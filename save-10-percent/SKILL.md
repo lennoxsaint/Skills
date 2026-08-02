@@ -1,6 +1,15 @@
 ---
 name: save-10-percent
 description: Audit bank transactions, invoices, SaaS seats, cloud bills, memberships, and verified product usage; normalize controllable recurring expenses; continue researching until at least 10% can be safely saved or the evidence is exhausted; freeze one exact approval batch; and optionally cancel, downgrade, consolidate, renegotiate, or replace only that approved batch with receipts. Use for subscription audits, recurring-cost reduction, duplicate-seat reviews, SaaS or cloud cleanup, monthly expense optimization, and autonomous cancellation requests.
+license: MIT
+metadata:
+  author: Lennox Saint
+  version: 1.0.2
+  category: finance-operations
+  tags:
+    - subscriptions
+    - cost-optimization
+    - automation
 ---
 
 # Save 10%
@@ -74,4 +83,3 @@ After redacted ledgers and receipts exist, run `scripts/redact_and_cleanup.py`. 
 ## Finish
 
 Return the baseline, approved and executed actions, projected/provider-confirmed/realized savings, remaining shortfall, rollbacks, skipped rows, and a raw-data deletion receipt. Make the next action obvious to a non-technical user.
-
