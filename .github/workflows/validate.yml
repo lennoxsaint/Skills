@@ -8,8 +8,8 @@ jobs:
   validate:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
         with:
           python-version: "3.12"
       - name: Run deterministic tests
@@ -28,6 +28,11 @@ jobs:
           cases = json.loads(pathlib.Path("tests/trigger-cases.json").read_text())
           assert len(cases) >= 10
           text = "\n".join(p.read_text(errors="ignore") for p in pathlib.Path(".").rglob("*") if p.is_file() and ".git" not in p.parts)
-          blocked = [r"up:yeah:", r"OPENAI_API_KEY=", r"OPENROUTER_API_KEY=", r"gho_[A-Za-z0-9]"]
+          blocked = [
+              "up" + r":yeah:",
+              "OPENAI_" + r"API_KEY=",
+              "OPENROUTER_" + r"API_KEY=",
+              "gho_" + r"[A-Za-z0-9]",
+          ]
           assert not any(re.search(pattern, text) for pattern in blocked)
           PY
