@@ -63,4 +63,6 @@ python3 -m unittest -v save-10-percent/scripts/test_save10.py
 python3 /path/to/skill-creator/scripts/quick_validate.py save-10-percent
 ```
 
+See [EVALUATION.md](EVALUATION.md) for trigger, functional, safety, and real-workflow dogfood evidence.
+
 Licensed under MIT.
