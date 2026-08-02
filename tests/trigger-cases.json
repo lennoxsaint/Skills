@@ -1,0 +1,15 @@
+[
+  {"prompt":"Find 10% I can save on subscriptions","should_trigger":true},
+  {"prompt":"Audit my bank CSV against actual SaaS usage","should_trigger":true},
+  {"prompt":"Cancel the unused subscriptions after I approve them","should_trigger":true},
+  {"prompt":"Why is our monthly software bill so high?","should_trigger":true},
+  {"prompt":"Review cloud, memberships, and inactive seats for savings","should_trigger":true},
+  {"prompt":"Can you lower my recurring business expenses?","should_trigger":true},
+  {"prompt":"Summarize this one invoice","should_trigger":false},
+  {"prompt":"Write a cancellation email to a customer","should_trigger":false},
+  {"prompt":"Forecast next quarter's revenue","should_trigger":false},
+  {"prompt":"Categorize these one-off travel purchases","should_trigger":false},
+  {"prompt":"Build a pricing page","should_trigger":false},
+  {"prompt":"Calculate payroll tax","should_trigger":false}
+]
+

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Save 10%"
+  short_description: "Find and safely execute 10% recurring savings"
+  default_prompt: "Use $save-10-percent to audit my recurring expenses, verify actual usage, and find at least 10% I can safely save."

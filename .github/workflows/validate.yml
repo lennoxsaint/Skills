@@ -1,0 +1,33 @@
+name: Validate skills
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Run deterministic tests
+        run: python3 -m unittest -v save-10-percent/scripts/test_save10.py
+      - name: Compile scripts
+        run: python3 -m py_compile save-10-percent/scripts/*.py
+      - name: Check skill frontmatter and secrets
+        run: |
+          python3 - <<'PY'
+          import json
+          import pathlib
+          import re
+          skill = pathlib.Path("save-10-percent/SKILL.md").read_text()
+          assert skill.startswith("---\nname: save-10-percent\ndescription:")
+          assert "TODO" not in skill
+          cases = json.loads(pathlib.Path("tests/trigger-cases.json").read_text())
+          assert len(cases) >= 10
+          text = "\n".join(p.read_text(errors="ignore") for p in pathlib.Path(".").rglob("*") if p.is_file() and ".git" not in p.parts)
+          blocked = [r"up:yeah:", r"OPENAI_API_KEY=", r"OPENROUTER_API_KEY=", r"gho_[A-Za-z0-9]"]
+          assert not any(re.search(pattern, text) for pattern in blocked)
+          PY
