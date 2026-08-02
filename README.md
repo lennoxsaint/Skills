@@ -10,11 +10,11 @@ It does **not** upload your bank data, guess that an unfamiliar merchant is wast
 
 ### Five-minute start
 
-1. Install the `save-10-percent` folder in your agent's skills directory.
-2. Say: `Use $save-10-percent to audit my recurring expenses and find 10% I can safely save.`
-3. Connect supported read-only sources or provide a local CSV, JSON, OFX/QFX, or QIF transaction export.
-4. Name anything that must be protected.
-5. Review the frozen batch. Nothing is changed until you approve that exact batch.
+1. Download the latest `save-10-percent-*.zip` from [Releases](https://github.com/lennoxsaint/Skills/releases).
+2. Claude users: upload the ZIP in **Settings > Capabilities > Skills**. Codex users: unzip it into the skills directory shown below.
+3. Say: `Use $save-10-percent to audit my recurring expenses and find 10% I can safely save.`
+4. Connect supported read-only sources or provide a local CSV, JSON, OFX/QFX, or QIF transaction export.
+5. Name anything that must be protected. Review the frozen batch; nothing changes until you approve that exact batch.
 
 For Codex:
 
@@ -23,6 +23,18 @@ cp -R save-10-percent "${CODEX_HOME:-$HOME/.codex}/skills/"
 ```
 
 For Claude-compatible skill clients, install the same `save-10-percent` directory using that client's normal skill/plugin workflow. The core instructions and scripts use the open skill folder format and Python's standard library.
+
+### What the result looks like
+
+The skill returns one plain-language savings packet:
+
+- your verified monthly recurring-cost baseline and exact 10% target;
+- safe recommendations ranked by consequence, confidence, and recovery path;
+- one immutable approval batch, so later execution cannot quietly expand scope;
+- separate projected, provider-confirmed, and realized savings totals; and
+- receipts, rollback instructions, evidence gaps, and a raw-data cleanup receipt.
+
+If a browser login, MFA prompt, CAPTCHA, changed contract, purchase, or data-loss warning appears, the skill stops at that provider and keeps working on the rest.
 
 ### Try the deterministic pipeline
 
@@ -52,4 +64,3 @@ python3 /path/to/skill-creator/scripts/quick_validate.py save-10-percent
 ```
 
 Licensed under MIT.
-
