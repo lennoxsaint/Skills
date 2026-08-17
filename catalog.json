@@ -1,0 +1,19 @@
+{
+  "schema_version": "1.0",
+  "repository": "https://github.com/lennoxsaint/Skills",
+  "skills": [
+    {
+      "name": "save-10-percent",
+      "display_name": "Save 10%",
+      "path": "save-10-percent",
+      "status": "stable",
+      "version": "2.0.1",
+      "summary": "Audit recurring costs, verify actual use, find 10% in safe net savings, and optionally execute an exact approved batch.",
+      "requires": "Python 3.10+",
+      "docs": "docs/save-10-percent.md",
+      "evaluation": "evaluations/save-10-percent.md",
+      "examples": "examples/save-10-percent",
+      "trigger_cases": "tests/save-10-percent/trigger-cases.json"
+    }
+  ]
+}

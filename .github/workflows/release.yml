@@ -3,7 +3,7 @@ name: Release skill
 on:
   push:
     tags:
-      - "save-10-percent-v*"
+      - "*-v*"
 
 permissions:
   contents: write
@@ -16,18 +16,48 @@ jobs:
       - uses: actions/setup-python@v6
         with:
           python-version: "3.12"
-      - name: Verify release candidate
+      - name: Resolve and validate tagged skill
+        id: metadata
+        env:
+          RELEASE_TAG: ${{ github.ref_name }}
         run: |
-          python3 -m unittest discover -v -s save-10-percent/scripts -p 'test_*.py'
-          python3 -m py_compile save-10-percent/scripts/*.py
+          python3 scripts/skills.py validate
+          python3 - <<'PY' >> "$GITHUB_OUTPUT"
+          import json
+          import os
+
+          tag = os.environ["RELEASE_TAG"]
+          marker = "-v"
+          if marker not in tag:
+              raise SystemExit(f"Invalid skill tag: {tag}")
+          skill_name, version = tag.rsplit(marker, 1)
+          entries = json.load(open("catalog.json"))["skills"]
+          matches = [entry for entry in entries if entry["name"] == skill_name]
+          if len(matches) != 1:
+              raise SystemExit(f"Tag does not name a catalogued skill: {skill_name}")
+          entry = matches[0]
+          if entry["version"] != version:
+              raise SystemExit(
+                  f"Tag version {version} does not match catalog version {entry['version']}"
+              )
+          print(f"skill={skill_name}")
+          print(f"path={entry['path']}")
+          print(f"version={version}")
+          print(f"display_name={entry['display_name']}")
+          PY
+      - name: Run tagged skill tests
+        run: |
+          scripts_dir="${{ steps.metadata.outputs.path }}/scripts"
+          if [ -d "$scripts_dir" ]; then
+            python3 -m unittest discover -v -s "$scripts_dir" -p 'test_*.py'
+          fi
       - name: Build deterministic archive
         run: |
-          version="${GITHUB_REF_NAME#save-10-percent-}"
           mkdir -p dist
-          python3 save-10-percent/scripts/build_release.py save-10-percent "dist/save-10-percent-${version}.zip" | tee "dist/save-10-percent-${version}.sha256"
+          output="dist/${{ steps.metadata.outputs.skill }}-v${{ steps.metadata.outputs.version }}.zip"
+          python3 scripts/build_skill_release.py "${{ steps.metadata.outputs.path }}" "$output" | tee "${output%.zip}.sha256"
       - name: Publish GitHub release
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          version="${GITHUB_REF_NAME#save-10-percent-}"
-          gh release create "$GITHUB_REF_NAME" dist/* --verify-tag --generate-notes --title "Save 10% ${version}"
+          gh release create "${{ github.ref_name }}" dist/* --verify-tag --generate-notes --title "${{ steps.metadata.outputs.display_name }} v${{ steps.metadata.outputs.version }}"

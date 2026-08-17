@@ -4,7 +4,7 @@
   "model": "openai/gpt-5.6-luna",
   "route": "authenticated_openrouter_mcp",
   "generation_id": "gen-1786927107-dQa5qB5uZQiF6gDND10S",
-  "case_file": "tests/trigger-cases.json",
+  "case_file": "tests/save-10-percent/trigger-cases.json",
   "positive_cases": 20,
   "positive_correct": 20,
   "negative_cases": 20,

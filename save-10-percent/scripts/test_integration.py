@@ -24,6 +24,16 @@ def run_script(name, *args):
     )
 
 
+def run_repo_script(name, *args):
+    return subprocess.run(
+        [sys.executable, str(REPO_ROOT / "scripts" / name), *map(str, args)],
+        cwd=REPO_ROOT,
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+
+
 class CommandLineWorkflowTests(unittest.TestCase):
     def test_synthetic_pipeline_reaches_exhaustive_aud_70_baseline(self):
         with tempfile.TemporaryDirectory() as directory:
@@ -35,7 +45,7 @@ class CommandLineWorkflowTests(unittest.TestCase):
             baseline = root / "baseline.json"
             run_script(
                 "normalize_transactions.py",
-                REPO_ROOT / "examples" / "sample-transactions.csv",
+                REPO_ROOT / "examples" / "save-10-percent" / "sample-transactions.csv",
                 normalized,
                 "--account-id",
                 "checking",
@@ -47,7 +57,7 @@ class CommandLineWorkflowTests(unittest.TestCase):
             self.assertEqual(manifest["period_start"], "2025-03-03")
             self.assertEqual(manifest["period_end"], "2026-03-20")
             run_script("reconcile_transactions.py", normalized, reconciled)
-            run_script("assess_coverage.py", reconciled, REPO_ROOT / "examples" / "sample-scope.json", coverage)
+            run_script("assess_coverage.py", reconciled, REPO_ROOT / "examples" / "save-10-percent" / "sample-scope.json", coverage)
             run_script("detect_recurring.py", reconciled, recurring)
             run_script("build_baseline.py", recurring, coverage, baseline)
             coverage_payload = json.loads(coverage.read_text())
@@ -64,8 +74,8 @@ class CommandLineWorkflowTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             first = Path(directory) / "first.zip"
             second = Path(directory) / "second.zip"
-            run_script("build_release.py", SKILL_DIR, first)
-            run_script("build_release.py", SKILL_DIR, second)
+            run_repo_script("build_skill_release.py", SKILL_DIR, first)
+            run_repo_script("build_skill_release.py", SKILL_DIR, second)
             self.assertEqual(hashlib.sha256(first.read_bytes()).hexdigest(), hashlib.sha256(second.read_bytes()).hexdigest())
             with zipfile.ZipFile(first) as archive:
                 names = archive.namelist()

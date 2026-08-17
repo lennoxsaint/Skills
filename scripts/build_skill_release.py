@@ -1,4 +1,8 @@
 #!/usr/bin/env python3
+"""Build a deterministic ZIP containing exactly one public skill folder."""
+
+from __future__ import annotations
+
 import argparse
 import hashlib
 import os
@@ -13,6 +17,8 @@ args = parser.parse_args()
 
 skill_dir = Path(args.skill_dir).resolve()
 output = Path(args.output).resolve()
+if not (skill_dir / "SKILL.md").is_file():
+    parser.error(f"{skill_dir} is not a skill folder")
 output.parent.mkdir(parents=True, exist_ok=True)
 files = sorted(
     path for path in skill_dir.rglob("*")

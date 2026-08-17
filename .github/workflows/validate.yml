@@ -12,34 +12,34 @@ jobs:
       - uses: actions/setup-python@v6
         with:
           python-version: "3.12"
-      - name: Run deterministic and integration tests
-        run: python3 -m unittest discover -v -s save-10-percent/scripts -p 'test_*.py'
-      - name: Compile scripts
-        run: python3 -m py_compile save-10-percent/scripts/*.py
-      - name: Validate skill, trigger bank, links, and secrets
+      - name: Validate public catalog and skill structure
+        run: python3 scripts/skills.py validate
+      - name: Run repository tests
+        run: python3 -m unittest discover -v -s tests -p 'test_*.py'
+      - name: Run every catalogued skill test suite
         run: |
           python3 - <<'PY'
           import json
           import pathlib
+          import subprocess
+          import sys
+
+          root = pathlib.Path(".")
+          for entry in json.loads((root / "catalog.json").read_text())["skills"]:
+              scripts = root / entry["path"] / "scripts"
+              if scripts.is_dir():
+                  subprocess.run(
+                      [sys.executable, "-m", "unittest", "discover", "-v", "-s", str(scripts), "-p", "test_*.py"],
+                      check=True,
+                  )
+          PY
+      - name: Scan repository for credential patterns
+        run: |
+          python3 - <<'PY'
+          import pathlib
           import re
 
           root = pathlib.Path(".")
-          skill_path = root / "save-10-percent" / "SKILL.md"
-          skill = skill_path.read_text()
-          assert skill.startswith("---\n")
-          frontmatter = skill.split("---\n", 2)[1]
-          keys = [line.split(":", 1)[0] for line in frontmatter.splitlines() if line and not line.startswith(" ")]
-          assert keys == ["name", "description"], keys
-          assert "name: save-10-percent" in frontmatter
-          assert "TODO" not in skill
-          for relative in re.findall(r"\]\((references/[^)]+)\)", skill):
-              assert (skill_path.parent / relative).is_file(), relative
-
-          cases = json.loads((root / "tests" / "trigger-cases.json").read_text())
-          assert sum(case["should_trigger"] is True for case in cases) >= 20
-          assert sum(case["should_trigger"] is False for case in cases) >= 20
-          assert len({case["prompt"] for case in cases}) == len(cases)
-
           text = "\n".join(
               path.read_text(errors="ignore")
               for path in root.rglob("*")
@@ -54,11 +54,27 @@ jobs:
           ]
           assert not any(re.search(pattern, text) for pattern in blocked)
           PY
-      - name: Build deterministic release archive
+      - name: Build every deterministic release archive
         run: |
           mkdir -p dist
-          python3 save-10-percent/scripts/build_release.py save-10-percent dist/save-10-percent-v2.0.0.zip | tee dist/save-10-percent-v2.0.0.sha256
+          python3 - <<'PY'
+          import json
+          import pathlib
+          import subprocess
+          import sys
+
+          root = pathlib.Path(".")
+          for entry in json.loads((root / "catalog.json").read_text())["skills"]:
+              output = root / "dist" / f"{entry['name']}-v{entry['version']}.zip"
+              result = subprocess.run(
+                  [sys.executable, "scripts/build_skill_release.py", entry["path"], str(output)],
+                  check=True,
+                  capture_output=True,
+                  text=True,
+              )
+              (output.with_suffix(".sha256")).write_text(result.stdout)
+          PY
       - uses: actions/upload-artifact@v4
         with:
-          name: save-10-percent-v2.0.0
+          name: skill-release-candidates
           path: dist/
