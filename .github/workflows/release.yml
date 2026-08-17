@@ -1,0 +1,33 @@
+name: Release skill
+
+on:
+  push:
+    tags:
+      - "save-10-percent-v*"
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - name: Verify release candidate
+        run: |
+          python3 -m unittest discover -v -s save-10-percent/scripts -p 'test_*.py'
+          python3 -m py_compile save-10-percent/scripts/*.py
+      - name: Build deterministic archive
+        run: |
+          version="${GITHUB_REF_NAME#save-10-percent-}"
+          mkdir -p dist
+          python3 save-10-percent/scripts/build_release.py save-10-percent "dist/save-10-percent-${version}.zip" | tee "dist/save-10-percent-${version}.sha256"
+      - name: Publish GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          version="${GITHUB_REF_NAME#save-10-percent-}"
+          gh release create "$GITHUB_REF_NAME" dist/* --verify-tag --generate-notes --title "Save 10% ${version}"

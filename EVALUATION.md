@@ -1,54 +1,132 @@
-# Save 10% evaluation
+# Save 10% v2.0 evaluation
 
-## What was tested
+## Release-candidate status
 
-### Trigger coverage
+The v2.0 local release candidate passes 37 deterministic and command-line tests, Python compilation, skill-folder validation, a deterministic ZIP build, and a 40-case advisory trigger evaluation.
 
-`tests/trigger-cases.json` contains six prompts that should trigger the skill and six nearby prompts that should not. It covers direct savings requests, bank-file audits, cloud and seat cleanup, approved cancellation, invoice-only work, payroll tax, one-off travel, and unrelated product work.
+This evidence supports the local workflow and release package. It does not claim that every bank format, provider website, host router, or live cancellation flow has been observed.
 
-This is a review bank for agent-level trigger evaluation, not a claim that a JSON file can prove automatic model routing by itself.
+## Anthropic guide cross-check
 
-### Deterministic functions
+The package follows the public guidance in *The Complete Guide to Building Skills for Claude*:
 
-Seven standard-library tests cover:
+- one trigger-rich description with what and when;
+- concise imperative workflow in `SKILL.md`;
+- one-level progressive-disclosure references;
+- explicit ordering, dependencies, validation, stopping rules, recovery, and error handling;
+- deterministic scripts for fragile financial and approval logic;
+- trigger, functional, integration, safety, persistence, and packaging tests;
+- repository-level installation, examples, limitations, and release documentation;
+- no README inside the skill folder.
 
-- monthly and annual recurrence detection;
-- transfer exclusion and exact 10% target arithmetic;
-- duplicate merchant normalization;
-- protected-expense enforcement and honest shortfall reporting;
-- stable immutable batch hashes;
-- rejection of broken arithmetic and hidden annual commitments; and
-- safe handling of unconverted currencies.
+## OpenRouter review and routing receipt
 
-Run them with:
+A redacted council using Claude Opus 5, Grok 4.6, Gemini 3.7 Flash, and GPT-5.6 reviewed the v1 design. No raw financial records, credentials, transactions, or private member data were sent. The strongest shared findings became v2 release gates:
+
+- signed transaction direction;
+- declared-source coverage before baseline freeze;
+- cross-account transfer and card-payment reconciliation;
+- durable local state rather than chat memory;
+- unique liability identity and live execution preflight;
+- net 12-month savings after switching costs;
+- honest shortfall instead of a manufactured 10%.
+
+The current description was then classified against 20 intended triggers and 20 nearby non-triggers by `openai/gpt-5.6-luna` through authenticated OpenRouter MCP. It returned 40/40 expected decisions. The aggregate receipt is `tests/trigger-eval-receipt.json`. This is advisory description evidence, not proof of automatic routing in every compatible host.
+
+## Deterministic suite
+
+Run:
 
 ```bash
-python3 -m unittest -v save-10-percent/scripts/test_save10.py
+python3 -m unittest discover -v -s save-10-percent/scripts -p 'test_*.py'
 ```
 
-### Synthetic end to end
+### Financial correctness
 
-The included sample transaction file passes through normalize, recurrence detection, and baseline construction without external dependencies. Its expected monthly controllable baseline is A$70 and its exact target is A$7.
+Passing scenarios cover:
 
-### Real-workflow dogfood
+- income, refunds, reimbursements, reversals, and ambiguous positive amounts;
+- separate debit and credit columns;
+- explicit DMY/MDY handling for slash-formatted dates;
+- cross-account credit-card payment reconciliation without hiding underlying card spend;
+- duplicate rows and duplicate source files;
+- same-day legitimate charges with distinct provider IDs remaining intact;
+- unresolved duplicate candidates without provider IDs failing closed;
+- same merchant on different accounts remaining distinct liabilities;
+- same merchant and account remaining separate when provider liability hints differ;
+- long all-letter vendor names not being erased as identifiers;
+- fortnightly, monthly, and annual cadence arithmetic;
+- unconverted currency exclusion;
+- replacement, exit, setup, bundle, and migration cost netting;
+- protected rows and honest target shortfall.
 
-The private Lennox version was used to freeze a real recurring-expense action manifest. That run caught two important failure modes before cancellation:
+### Coverage and persistence
 
-- a community downgrade would have disabled a Pro-only membership automation; and
-- a service believed to be unused still had live flows sending customer messages.
+Passing scenarios cover:
 
-No bank records, credentials, provider cookies, private receipts, or account identifiers are included in this repository.
+- missing declared accounts;
+- undeclared accounts present in the combined source set;
+- ambiguous direction;
+- less than 90 days of history and the 13-calendar-month exhaustive boundary;
+- material activity gaps;
+- preliminary and exhaustive coverage states;
+- baseline refusal before coverage passes;
+- append-only case replay;
+- invalid state transitions;
+- tamper detection in the event hash chain;
+- rejection of common secret-like case fields and value patterns;
+- command-line resume from disk.
+
+### Approval and execution
+
+Passing scenarios cover:
+
+- exact baseline-bound batch hashes;
+- 24-hour approval expiry;
+- high-risk item confirmation;
+- annual-commitment rejection;
+- changed price detection during live preflight;
+- autonomous-browser denial when any required host capability is missing;
+- guided-checklist fallback.
+
+### PDF and packaging
+
+Passing scenarios cover:
+
+- confident text-statement parsing;
+- fail-closed ambiguous PDF extraction;
+- complete synthetic command-line workflow;
+- reproducible A$70 baseline and A$7 target;
+- deterministic release ZIP hashes;
+- exclusion of caches and files outside the skill folder.
 
 ## Baseline comparison
 
-Without the skill, a subscription audit can easily mix guesses with evidence, count projected savings as cash already saved, and let a later execution drift beyond what the user approved.
+The v1 workflow could interpret a positive amount as spend, delete legitimate long vendor names during normalization, collapse same-day charges, merge distinct vendor liabilities, proceed without a durable case, calculate a baseline without a coverage artifact or protected-list binding, and freeze approval without expiry or live drift comparison.
 
-With the skill, the same workflow has a normalized baseline, explicit coverage gaps, protected capabilities, consequence and recovery fields, a deterministic 10% target, one immutable approval hash, provider receipts, and separate projected, provider-confirmed, and realized totals.
+The v2 workflow fails closed on those paths. It also provides an exact next evidence request instead of lowering confidence invisibly.
 
-## Known limits
+## CI gates
 
-- Provider login, MFA, CAPTCHA, contract, and data-loss gates still require the user.
-- A 10% result is impossible when safe opportunities do not add up to 10%; the skill reports the shortfall instead.
-- Trigger routing must be evaluated in each host agent because hosts discover and rank skills differently.
-- Cancellation is only complete after provider confirmation; realization still requires an affected billing readback.
+Every push and pull request must pass:
 
+1. the complete test suite;
+2. Python compilation;
+3. frontmatter key validation;
+4. all linked-reference checks;
+5. at least 20 positive and 20 negative trigger cases;
+6. repository secret scanning;
+7. deterministic release archive construction.
+
+Tags matching `save-10-percent-v*` rerun tests and compilation before GitHub release creation.
+
+## Known limits and watch-outs
+
+- Actual automatic skill routing varies by host; the JSON bank and OpenRouter classification do not replace host-specific routing tests.
+- Text PDF support depends on local `pdftotext`; scans and unusual layouts may fail correctly to CSV/OFX rather than parse.
+- Generic browser execution is governed by the host. The skill provides deterministic capability and preflight gates but cannot guarantee a provider has not redesigned its website.
+- No live vendor account was changed during repository evaluation.
+- Statement realization still requires a future affected bill or account ledger.
+- Users must declare all relevant accounts and answer dependency questions honestly; the skill cannot discover inaccessible sources.
+
+These limits must remain visible in the README and final audit output.

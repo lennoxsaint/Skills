@@ -1,85 +1,129 @@
 ---
 name: save-10-percent
-description: Audit bank transactions, invoices, SaaS seats, cloud bills, memberships, and verified product usage; normalize controllable recurring expenses; continue researching until at least 10% can be safely saved or the evidence is exhausted; freeze one exact approval batch; and optionally cancel, downgrade, consolidate, renegotiate, or replace only that approved batch with receipts. Use for subscription audits, recurring-cost reduction, duplicate-seat reviews, SaaS or cloud cleanup, monthly expense optimization, and autonomous cancellation requests.
-license: MIT
-metadata:
-  author: Lennox Saint
-  version: 1.0.2
-  category: finance-operations
-  tags:
-    - subscriptions
-    - cost-optimization
-    - automation
+description: Audit personal and small-business recurring costs from CSV, JSON, OFX/QFX, QIF, text PDF, invoices, or read-only billing sources; verify actual use and dependencies; compare cheaper alternatives; persist until at least 10% in net recurring savings is evidenced or every safe lane is exhausted; and optionally execute an exact approved cancellation or downgrade batch with live browser preflight and receipts. Use for subscription audits, SaaS or cloud cleanup, inactive seats, memberships, recurring expense reduction, plan downgrades, tool consolidation, or autonomous cancellation requests. Do not use for payroll, tax, debt, investment advice, or one-off budgeting.
 ---
 
 # Save 10%
 
-Find consequential recurring savings by comparing what is paid with what is actually used. Keep projected, provider-confirmed, and realized savings separate.
+Find recurring savings without goal-hacking the denominator. Keep analysis, approval, provider confirmation, effective billing, and statement realization separate.
 
-## Start with three questions
+## Critical rules
 
-Ask only what cannot be discovered:
+- Keep raw financial records and credentials local. Never paste them into hosted model calls, logs, receipts, or public artifacts.
+- Treat transaction direction, source coverage, liability identity, usage, dependencies, and net savings as gates—not suggestions.
+- Never use absolute-value amount handling. Quarantine ambiguous credits and debits.
+- Never call an audit exhaustive without 13 calendar months or equivalent annual-renewal evidence.
+- Never manufacture 10%. Finish with the honest shortfall and exact blockers when safe opportunities are exhausted.
+- Never execute from conversation memory. Use the durable case, frozen batch, unexpired approval, and live preflight.
+- Continue independent lanes when one provider is blocked. Stop only the affected row for missing evidence, login, MFA, CAPTCHA, changed terms, purchase, permission, ambiguity, or data-loss risk.
 
-1. Which currency and accounts define the audit?
-2. Which services or capabilities are protected?
-3. Should raw working data be deleted after the audit? Default to yes.
+## 1. Create or resume the case
 
-Then connect available read-only financial, billing, and usage sources. If connectors are unavailable, accept CSV, JSON, OFX/QFX, or QIF exports. Never require a specific bank.
+Read [case-and-coverage.md](references/case-and-coverage.md). Resume the user-named case if one exists; otherwise create one:
 
-## Contract
+```bash
+python3 scripts/case_state.py create --currency AUD --protected "Required service"
+```
 
-- Default scope to controllable recurring expenses: subscriptions, SaaS, cloud, memberships, seats, and recurring services.
-- Exclude payroll, tax, transfers, debt, personal purchases, and core cost of goods unless the user opts in.
-- Continue until verified projected savings reach 10% or every safe lane is exhausted.
-- Never manufacture the missing percentage. Return the honest shortfall and smallest evidence repair.
-- Never expose credentials or raw transaction data. Prefer Keychain, environment-secret stores, or authenticated connectors.
-- Never cancel, downgrade, purchase, accept an annual contract, or delete data without an exact approved action envelope.
+Record every completed phase, user answer, artifact hash, approval, error, and provider result. Do not store passwords, tokens, cookies, raw statements, or raw transaction descriptions in case events.
 
-## Workflow
+## 2. Acquire sufficient sources
 
-### 1. Normalize spend
+Read [data-sources.md](references/data-sources.md). Ask only for information that cannot be discovered safely:
 
-Read [data-sources.md](references/data-sources.md). Run `scripts/normalize_transactions.py`, then `scripts/detect_recurring.py` and `scripts/build_baseline.py`. Prefer settled account-currency values. Treat unconverted currencies as a coverage gap, not zero.
+1. home currency and accounts included in the recurring-cost audit;
+2. protected services or capabilities;
+3. whether raw inputs should be deleted after redacted artifacts exist; default to yes.
 
-Produce a baseline with inclusions, exclusions, coverage, monthly controllable spend, and the exact 10% target. Re-freeze the baseline when a new recurring expense is found.
+Use an already authenticated read-only connector when available. Otherwise guide the user to export CSV, OFX/QFX, QIF, JSON, or a text PDF. Do not require one bank or connector.
 
-### 2. Verify usage and consequences
+Normalize each account separately, combine sources, reconcile transfers, and run the coverage gate:
 
-Read [evidence-policy.md](references/evidence-policy.md). Cross-reference provider activity, workspace seats, integrations, invoices, recent workflows, exports, and user confirmation. Ask for browser-history or content access only when necessary and consented.
+```bash
+python3 scripts/normalize_transactions.py INPUT OUTPUT --account-id ID --account-type TYPE --currency AUD --date-order DMY
+python3 scripts/combine_sources.py NORMALIZED... --output COMBINED
+python3 scripts/reconcile_transactions.py COMBINED RECONCILED
+python3 scripts/assess_coverage.py RECONCILED SCOPE_DECLARATION COVERAGE
+```
 
-Classify every item as `verified_used`, `owner_confirmed_unused`, `probable_unused`, `unverified`, or `protected`. Use `scripts/score_usage.py` to merge the evidence.
+Resolve every missing declared account, duplicate source, ambiguous direction, cross-account transfer, material gap, and unconverted currency before freezing a baseline.
 
-### 3. Keep searching in this order
+## 3. Freeze the baseline
 
-1. Cancel unused services.
-2. Remove duplicate or inactive seats.
-3. Downgrade overpowered tiers or resize usage-based infrastructure.
-4. Consolidate overlapping tools.
-5. Renegotiate material contracts.
-6. Replace a vendor or redesign a workflow when the migration cost and risk are lower than the verified saving.
+Run recurring detection and baseline construction only after coverage passes:
 
-Use `scripts/optimize_batch.py` to select the lowest-risk batch that clears 10%. Calculate migration time, one-off fees, lost credits, and contract lock-in separately; never disguise them as monthly savings.
+```bash
+python3 scripts/detect_recurring.py RECONCILED RECURRING
+python3 scripts/build_baseline.py RECURRING COVERAGE BASELINE --currency AUD --protected-services CASE_JSON
+```
 
-### 4. Freeze one action envelope
+Treat 90 continuous days across every declared account as preliminary coverage. Require 13 distinct calendar months spanning at least a year, or equivalent annual-renewal evidence, for exhaustive coverage. A changed source, protected list, currency conversion, parser, or inclusion set invalidates the baseline hash.
 
-Read [execution-safety.md](references/execution-safety.md) and [output-contract.md](references/output-contract.md). Every row must state the provider, exact action, current and future monthly cost, verified saving, consequence, recovery path, effective date, and execution gate.
+## 4. Interrogate real value in planning state
 
-Present the entire batch and ask: **Do you want me to cancel or downgrade the subscriptions in this approved batch?**
+Read [vendor-review.md](references/vendor-review.md) and [evidence-policy.md](references/evidence-policy.md). Stay read-only through this phase.
 
-If approved, run `scripts/validate_manifest.py --approval ...`. The resulting SHA-256 hash is immutable. Any changed price, warning, consequence, contract, or action requires a new batch and approval.
+Review the highest-value liability first. Present one vendor card at a time with three to five grouped questions covering:
 
-### 5. Execute safely
+- who uses it, for what outcome, and how recently;
+- seats, data, automations, clients, family members, or workflows that depend on it;
+- genuinely required features;
+- contract, renewal, notice, promotion, bundle, and retention conditions;
+- whether cancellation, pause, downgrade, consolidation, negotiation, or replacement preserves the outcome.
 
-Use official APIs or authenticated provider UIs. Pause for login, MFA, CAPTCHA, permission changes, unapproved purchases, materially changed terms, or irreversible data-loss warnings.
+Challenge weak “I might need it” answers with evidence, but do not override the user's protection or dependency decisions.
 
-Use the nearest cheaper tier only when it is reversible, adequate, month-to-month, and preserves required data. Transfer assets before removing seats. Prove restores before cloud deletion. Shadow replacement workflows before switching writes.
+## 5. Research alternatives and keep searching
 
-Track `candidate -> approved -> scheduled -> provider_confirmed -> realized`. Count a saving toward the public 10% result only after a provider confirmation and affected billing evidence.
+Use current official provider pricing, plan limits, cancellation terms, data-retention rules, and documented feature differences. Prefer primary sources. Record source, retrieval date, price, term, confidence, and unresolved questions.
 
-### 6. Delete raw inputs
+Calculate:
 
-After redacted ledgers and receipts exist, run `scripts/redact_and_cleanup.py`. Report deletion failures. File deletion is not a claim of forensic erasure on modern filesystems.
+`net 12-month saving = gross reduction - replacement cost - exit fees - setup cost - lost bundle value - known migration cost`
 
-## Finish
+Keep migration hours separate unless the user supplies a value of time. Search in this order:
 
-Return the baseline, approved and executed actions, projected/provider-confirmed/realized savings, remaining shortfall, rollbacks, skipped rows, and a raw-data deletion receipt. Make the next action obvious to a non-technical user.
+1. unused cancellations;
+2. inactive or duplicate seats;
+3. adequate cheaper tiers;
+4. cloud and usage-based resizing;
+5. overlapping-tool consolidation;
+6. pauses and billing-cycle changes;
+7. renegotiation or retention;
+8. workflow redesign or vendor replacement.
+
+Continue until net candidates reach 10% of the frozen baseline or every liability is reviewed and the remaining rows are protected, uneconomic, insufficiently evidenced, or blocked by a named requirement.
+
+## 6. Freeze one approval envelope
+
+Read [execution-safety.md](references/execution-safety.md) and [output-contract.md](references/output-contract.md). Every action row must bind the unique liability, account, provider, exact action, current and target plan, costs, evidence snapshot, consequence, recovery, risk, and execution gate.
+
+Present the whole batch and ask exactly:
+
+**Do you approve this exact batch for execution, subject to live preflight and fresh confirmation for any high-risk or materially changed item?**
+
+After approval, create the immutable 24-hour batch:
+
+```bash
+python3 scripts/validate_manifest.py CANDIDATE FROZEN --approval "EXACT USER APPROVAL"
+```
+
+Any changed row, source, consequence, risk, price, plan, or baseline requires a new batch.
+
+## 7. Execute only when the host proves capability
+
+Require authenticated browser/computer controls, target-account readback, before/after proof, interruptible security prompts, and receipt capture. Record those booleans and run `scripts/assess_execution_capabilities.py`. If any capability is absent, provide the exact guided checklist instead of claiming autonomous execution.
+
+Immediately before each action, compare live state with the approved row using `scripts/preflight_batch.py`. Low-risk reversible rows may use the batch approval. Require fresh item approval for purchases, annual commitments, deletion, lost access, irreversible actions, ambiguous identity, or material drift.
+
+Never bypass MFA, CAPTCHA, passkeys, permission prompts, retention terms, or data-loss warnings. Never improvise a different plan. Use each idempotency key once.
+
+## 8. Prove and clean up
+
+Track:
+
+`candidate -> approved -> scheduled -> provider_confirmed -> effective -> statement_realized`
+
+Do not call projected savings “saved.” Do not call provider confirmation “statement realized.” After redacted outputs and receipts exist, run `scripts/redact_and_cleanup.py` on the user-approved raw paths and report any deletion failure.
+
+Finish with the baseline, coverage state, vendor decisions, approved and executed rows, projected/provider-confirmed/effective/statement-realized totals, shortfall, blockers, rollbacks, and one obvious next action.

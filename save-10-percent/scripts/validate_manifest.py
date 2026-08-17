@@ -7,5 +7,7 @@ parser.add_argument("input")
 parser.add_argument("output")
 parser.add_argument("--approval", help="Exact owner approval text; omit for validation only")
 args = parser.parse_args()
-write_json(args.output, validate_and_freeze(load_json(args.input), args.approval))
-
+write_json(
+    args.output,
+    validate_and_freeze(load_json(args.input), args.approval),
+)

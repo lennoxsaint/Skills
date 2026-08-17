@@ -12,27 +12,53 @@ jobs:
       - uses: actions/setup-python@v6
         with:
           python-version: "3.12"
-      - name: Run deterministic tests
-        run: python3 -m unittest -v save-10-percent/scripts/test_save10.py
+      - name: Run deterministic and integration tests
+        run: python3 -m unittest discover -v -s save-10-percent/scripts -p 'test_*.py'
       - name: Compile scripts
         run: python3 -m py_compile save-10-percent/scripts/*.py
-      - name: Check skill frontmatter and secrets
+      - name: Validate skill, trigger bank, links, and secrets
         run: |
           python3 - <<'PY'
           import json
           import pathlib
           import re
-          skill = pathlib.Path("save-10-percent/SKILL.md").read_text()
-          assert skill.startswith("---\nname: save-10-percent\ndescription:")
+
+          root = pathlib.Path(".")
+          skill_path = root / "save-10-percent" / "SKILL.md"
+          skill = skill_path.read_text()
+          assert skill.startswith("---\n")
+          frontmatter = skill.split("---\n", 2)[1]
+          keys = [line.split(":", 1)[0] for line in frontmatter.splitlines() if line and not line.startswith(" ")]
+          assert keys == ["name", "description"], keys
+          assert "name: save-10-percent" in frontmatter
           assert "TODO" not in skill
-          cases = json.loads(pathlib.Path("tests/trigger-cases.json").read_text())
-          assert len(cases) >= 10
-          text = "\n".join(p.read_text(errors="ignore") for p in pathlib.Path(".").rglob("*") if p.is_file() and ".git" not in p.parts)
+          for relative in re.findall(r"\]\((references/[^)]+)\)", skill):
+              assert (skill_path.parent / relative).is_file(), relative
+
+          cases = json.loads((root / "tests" / "trigger-cases.json").read_text())
+          assert sum(case["should_trigger"] is True for case in cases) >= 20
+          assert sum(case["should_trigger"] is False for case in cases) >= 20
+          assert len({case["prompt"] for case in cases}) == len(cases)
+
+          text = "\n".join(
+              path.read_text(errors="ignore")
+              for path in root.rglob("*")
+              if path.is_file() and ".git" not in path.parts
+          )
           blocked = [
               "up" + r":yeah:",
               "OPENAI_" + r"API_KEY=",
               "OPENROUTER_" + r"API_KEY=",
               "gho_" + r"[A-Za-z0-9]",
+              "sk-" + r"[A-Za-z0-9]{20,}",
           ]
           assert not any(re.search(pattern, text) for pattern in blocked)
           PY
+      - name: Build deterministic release archive
+        run: |
+          mkdir -p dist
+          python3 save-10-percent/scripts/build_release.py save-10-percent dist/save-10-percent-v2.0.0.zip | tee dist/save-10-percent-v2.0.0.sha256
+      - uses: actions/upload-artifact@v4
+        with:
+          name: save-10-percent-v2.0.0
+          path: dist/

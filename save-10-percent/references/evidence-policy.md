@@ -1,26 +1,45 @@
 # Evidence policy
 
-## Confidence
+## Liability and usage
+
+A merchant name is not a subscription identity. Transaction-only merchant groups remain unverified. Bind every execution candidate to an account, currency, recurring transaction set, current plan or contract, and confirmed user or workflow. Two products from the same vendor and account remain separate when a hashed provider liability hint is available; otherwise resolve them in current provider billing before approval.
+
+Use these usage states:
+
+- `protected`: excluded by the user or a verified critical dependency;
+- `verified_used`: current activity or workflow evidence exists;
+- `owner_confirmed_unused`: the user confirms no required use and no dependency conflicts;
+- `underused`: required outcome uses less than the current tier provides;
+- `over_tiered`: a cheaper current tier preserves required features;
+- `duplicated`: another paid capability already provides the required outcome;
+- `replacement_candidate`: a verified alternative can preserve the outcome at lower net cost;
+- `research_needed`: identity, usage, terms, or consequence remains unclear;
+- `blocked`: the exact missing evidence or access is recorded.
+
+## Evidence tiers
 
 - `high`: current provider billing plus current usage/admin evidence.
-- `medium`: settled recurring charge plus owner confirmation or indirect usage evidence.
-- `low`: merchant cadence or search evidence without current account proof.
+- `medium`: settled recurring charge plus user confirmation and verified dependency coverage.
+- `low`: cadence, memory, or third-party search without current account proof.
 
-Only high- or medium-confidence rows may enter an execution batch. Low-confidence rows remain research leads.
+Only high- or medium-confidence rows with confirmed liability identity may enter an execution batch.
 
-## Usage states
+Every candidate records:
 
-- `verified_used`: recent provider, workflow, seat, or local-use proof exists.
-- `owner_confirmed_unused`: Lennox explicitly says it is unused and no current dependency is found.
-- `probable_unused`: no recent activity is visible, but dependency coverage is incomplete.
-- `unverified`: evidence conflicts or is missing.
-- `protected`: excluded by owner instruction or business-critical dependency.
+- evidence source and retrieval date;
+- plan, price, currency, renewal, and contract term;
+- actual use and dependent people/workflows;
+- required features and protected outcomes;
+- current and replacement recurring costs;
+- exit, setup, bundle, and migration costs;
+- consequence, rollback, confidence, and unresolved questions.
+
+Use official provider sources for current pricing and terms. Do not count stale or third-party-only pricing toward the 10% target.
 
 ## Proof states
 
-Never collapse these states:
+Never collapse:
 
-`candidate -> approved -> scheduled -> provider_confirmed -> realized`
+`candidate -> approved -> scheduled -> provider_confirmed -> effective -> statement_realized`
 
-Use `realized` only after a bill, account statement, or provider ledger demonstrates the lower recurring charge. Keep one-off refunds and credits out of recurring savings.
-
+A provider confirmation is not an affected bill. A bill change is not proof that an unrelated annual renewal has stopped. Keep one-off refunds and credits outside recurring savings.

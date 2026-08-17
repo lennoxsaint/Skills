@@ -1,0 +1,10 @@
+{
+  "scope_confirmed": true,
+  "annual_evidence_complete": false,
+  "accounts": [
+    {
+      "account_id": "checking",
+      "account_type": "checking"
+    }
+  ]
+}
