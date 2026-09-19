@@ -1,0 +1,8 @@
+interface:
+  display_name: "Email Triage Pro"
+  short_description: "Triage Gmail and learn your email preferences"
+  brand_color: "#2563EB"
+  default_prompt: "Use $email-triage-pro to set up my Gmail accounts, surface important mail, draft a few replies, and learn from my feedback."
+
+policy:
+  allow_implicit_invocation: true

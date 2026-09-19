@@ -10,9 +10,10 @@ Every skill is a self-contained folder with instructions, UI metadata, determini
 
 | Skill | What it does | Status | Version |
 |---|---|---:|---:|
+| [Email Triage Pro](email-triage-pro/SKILL.md) | Reviews Gmail, surfaces important mail, drafts a few replies, and learns archive and writing preferences. | Stable | 1.0.0 |
 | [Save 10%](save-10-percent/SKILL.md) | Audits recurring costs, verifies actual use, finds 10% in safe net savings, and can execute an exact approved batch. | Stable | 2.0.1 |
 
-See the machine-readable [catalog](catalog.json), the [plain-English guide](docs/save-10-percent.md), or the [evaluation evidence](evaluations/save-10-percent.md).
+See the machine-readable [catalog](catalog.json), the plain-English guides in [`docs/`](docs), or the evaluation evidence in [`evaluations/`](evaluations).
 
 ## Install in under a minute
 
@@ -22,7 +23,7 @@ See the machine-readable [catalog](catalog.json), the [plain-English guide](docs
 git clone https://github.com/lennoxsaint/Skills.git
 cd Skills
 python3 scripts/skills.py list
-python3 scripts/skills.py install save-10-percent
+python3 scripts/skills.py install email-triage-pro
 ```
 
 The installer uses `$CODEX_HOME/skills` when `CODEX_HOME` is set, otherwise `~/.codex/skills`. It validates the repository first and refuses to overwrite an existing skill.
@@ -30,14 +31,14 @@ The installer uses `$CODEX_HOME/skills` when `CODEX_HOME` is set, otherwise `~/.
 Restart Codex if the new skill does not appear immediately, then try:
 
 ```text
-Use $save-10-percent to audit my recurring costs and keep working until you find 10% in safe net savings or prove the honest shortfall.
+Use $email-triage-pro to connect my Gmail accounts, surface important mail, draft a few replies, and learn from my feedback.
 ```
 
 ### Option 2: download a release
 
 Open [Releases](https://github.com/lennoxsaint/Skills/releases), download the ZIP for the skill you want, and upload or copy that skill folder through your client’s normal Skills interface.
 
-For Codex, the destination is normally:
+For local Codex, the destination is normally:
 
 ```text
 ~/.codex/skills/<skill-name>/
@@ -47,8 +48,8 @@ The folder must contain `SKILL.md` directly. Avoid accidentally creating `<skill
 
 ## Compatibility
 
-- Codex: supported through the standard local skill-folder format.
-- Claude and compatible clients: use the release ZIP or the client’s skill upload flow when supported.
+- ChatGPT and Codex: use the plugin or skill installation flow available to the client; local Codex supports the standard skill-folder format.
+- Claude: use the release ZIP with Claude's skill or custom plugin upload flow.
 - Python: individual skills declare their own requirements in the catalog and documentation.
 - Browser actions: available only when the host proves authenticated controls, live readback, safe interruption, and receipt capture.
 

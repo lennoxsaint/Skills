@@ -20,8 +20,9 @@ class PublicRepositoryTests(unittest.TestCase):
             text=True,
         )
 
-    def test_catalog_lists_save_10_percent(self):
+    def test_catalog_lists_public_skills(self):
         result = self.run_cli("list")
+        self.assertIn("email-triage-pro", result.stdout)
         self.assertIn("save-10-percent", result.stdout)
         self.assertIn("stable", result.stdout)
 
@@ -33,6 +34,15 @@ class PublicRepositoryTests(unittest.TestCase):
         payload = json.loads(self.run_cli("show", "save-10-percent").stdout)
         self.assertEqual(payload["path"], "save-10-percent")
         self.assertEqual(payload["status"], "stable")
+
+    def test_email_triage_pro_is_installable(self):
+        payload = json.loads(self.run_cli("show", "email-triage-pro").stdout)
+        self.assertEqual(payload["path"], "email-triage-pro")
+        with tempfile.TemporaryDirectory() as directory:
+            self.run_cli("install", "email-triage-pro", "--target-root", directory)
+            installed = Path(directory) / "email-triage-pro"
+            self.assertTrue((installed / "SKILL.md").is_file())
+            self.assertTrue((installed / "references" / "feedback-learning.md").is_file())
 
     def test_install_is_safe_and_excludes_tests(self):
         with tempfile.TemporaryDirectory() as directory:

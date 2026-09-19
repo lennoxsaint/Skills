@@ -3,6 +3,19 @@
   "repository": "https://github.com/lennoxsaint/Skills",
   "skills": [
     {
+      "name": "email-triage-pro",
+      "display_name": "Email Triage Pro",
+      "path": "email-triage-pro",
+      "status": "stable",
+      "version": "1.0.0",
+      "summary": "Review Gmail, surface important mail, draft a small reply queue, and learn archive and writing preferences.",
+      "requires": "ChatGPT Gmail app, Claude Gmail connector, or gog 0.35+",
+      "docs": "docs/email-triage-pro.md",
+      "evaluation": "evaluations/email-triage-pro.md",
+      "examples": "examples/email-triage-pro",
+      "trigger_cases": "tests/email-triage-pro/trigger-cases.json"
+    },
+    {
       "name": "save-10-percent",
       "display_name": "Save 10%",
       "path": "save-10-percent",

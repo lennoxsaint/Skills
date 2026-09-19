@@ -1,0 +1,37 @@
+{
+  "version": 1,
+  "classification_rules": [
+    {
+      "id": "rule-demo-archive-1",
+      "account_scope": "work",
+      "decision": "archive",
+      "match": {
+        "sender": "digest@example.invalid"
+      },
+      "source": "explicit",
+      "distinct_examples": 1,
+      "active": true
+    },
+    {
+      "id": "rule-demo-protect-1",
+      "account_scope": "all accounts",
+      "decision": "protect",
+      "match": {
+        "subject_phrase": "invoice"
+      },
+      "source": "explicit",
+      "distinct_examples": 1,
+      "active": true
+    }
+  ],
+  "voice_profiles": {
+    "work": {
+      "tone": "warm and direct",
+      "normal_length": "under 120 words",
+      "sign_off": "Thanks, Sam",
+      "avoid_phrases": [
+        "just checking in"
+      ]
+    }
+  }
+}
