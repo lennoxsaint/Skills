@@ -44,6 +44,24 @@ class PublicRepositoryTests(unittest.TestCase):
             self.assertTrue((installed / "SKILL.md").is_file())
             self.assertTrue((installed / "references" / "feedback-learning.md").is_file())
 
+    def test_goal_is_installable_and_self_validating(self):
+        payload = json.loads(self.run_cli("show", "goal").stdout)
+        self.assertEqual(payload["path"], "goal")
+        with tempfile.TemporaryDirectory() as directory:
+            self.run_cli("install", "goal", "--target-root", directory)
+            installed = Path(directory) / "goal"
+            self.assertTrue((installed / "SKILL.md").is_file())
+            self.assertTrue((installed / "assets" / "goal.md.template").is_file())
+            self.assertTrue((installed / "assets" / "progress.md.template").is_file())
+            result = subprocess.run(
+                [sys.executable, str(installed / "scripts" / "validate_goal_skill.py")],
+                cwd=installed,
+                check=True,
+                capture_output=True,
+                text=True,
+            )
+            self.assertIn("PASS", result.stdout)
+
     def test_install_is_safe_and_excludes_tests(self):
         with tempfile.TemporaryDirectory() as directory:
             self.run_cli("install", "save-10-percent", "--target-root", directory)

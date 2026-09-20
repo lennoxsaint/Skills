@@ -1,0 +1,8 @@
+interface:
+  display_name: "Goal"
+  short_description: "Turn a plan into a durable execution goal"
+  brand_color: "#7C3AED"
+  default_prompt: "Use $goal to turn my plan into a durable, steerable Codex goal packet."
+
+policy:
+  allow_implicit_invocation: true

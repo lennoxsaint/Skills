@@ -1,0 +1,36 @@
+---
+goal_slug: "{{GOAL_SLUG}}"
+status: "ready"
+updated_at_local: "{{UPDATED_AT_LOCAL}}"
+goal_sha256: "{{GOAL_SHA256}}"
+---
+
+# Progress: {{GOAL_TITLE}}
+
+## Current checkpoint
+
+Not started.
+
+## Verified evidence
+
+- Goal packet created.
+
+## Remaining work
+
+{{INITIAL_REMAINING_WORK}}
+
+## Blockers
+
+None known.
+
+## Accepted steering
+
+None yet.
+
+## Decisions and strategy changes
+
+None yet.
+
+## Next action
+
+Start native Goal Mode with the launcher returned by `$goal`.

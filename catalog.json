@@ -16,6 +16,19 @@
       "trigger_cases": "tests/email-triage-pro/trigger-cases.json"
     },
     {
+      "name": "goal",
+      "display_name": "Goal",
+      "path": "goal",
+      "status": "stable",
+      "version": "1.0.0",
+      "summary": "Turn a plan into a durable Codex goal packet or a concise Claude /goal prompt.",
+      "requires": "Python 3.10+ for Codex packet creation; no helper runtime for Claude prompt mode",
+      "docs": "docs/goal.md",
+      "evaluation": "evaluations/goal.md",
+      "examples": "examples/goal",
+      "trigger_cases": "tests/goal/trigger-cases.json"
+    },
+    {
       "name": "save-10-percent",
       "display_name": "Save 10%",
       "path": "save-10-percent",

@@ -1,0 +1,48 @@
+---
+title: "{{GOAL_TITLE}}"
+goal_slug: "{{GOAL_SLUG}}"
+status: "ready"
+created_at_local: "{{CREATED_AT_LOCAL}}"
+workspace_root: "{{WORKSPACE_ROOT}}"
+progress_file: "{{PROGRESS_PATH}}"
+---
+
+# {{GOAL_TITLE}}
+
+## Outcome
+
+{{OUTCOME}}
+
+## Workspace and source truth
+
+{{WORKSPACE_AND_SOURCE_TRUTH}}
+
+## Success and loop criteria
+
+{{SUCCESS_AND_LOOP_CRITERIA}}
+
+## Autonomy
+
+{{AUTONOMY}}
+
+## Hard stop rules
+
+{{HARD_STOP_RULES}}
+
+## Required work
+
+{{REQUIRED_WORK}}
+
+## Verification
+
+{{VERIFICATION}}
+
+## Steering notes
+
+Owner-editable. Add durable changes in scope, priority, constraints, or acceptance criteria here. Thread instructions take effect immediately; file edits take effect when Codex next re-reads this contract.
+
+{{STEERING_NOTES}}
+
+## Final report
+
+{{FINAL_REPORT}}
