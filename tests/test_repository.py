@@ -62,6 +62,19 @@ class PublicRepositoryTests(unittest.TestCase):
             )
             self.assertIn("PASS", result.stdout)
 
+    def test_ambitious_is_installable(self):
+        payload = json.loads(self.run_cli("show", "ambitious").stdout)
+        self.assertEqual(payload["path"], "ambitious")
+        with tempfile.TemporaryDirectory() as directory:
+            self.run_cli("install", "ambitious", "--target-root", directory)
+            installed = Path(directory) / "ambitious"
+            self.assertTrue((installed / "SKILL.md").is_file())
+            for name in ("crew.md", "instruments.md", "judging.md", "report.md"):
+                self.assertTrue((installed / "references" / name).is_file())
+            for name in ("flight_check.mjs", "judge.mjs", "selftest.mjs"):
+                self.assertTrue((installed / "scripts" / name).is_file())
+            self.assertFalse(any((installed / "scripts").glob("test_*.py")))
+
     def test_install_is_safe_and_excludes_tests(self):
         with tempfile.TemporaryDirectory() as directory:
             self.run_cli("install", "save-10-percent", "--target-root", directory)

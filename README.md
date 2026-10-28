@@ -10,6 +10,7 @@ Every skill is a self-contained folder with instructions, UI metadata, determini
 
 | Skill | What it does | Status | Version |
 |---|---|---:|---:|
+| [Ambitious](ambitious/SKILL.md) | Goes deeper on a big task you flag as important, then has a different AI model score the work instead of grading itself. | Stable | 1.0.0 |
 | [Email Triage Pro](email-triage-pro/SKILL.md) | Reviews Gmail, surfaces important mail, drafts a few replies, and learns archive and writing preferences. | Stable | 1.0.0 |
 | [Goal](goal/SKILL.md) | Turns a plan into a durable Codex goal packet or a compact Claude `/goal` prompt. | Stable | 1.0.0 |
 | [Save 10%](save-10-percent/SKILL.md) | Audits recurring costs, verifies actual use, finds 10% in safe net savings, and can execute an exact approved batch. | Stable | 2.0.1 |

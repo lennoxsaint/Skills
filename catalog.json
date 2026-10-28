@@ -3,6 +3,19 @@
   "repository": "https://github.com/lennoxsaint/Skills",
   "skills": [
     {
+      "name": "ambitious",
+      "display_name": "Ambitious",
+      "path": "ambitious",
+      "status": "stable",
+      "version": "1.0.0",
+      "summary": "Run a big task the way the field's best practitioner would: find the goal behind the goal and the money moment, build from raw material, red-team it, get an outside judge and report against stretch targets.",
+      "requires": "Node 18+ for the flight log and judge scripts; Codex CLI or Claude CLI for the outside judge",
+      "docs": "docs/ambitious.md",
+      "evaluation": "evaluations/ambitious.md",
+      "examples": "examples/ambitious",
+      "trigger_cases": "tests/ambitious/trigger-cases.json"
+    },
+    {
       "name": "email-triage-pro",
       "display_name": "Email Triage Pro",
       "path": "email-triage-pro",

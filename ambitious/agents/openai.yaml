@@ -1,0 +1,8 @@
+interface:
+  display_name: "Ambitious"
+  short_description: "A Way of Flying: the deeper version, judged from outside"
+  brand_color: "#EA580C"
+  default_prompt: "Use $ambitious to run this as a flight: goal behind the goal, money moment, raw material, real instruments, a crew of methods, an outside judge and a measured flight report."
+
+policy:
+  allow_implicit_invocation: true
