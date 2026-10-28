@@ -5,7 +5,7 @@ description: "Runs a big task the way the field's best practitioner would, then 
 
 # Ambitious: A Way of Flying
 
-Version 1.0.0.
+Version 1.2.4.
 
 The method comes from Felix Rieseberg's essay [How to be more ambitious: A tutorial for humans with models](https://felixrieseberg.com/how-to-be-more-ambitious-a-tutorial-for-humans-with-models/). Its image is Goya's "Modo de volar" (*A Way of Flying*). Models are astounding in some directions. Most work under-uses them because the request is the person's best guess at a task, not the outcome they want. This skill makes you ask the deeper question yourself, and then prove the answer.
 

@@ -105,4 +105,6 @@ you can keep a private file at `~/.ambitious/profile.md` (or wherever `AMBITIOUS
 
 ## changelog
 
+**1.2.4** (29 Oct 2026) - label only. the version number now follows the private history (v1.2.3 plus the trigger fix). the skill text is unchanged.
+
 **1.0.0** (28 Oct 2026) - first public release. this is the private v1.2.3 body plus the 28 Oct trigger fix. a later private version tried to replace v1.2.3 in a blind test. it did not beat v1.2.3 by the rule we wrote before the test, so v1.2.3 stayed. the fix narrows when the skill fires: only on an explicit ask for big effort, or explicitly high stakes. a plain request for a sales page or a template is now normal work. private paths and owner-only rules were removed. the method is the same.
