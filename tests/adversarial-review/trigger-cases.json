@@ -1,0 +1,178 @@
+[
+  {
+    "prompt": "Run an adversarial review of this plan.",
+    "should_trigger": true
+  },
+  {
+    "prompt": "Red-team this workflow with an independent reviewer.",
+    "should_trigger": true
+  },
+  {
+    "prompt": "Use $adversarial-review on this skill with a 90/100 bar.",
+    "should_trigger": true
+  },
+  {
+    "prompt": "Get another model to tear this answer apart, then fix what holds up.",
+    "should_trigger": true
+  },
+  {
+    "prompt": "Iterate with Codex until you both agree on this plan.",
+    "should_trigger": true
+  },
+  {
+    "prompt": "Have a different model critique this implementation against a fixed rubric.",
+    "should_trigger": true
+  },
+  {
+    "prompt": "Adversarially review my migration plan. Review only.",
+    "should_trigger": true
+  },
+  {
+    "prompt": "Red-team iteration on this prompt until it scores 95.",
+    "should_trigger": true
+  },
+  {
+    "prompt": "I want agreement between you and another model on this design before we build.",
+    "should_trigger": true
+  },
+  {
+    "prompt": "Send this spec to an independent reviewer and check every finding.",
+    "should_trigger": true
+  },
+  {
+    "prompt": "Do an adversarial pass on this answer and keep the disagreements.",
+    "should_trigger": true
+  },
+  {
+    "prompt": "Critique and revise this plan with a second model until it clears 90.",
+    "should_trigger": true
+  },
+  {
+    "prompt": "Run a red-team loop on this onboarding workflow and report the score history.",
+    "should_trigger": true
+  },
+  {
+    "prompt": "Get a fresh reviewer to find counterexamples to this approach.",
+    "should_trigger": true
+  },
+  {
+    "prompt": "Adversarial review: is this skill safe to publish? Use a different model family.",
+    "should_trigger": true
+  },
+  {
+    "prompt": "Have GPT review this, verify its findings, revise, and send it back.",
+    "should_trigger": true
+  },
+  {
+    "prompt": "Review this implementation adversarially and tell me what is still unresolved.",
+    "should_trigger": true
+  },
+  {
+    "prompt": "Red-team my launch checklist with an outside model and a fixed rubric.",
+    "should_trigger": true
+  },
+  {
+    "prompt": "Keep going back and forth with the reviewer until no material disagreement remains.",
+    "should_trigger": true
+  },
+  {
+    "prompt": "Independent critique of this architecture decision, scored out of 100, with fixes.",
+    "should_trigger": true
+  },
+  {
+    "prompt": "Make another model try to break this plan before I run it.",
+    "should_trigger": true
+  },
+  {
+    "prompt": "Adversarially review this answer. Do not change the rubric to get a pass.",
+    "should_trigger": true
+  },
+  {
+    "prompt": "Review this pull request.",
+    "should_trigger": false
+  },
+  {
+    "prompt": "Proofread this paragraph.",
+    "should_trigger": false
+  },
+  {
+    "prompt": "Double-check your answer.",
+    "should_trigger": false
+  },
+  {
+    "prompt": "Build the migration.",
+    "should_trigger": false
+  },
+  {
+    "prompt": "What do you think of this plan?",
+    "should_trigger": false
+  },
+  {
+    "prompt": "Loop this draft until it's 100/100.",
+    "should_trigger": false
+  },
+  {
+    "prompt": "Hill climb this until two judges would ship it.",
+    "should_trigger": false
+  },
+  {
+    "prompt": "Steelman both options and score them.",
+    "should_trigger": false
+  },
+  {
+    "prompt": "Ask Codex to implement this feature.",
+    "should_trigger": false
+  },
+  {
+    "prompt": "Write a security threat model for this service.",
+    "should_trigger": false
+  },
+  {
+    "prompt": "Run the tests and fix what fails.",
+    "should_trigger": false
+  },
+  {
+    "prompt": "Summarize the reviewer's comments on my paper.",
+    "should_trigger": false
+  },
+  {
+    "prompt": "Find the bug in this function.",
+    "should_trigger": false
+  },
+  {
+    "prompt": "Leave a review for this restaurant.",
+    "should_trigger": false
+  },
+  {
+    "prompt": "Turn this plan into a goal.",
+    "should_trigger": false
+  },
+  {
+    "prompt": "Go above and beyond on this report.",
+    "should_trigger": false
+  },
+  {
+    "prompt": "Compare Claude and GPT for coding.",
+    "should_trigger": false
+  },
+  {
+    "prompt": "Write a red team exercise for my security class.",
+    "should_trigger": false
+  },
+  {
+    "prompt": "Check this essay for AI-sounding phrases.",
+    "should_trigger": false
+  },
+  {
+    "prompt": "Approve this plan and start work.",
+    "should_trigger": false
+  },
+  {
+    "prompt": "Explain what an adversarial example is in machine learning.",
+    "should_trigger": false
+  },
+  {
+    "prompt": "Rate this thumbnail.",
+    "should_trigger": false
+  }
+]

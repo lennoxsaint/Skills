@@ -1,0 +1,8 @@
+interface:
+  display_name: "Adversarial Review"
+  short_description: "Get an independent critique, check each finding, revise"
+  brand_color: "#DC2626"
+  default_prompt: "Use $adversarial-review on this plan with a 90/100 bar and an independent reviewer."
+
+policy:
+  allow_implicit_invocation: true

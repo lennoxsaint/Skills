@@ -13,6 +13,9 @@ Works in Claude Code and Codex. One command to install. By [Lennox Saint](https:
 | [Hill Climb](hill-climb/SKILL.md) | Turns your real data into locked tests, then keeps improving the work until the score and two outside judges say it is done. | "Hill climb this until 90% of the cases pass." | 1.0.0 |
 | [Ambitious](ambitious/SKILL.md) | Goes deeper on a big task you flag as important, then has a different AI model score the work instead of grading itself. | "Go above and beyond on this." | 1.2.4 |
 | [Goal](goal/SKILL.md) | Turns a plan into one bounded goal an agent can run for hours: a durable Codex goal packet or a compact Claude `/goal` prompt. | "Turn this plan into a goal." | 1.1.0 |
+| [Loop](loop/SKILL.md) | Writes a 100-point rubric for one draft, fixes and rescores it, and stops at 100/100 or tells you exactly which points are missing. | "Loop this until it's 100/100." | 1.0.0 |
+| [Adversarial Review](adversarial-review/SKILL.md) | Sends your draft to an independent reviewer, checks every finding, fixes what holds up, and reports the score history and what is still open. | "Red-team this plan." | 1.0.0 |
+| [Strategy Prompt](strategy-prompt/SKILL.md) | Steelmans every option, scores them in a weighted matrix, then attacks its own pick before it gives a final recommendation. | "Steelman both sides and score them." | 1.0.0 |
 | [Save 10%](save-10-percent/SKILL.md) | Audits recurring costs, verifies actual use, finds 10% in safe net savings, and can execute an exact approved batch. | "Find 10% in safe savings." | 2.0.1 |
 | [Email Triage Pro](email-triage-pro/SKILL.md) | Reviews Gmail, surfaces important mail, drafts a few replies, and learns archive and writing preferences. | "Triage my Gmail." | 1.0.0 |
 

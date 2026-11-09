@@ -24,6 +24,22 @@
   },
   "skills": [
     {
+      "name": "adversarial-review",
+      "display_name": "Adversarial Review",
+      "path": "adversarial-review",
+      "status": "stable",
+      "version": "1.0.0",
+      "summary": "Have an independent reviewer critique a draft against a fixed rubric, check each finding, revise, and repeat until the bar is met or the budget runs out.",
+      "use_when": "The user wants a plan, answer, workflow, skill or implementation attacked by a second model before they rely on it (\"adversarial review\", \"red-team this\", \"iterate until you both agree\"). Not for a plain code review or for building the thing.",
+      "try": "Run an adversarial review of this plan with a 90/100 bar and an independent reviewer.",
+      "hosts": ["claude", "codex"],
+      "requires": "A second reviewer the agent can reach: another model's CLI or connector, or a fresh session of the same model",
+      "docs": "docs/adversarial-review.md",
+      "evaluation": "evaluations/adversarial-review.md",
+      "examples": "examples/adversarial-review",
+      "trigger_cases": "tests/adversarial-review/trigger-cases.json"
+    },
+    {
       "name": "ambitious",
       "display_name": "Ambitious",
       "path": "ambitious",
@@ -88,6 +104,22 @@
       "trigger_cases": "tests/hill-climb/trigger-cases.json"
     },
     {
+      "name": "loop",
+      "display_name": "Loop",
+      "path": "loop",
+      "status": "stable",
+      "version": "1.0.0",
+      "summary": "Write a 100-point rubric for one draft, revise and rescore it, and stop at 100/100 or say exactly which points are missing.",
+      "use_when": "The user wants one local draft or artifact improved now with a score for every pass (\"loop this\", \"make it 100/100\", \"iterate until perfect\"). Not for long jobs that need a measured bar: use hill-climb for those.",
+      "try": "Loop this draft: make it 100/100 or tell me exactly what blocks it.",
+      "hosts": ["claude", "codex"],
+      "requires": "Nothing to install; the agent must be able to read and edit the draft",
+      "docs": "docs/loop.md",
+      "evaluation": "evaluations/loop.md",
+      "examples": "examples/loop",
+      "trigger_cases": "tests/loop/trigger-cases.json"
+    },
+    {
       "name": "save-10-percent",
       "display_name": "Save 10%",
       "path": "save-10-percent",
@@ -102,6 +134,22 @@
       "evaluation": "evaluations/save-10-percent.md",
       "examples": "examples/save-10-percent",
       "trigger_cases": "tests/save-10-percent/trigger-cases.json"
+    },
+    {
+      "name": "strategy-prompt",
+      "display_name": "Strategy Prompt",
+      "path": "strategy-prompt",
+      "status": "stable",
+      "version": "1.0.0",
+      "summary": "Steelman every option, score them in a weighted matrix, recommend one, check that pick for bias and blind spots, then give a final recommendation.",
+      "use_when": "The user faces a business, strategy or research decision with real options and wants a rigorous recommendation (\"strategy prompt\", \"steelman both sides\", \"score the options\"). Not for a quick opinion or a pros and cons list.",
+      "try": "Use the strategy prompt: steelman both options, score them, and tell me which one to pick.",
+      "hosts": ["claude", "codex"],
+      "requires": "Nothing to install; a notes or web search tool helps when the agent has one",
+      "docs": "docs/strategy-prompt.md",
+      "evaluation": "evaluations/strategy-prompt.md",
+      "examples": "examples/strategy-prompt",
+      "trigger_cases": "tests/strategy-prompt/trigger-cases.json"
     }
   ]
 }

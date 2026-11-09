@@ -1,0 +1,8 @@
+interface:
+  display_name: "Strategy Prompt"
+  short_description: "Steelman the options, score them, then check the answer"
+  brand_color: "#DB2777"
+  default_prompt: "Use $strategy-prompt to compare these options: "
+
+policy:
+  allow_implicit_invocation: true

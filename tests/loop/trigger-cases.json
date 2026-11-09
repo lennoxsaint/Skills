@@ -1,0 +1,178 @@
+[
+  {
+    "prompt": "Loop this draft until it is 100/100.",
+    "should_trigger": true
+  },
+  {
+    "prompt": "Use $loop on this email and tell me what blocks a perfect score.",
+    "should_trigger": true
+  },
+  {
+    "prompt": "Make this post 100/100.",
+    "should_trigger": true
+  },
+  {
+    "prompt": "Iterate on this script until it's perfect.",
+    "should_trigger": true
+  },
+  {
+    "prompt": "Loop this thumbnail: score it, fix it, score it again.",
+    "should_trigger": true
+  },
+  {
+    "prompt": "Run a quality loop on my landing page copy right now.",
+    "should_trigger": true
+  },
+  {
+    "prompt": "Give me the criteria for a great hook, then run them on this one until it passes.",
+    "should_trigger": true
+  },
+  {
+    "prompt": "Improve this draft. Score every pass out of 100.",
+    "should_trigger": true
+  },
+  {
+    "prompt": "Loop this carousel until every slide earns its points.",
+    "should_trigger": true
+  },
+  {
+    "prompt": "Take this newsletter intro and keep revising until it scores 100.",
+    "should_trigger": true
+  },
+  {
+    "prompt": "Build a rubric for this video description and loop it to 100.",
+    "should_trigger": true
+  },
+  {
+    "prompt": "/loop this caption",
+    "should_trigger": true
+  },
+  {
+    "prompt": "Score this cold email out of 100, fix the weakest part, and repeat.",
+    "should_trigger": true
+  },
+  {
+    "prompt": "Keep iterating on this README section until nothing loses points.",
+    "should_trigger": true
+  },
+  {
+    "prompt": "Loop it: rubric, revise, rescore, stop at 100 or tell me why not.",
+    "should_trigger": true
+  },
+  {
+    "prompt": "Make this pitch perfect. I want a scorecard for every pass.",
+    "should_trigger": true
+  },
+  {
+    "prompt": "Run the loop on this spec and report the lost points.",
+    "should_trigger": true
+  },
+  {
+    "prompt": "Polish this thread to 100/100 and show me the rubric you used.",
+    "should_trigger": true
+  },
+  {
+    "prompt": "Loop this short video script. Stop after two passes with no gain.",
+    "should_trigger": true
+  },
+  {
+    "prompt": "Improve this product update and grade each version.",
+    "should_trigger": true
+  },
+  {
+    "prompt": "Create the criteria and execute them on this draft in one go.",
+    "should_trigger": true
+  },
+  {
+    "prompt": "Iterate until perfect on this bio. Do not post it.",
+    "should_trigger": true
+  },
+  {
+    "prompt": "Hill climb this until 90% of the cases pass.",
+    "should_trigger": false
+  },
+  {
+    "prompt": "Build an eval from my logs and climb it.",
+    "should_trigger": false
+  },
+  {
+    "prompt": "Write me a prompt I can paste later to run a quality loop.",
+    "should_trigger": false
+  },
+  {
+    "prompt": "Fix the typo in the second line.",
+    "should_trigger": false
+  },
+  {
+    "prompt": "What do you think of this draft?",
+    "should_trigger": false
+  },
+  {
+    "prompt": "Review this pull request.",
+    "should_trigger": false
+  },
+  {
+    "prompt": "Run this command every 10 minutes and tell me when it changes.",
+    "should_trigger": false
+  },
+  {
+    "prompt": "Loop over the files in this folder and rename them.",
+    "should_trigger": false
+  },
+  {
+    "prompt": "Write a for loop that sums this list.",
+    "should_trigger": false
+  },
+  {
+    "prompt": "Turn this plan into a /goal prompt.",
+    "should_trigger": false
+  },
+  {
+    "prompt": "Publish this post now.",
+    "should_trigger": false
+  },
+  {
+    "prompt": "Summarize this article in three bullets.",
+    "should_trigger": false
+  },
+  {
+    "prompt": "Get another model to red-team this plan.",
+    "should_trigger": false
+  },
+  {
+    "prompt": "Score these three options and tell me which to pick.",
+    "should_trigger": false
+  },
+  {
+    "prompt": "Write a first draft of a launch email.",
+    "should_trigger": false
+  },
+  {
+    "prompt": "Go above and beyond on this sales page.",
+    "should_trigger": false
+  },
+  {
+    "prompt": "Make the agent pass 95% of the support tickets, using last month's tickets as the test.",
+    "should_trigger": false
+  },
+  {
+    "prompt": "Translate this email into Spanish.",
+    "should_trigger": false
+  },
+  {
+    "prompt": "Schedule this thread for 9 am tomorrow.",
+    "should_trigger": false
+  },
+  {
+    "prompt": "Explain what a rubric is.",
+    "should_trigger": false
+  },
+  {
+    "prompt": "Why is my video loop stuttering in the browser?",
+    "should_trigger": false
+  },
+  {
+    "prompt": "Shorten this paragraph a little.",
+    "should_trigger": false
+  }
+]

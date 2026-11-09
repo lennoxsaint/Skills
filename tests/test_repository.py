@@ -89,6 +89,23 @@ class PublicRepositoryTests(unittest.TestCase):
                 self.assertTrue((installed / "scripts" / name).is_file())
             self.assertFalse(any((installed / "scripts").glob("test_*.py")))
 
+    def test_text_only_skills_install_with_their_references(self):
+        expected = {
+            "loop": ["references/rubric-adapters.md"],
+            "adversarial-review": ["references/reviewer-contract.md"],
+            "strategy-prompt": [],
+        }
+        for name, references in expected.items():
+            payload = json.loads(self.run_cli("show", name).stdout)
+            self.assertEqual(payload["path"], name)
+            with tempfile.TemporaryDirectory() as directory:
+                self.run_cli("install", name, "--target-root", directory)
+                installed = Path(directory) / name
+                self.assertTrue((installed / "SKILL.md").is_file(), name)
+                self.assertTrue((installed / "agents" / "openai.yaml").is_file(), name)
+                for reference in references:
+                    self.assertTrue((installed / reference).is_file(), f"{name}: {reference}")
+
     def test_catalog_entries_tell_an_agent_when_to_use_each_skill(self):
         catalog = json.loads((REPO_ROOT / "catalog.json").read_text(encoding="utf-8"))
         self.assertEqual(set(catalog["install"]), {"claude", "codex", "both", "update"})

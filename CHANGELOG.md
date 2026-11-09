@@ -7,6 +7,9 @@ What changed in this repository, newest first. Each skill also keeps its own not
 **Added**
 
 - **Hill Climb 1.0.0.** New skill. It turns real data into a locked answer key, then climbs to a measured target with fresh agent sessions until the score and two outside judges say it is done. See the [guide](docs/hill-climb.md) and the [evaluation](evaluations/hill-climb.md).
+- **Loop 1.0.0.** New skill. It writes a 100-point rubric for one draft, revises and rescores it, and stops at 100/100 or says which points are missing. See the [guide](docs/loop.md) and the [evaluation](evaluations/loop.md).
+- **Adversarial Review 1.0.0.** New skill. An independent reviewer critiques a frozen draft against a fixed rubric, each finding is checked, and the loop stops at the bar or the budget. See the [guide](docs/adversarial-review.md) and the [evaluation](evaluations/adversarial-review.md).
+- **Strategy Prompt 1.0.0.** New skill. It steelmans every option, scores them in a weighted matrix, checks its own pick, then gives a final recommendation. See the [guide](docs/strategy-prompt.md) and the [evaluation](evaluations/strategy-prompt.md).
 - **Install for Claude Code, Codex or both.** `scripts/skills.py install <name> --host claude|codex|both`. It also takes several skill names at once, and prints what each skill needs and a prompt to try.
 - **`--update`.** Replaces a skill you already installed. Your old copy is moved to a `skills-backup` folder first.
 - **Installer safety.** An empty `--target-root` is refused. When both hosts share one skills folder, `--host both` installs there once.

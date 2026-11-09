@@ -1,0 +1,178 @@
+[
+  {
+    "prompt": "Use the strategy prompt on this decision.",
+    "should_trigger": true
+  },
+  {
+    "prompt": "Steelman both sides, then tell me which to pick.",
+    "should_trigger": true
+  },
+  {
+    "prompt": "Score these options in a weighted matrix.",
+    "should_trigger": true
+  },
+  {
+    "prompt": "Compare these three strategic choices for my business.",
+    "should_trigger": true
+  },
+  {
+    "prompt": "Give me a rigorous recommendation: raise prices or add a cheaper tier?",
+    "should_trigger": true
+  },
+  {
+    "prompt": "$strategy-prompt: should I hire a contractor or build this myself?",
+    "should_trigger": true
+  },
+  {
+    "prompt": "Steelman each option, score them, and check your own bias before you answer.",
+    "should_trigger": true
+  },
+  {
+    "prompt": "Should I focus on YouTube or on short posts for the next quarter? Score it properly.",
+    "should_trigger": true
+  },
+  {
+    "prompt": "Run the strategy prompt on annual plan versus team plan.",
+    "should_trigger": true
+  },
+  {
+    "prompt": "I can't decide between two offers. Steelman both and weight the criteria.",
+    "should_trigger": true
+  },
+  {
+    "prompt": "Make a weighted decision matrix for these launch options and recommend one.",
+    "should_trigger": true
+  },
+  {
+    "prompt": "What would make you wrong about this recommendation? Do the full strategy pass.",
+    "should_trigger": true
+  },
+  {
+    "prompt": "Compare build, buy and partner for this feature with scores and a final call.",
+    "should_trigger": true
+  },
+  {
+    "prompt": "Give me a first recommendation, double-check it, then a final one.",
+    "should_trigger": true
+  },
+  {
+    "prompt": "Rigorous business recommendation please: keep the free tier or cut it?",
+    "should_trigger": true
+  },
+  {
+    "prompt": "Score the options against my goal of 1,000 customers and pick one.",
+    "should_trigger": true
+  },
+  {
+    "prompt": "Steelman the case for and against moving to usage pricing.",
+    "should_trigger": true
+  },
+  {
+    "prompt": "Use a scoring algorithm to choose between these three niches.",
+    "should_trigger": true
+  },
+  {
+    "prompt": "Help me decide where to put one growth bet. Steelman, score, double-check.",
+    "should_trigger": true
+  },
+  {
+    "prompt": "Strategy prompt this research question: which market do we enter first?",
+    "should_trigger": true
+  },
+  {
+    "prompt": "Weigh these options with criteria that add up to 100% and tell me your confidence.",
+    "should_trigger": true
+  },
+  {
+    "prompt": "Before I commit, steelman the option I'm against and score it fairly.",
+    "should_trigger": true
+  },
+  {
+    "prompt": "What's your quick take on raising prices?",
+    "should_trigger": false
+  },
+  {
+    "prompt": "List the pros and cons of remote work.",
+    "should_trigger": false
+  },
+  {
+    "prompt": "Write a strategy document for Q3.",
+    "should_trigger": false
+  },
+  {
+    "prompt": "Turn this strategy into a /goal prompt.",
+    "should_trigger": false
+  },
+  {
+    "prompt": "Look up the market size for note-taking apps.",
+    "should_trigger": false
+  },
+  {
+    "prompt": "Get another model to red-team this plan.",
+    "should_trigger": false
+  },
+  {
+    "prompt": "Loop this draft until it's 100/100.",
+    "should_trigger": false
+  },
+  {
+    "prompt": "Summarize this strategy memo.",
+    "should_trigger": false
+  },
+  {
+    "prompt": "Write a prompt for an image of a chess board.",
+    "should_trigger": false
+  },
+  {
+    "prompt": "Which of these two headlines is better?",
+    "should_trigger": false
+  },
+  {
+    "prompt": "Execute the plan we agreed on.",
+    "should_trigger": false
+  },
+  {
+    "prompt": "What is a steelman argument?",
+    "should_trigger": false
+  },
+  {
+    "prompt": "Score this essay out of 100.",
+    "should_trigger": false
+  },
+  {
+    "prompt": "Build me a pricing page.",
+    "should_trigger": false
+  },
+  {
+    "prompt": "Find 10% in savings across my subscriptions.",
+    "should_trigger": false
+  },
+  {
+    "prompt": "Draft an email telling the team about our new strategy.",
+    "should_trigger": false
+  },
+  {
+    "prompt": "Hill climb this until the eval passes.",
+    "should_trigger": false
+  },
+  {
+    "prompt": "What did I decide about pricing last month?",
+    "should_trigger": false
+  },
+  {
+    "prompt": "Explain game theory to me.",
+    "should_trigger": false
+  },
+  {
+    "prompt": "Make a spreadsheet of my competitors.",
+    "should_trigger": false
+  },
+  {
+    "prompt": "Fix the failing test in the billing module.",
+    "should_trigger": false
+  },
+  {
+    "prompt": "Brainstorm 20 business ideas.",
+    "should_trigger": false
+  }
+]
