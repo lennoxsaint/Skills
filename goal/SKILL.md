@@ -5,6 +5,14 @@ description: Generate durable Codex goal packets or optimized Claude /goal promp
 
 # Goal
 
+When the goal is a quality bar that real data can measure (a pass rate, an eval score, a judge verdict), route to `$hill-climb` when it is installed: it turns the data into a locked test set and runs the climb itself, so it needs no /goal prompt.
+
+## Entry guard: creation versus continuation
+
+Before applying the creation steps below, distinguish the current request from an already active goal. An automatic native Goal Mode continuation, or a request to resume/continue an existing goal, is execution work even when this skill remains in the conversation.
+
+For an active continuation: read the existing goal and its current progress, inspect the current runtime phase/next action, and execute the next authorized step. Do not recreate the packet, return the launcher, ask for the original plan again, or call goal creation again. Preserve the original activation timestamp and completed work. Only return a new or revised launcher when the user explicitly requests one now. The creation-only output rules below do not apply to execution continuations. Respect actual Plan Mode if active.
+
 Turn a user-provided plan into one bounded, verifiable goal.
 
 - For Codex, create a durable goal packet and return its paste-ready `/goal` launcher.

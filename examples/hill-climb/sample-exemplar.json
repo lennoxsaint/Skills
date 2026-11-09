@@ -1,0 +1,12 @@
+{
+  "id": "ex-fail-1",
+  "input": "show me the draft I was writing about onboarding",
+  "output": "{\"first_move\": \"search_all_notes\", \"tools\": [\"search_all_notes\", \"get_draft\"], \"args\": {\"query\": \"onboarding\"}, \"reply\": \"I searched all 412 notes and found your onboarding draft.\"}",
+  "label": "fail",
+  "why": "The user corrected it in the next message: they wanted the draft opened, not a search of every note.",
+  "source": "synthetic example - a real exemplar would name the transcript file and line here",
+  "checks": [
+    { "name": "first tool is the draft lookup", "type": "equals", "path": "tools[0]", "value": "get_draft" },
+    { "name": "does not search every note first", "type": "none_of", "path": "tools", "values": ["search_all_notes"] }
+  ]
+}

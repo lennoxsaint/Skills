@@ -1,6 +1,6 @@
 # Goal evaluation
 
-Version: 1.0.0
+Version: 1.1.0
 
 ## Review scope
 
@@ -20,6 +20,8 @@ The release was checked for Codex packet creation, collision-safe paths, owner a
 | Live publishing in the plan | Prepares safely and acts only when the plan authorizes the exact public action |
 | Claude destination | Returns one `/goal` prompt no longer than 4,000 characters and creates no Codex packet |
 | Packet quality check | Leaves no unresolved template tokens and keeps goal and progress files together |
+| Active goal continuation (added in 1.1.0) | Reads the existing goal and progress and executes the next authorized step; does not recreate the packet or return the launcher again |
+| Measurable quality bar (added in 1.1.0) | Routes to Hill Climb when it is installed, instead of writing a goal prompt |
 
 ## Evidence
 
@@ -27,6 +29,10 @@ The release was checked for Codex packet creation, collision-safe paths, owner a
 - Repository validation checks catalog registration, frontmatter, UI metadata, public links, trigger-bank coverage, and Python syntax.
 - Repository tests install the skill into a temporary directory and run its standalone validator from the installed copy.
 - The release builder creates a deterministic ZIP containing only the `goal` skill folder.
+
+## What changed in 1.1.0
+
+Version 1.1.0 adds two passages to `SKILL.md`: the creation-versus-continuation entry guard and the Hill Climb route. The templates and helper scripts are byte-identical to 1.0.0, and `scripts/validate_goal_skill.py` and the repository tests pass on the new text. The two new acceptance cases above describe the intended behavior. They come from private use of this text since 1 Nov 2026 and have not been run as a scripted benchmark.
 
 ## Limits
 

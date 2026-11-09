@@ -1,0 +1,30 @@
+# Skills by Lennox Saint
+
+> Installable AI agent skills for Claude Code and Codex. Each skill is one folder with a SKILL.md, a plain guide, test evidence, a synthetic example and trigger cases. Install with one command: `git clone --depth 1 https://github.com/lennoxsaint/Skills.git && python3 Skills/scripts/skills.py install <skill-name> --host claude|codex|both`.
+
+## Start here
+
+- [Agent guide](https://github.com/lennoxsaint/Skills/blob/main/AGENTS.md): install steps for agents, with a check for each step
+- [Catalog](https://raw.githubusercontent.com/lennoxsaint/Skills/main/catalog.json): every skill as JSON with `use_when`, `try`, `requires`, `hosts` and `version`
+- [README](https://github.com/lennoxsaint/Skills/blob/main/README.md): the human front page
+- [Changelog](https://github.com/lennoxsaint/Skills/blob/main/CHANGELOG.md): what changed and when
+
+## Skills
+
+- [hill-climb](https://github.com/lennoxsaint/Skills/blob/main/hill-climb/SKILL.md): Turn real data into a locked answer key, then climb to a measured target until the score and two outside judges say it is done. Use when a long job must reach a quality bar you can prove.
+- [ambitious](https://github.com/lennoxsaint/Skills/blob/main/ambitious/SKILL.md): Run a big task the way the field's best practitioner would, then get an outside judge. Use when the user asks for exceptional effort or says the stakes are high.
+- [goal](https://github.com/lennoxsaint/Skills/blob/main/goal/SKILL.md): Turn a plan into a durable Codex goal packet or a concise Claude /goal prompt. Use when the user has a plan and wants one bounded goal for a long agent run.
+- [save-10-percent](https://github.com/lennoxsaint/Skills/blob/main/save-10-percent/SKILL.md): Audit recurring costs, verify actual use and find 10% in safe net savings. Use when the user wants subscriptions or recurring costs audited.
+- [email-triage-pro](https://github.com/lennoxsaint/Skills/blob/main/email-triage-pro/SKILL.md): Review Gmail, surface important mail, draft a few replies and learn preferences. Use when the user wants their Gmail inbox triaged.
+
+## Guides
+
+- [Hill Climb guide](https://github.com/lennoxsaint/Skills/blob/main/docs/hill-climb.md)
+- [Ambitious guide](https://github.com/lennoxsaint/Skills/blob/main/docs/ambitious.md)
+- [Goal guide](https://github.com/lennoxsaint/Skills/blob/main/docs/goal.md)
+- [Save 10% guide](https://github.com/lennoxsaint/Skills/blob/main/docs/save-10-percent.md)
+- [Email Triage Pro guide](https://github.com/lennoxsaint/Skills/blob/main/docs/email-triage-pro.md)
+
+## Evidence
+
+- [Evaluations index](https://github.com/lennoxsaint/Skills/blob/main/EVALUATION.md): what was tested for each skill and the known limits

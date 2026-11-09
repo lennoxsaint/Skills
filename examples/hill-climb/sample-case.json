@@ -1,0 +1,14 @@
+{
+  "id": "c014",
+  "input": "show me the draft I was writing about onboarding",
+  "origin": "real",
+  "source": "synthetic example - a real case would name the transcript file and line here",
+  "must_pass": false,
+  "negative": false,
+  "note": "A plain ask for one draft should go straight to the draft tool, not a full search.",
+  "checks": [
+    { "name": "first tool is the draft lookup", "type": "equals", "path": "tools[0]", "value": "get_draft" },
+    { "name": "does not search every note first", "type": "none_of", "path": "tools", "values": ["search_all_notes"] },
+    { "name": "reply stays short", "type": "max_words", "path": "reply", "value": 80 }
+  ]
+}
