@@ -11,6 +11,7 @@ What changed in this repository, newest first. Each skill also keeps its own not
 - **`--update`.** Replaces a skill you already installed. Your old copy is moved to a `skills-backup` folder first.
 - **Installer safety.** An empty `--target-root` is refused. When both hosts share one skills folder, `--host both` installs there once.
 - **Agent entry points.** [`AGENTS.md`](AGENTS.md) has install steps with a check for each one. [`llms.txt`](llms.txt) is a short index. `CLAUDE.md` points Claude Code at the agent guide.
+- **`llms.txt` is enough on its own.** Each skill line now carries its try prompt and what it needs, and a test keeps it in step with `catalog.json`.
 - **Catalog fields.** Every skill in `catalog.json` now has `use_when`, `try` and `hosts`. The catalog also lists the install command for each host.
 
 **Changed**
