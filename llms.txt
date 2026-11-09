@@ -11,11 +11,13 @@
 
 ## Skills
 
-- [hill-climb](https://github.com/lennoxsaint/Skills/blob/main/hill-climb/SKILL.md): Turn real data into a locked answer key, then climb to a measured target until the score and two outside judges say it is done. Use when a long job must reach a quality bar you can prove.
-- [ambitious](https://github.com/lennoxsaint/Skills/blob/main/ambitious/SKILL.md): Run a big task the way the field's best practitioner would, then get an outside judge. Use when the user asks for exceptional effort or says the stakes are high.
-- [goal](https://github.com/lennoxsaint/Skills/blob/main/goal/SKILL.md): Turn a plan into a durable Codex goal packet or a concise Claude /goal prompt. Use when the user has a plan and wants one bounded goal for a long agent run.
-- [save-10-percent](https://github.com/lennoxsaint/Skills/blob/main/save-10-percent/SKILL.md): Audit recurring costs, verify actual use and find 10% in safe net savings. Use when the user wants subscriptions or recurring costs audited.
-- [email-triage-pro](https://github.com/lennoxsaint/Skills/blob/main/email-triage-pro/SKILL.md): Review Gmail, surface important mail, draft a few replies and learn preferences. Use when the user wants their Gmail inbox triaged.
+Each line gives what the skill does, when to use it, a prompt to try and what it needs. Install any of them with `python3 scripts/skills.py install <skill-name> --host claude|codex|both` from a clone.
+
+- [hill-climb](https://github.com/lennoxsaint/Skills/blob/main/hill-climb/SKILL.md): Turn real data into a locked answer key, then climb to a measured target until the score and two outside judges say it is done. Use when a long job must reach a quality bar you can prove. Try: "Hill climb this: build an answer key from my real logs, then climb until 90% of the cases pass." Needs: Node 18+ and git; macOS sandbox-exec (the Linux bwrap path is untested); Claude Code or Codex CLI for the climber and the judges.
+- [ambitious](https://github.com/lennoxsaint/Skills/blob/main/ambitious/SKILL.md): Run a big task the way the field's best practitioner would, then get an outside judge. Use when the user asks for exceptional effort or says the stakes are high. Try: "Go above and beyond: find where my signup page loses people and fix the biggest leak." Needs: Node 18+ for the flight log and judge scripts; Codex CLI or Claude CLI for the outside judge.
+- [goal](https://github.com/lennoxsaint/Skills/blob/main/goal/SKILL.md): Turn a plan into a durable Codex goal packet or a concise Claude /goal prompt. Use when the user has a plan and wants one bounded goal for a long agent run. Try: "Use goal to turn this plan into a durable goal: [paste the plan]." Needs: Python 3.10+ for Codex packet creation; no helper runtime for Claude prompt mode.
+- [save-10-percent](https://github.com/lennoxsaint/Skills/blob/main/save-10-percent/SKILL.md): Audit recurring costs, verify actual use and find 10% in safe net savings. Use when the user wants subscriptions or recurring costs audited. Try: "Use save-10-percent to audit my recurring costs and find 10% in safe savings." Needs: Python 3.10+.
+- [email-triage-pro](https://github.com/lennoxsaint/Skills/blob/main/email-triage-pro/SKILL.md): Review Gmail, surface important mail, draft a few replies and learn preferences. Use when the user wants their Gmail inbox triaged. Try: "Use email-triage-pro to connect my Gmail accounts, surface important mail, draft a few replies, and learn from my feedback." Needs: ChatGPT Gmail app, Claude Gmail connector, or gog 0.35+.
 
 ## Guides
 

@@ -101,6 +101,16 @@ class PublicRepositoryTests(unittest.TestCase):
         self.assertIn("USE WHEN", listing)
         self.assertIn("hill-climb", listing)
 
+    def test_llms_txt_carries_each_skill_with_its_try_prompt_and_needs(self):
+        catalog = json.loads((REPO_ROOT / "catalog.json").read_text(encoding="utf-8"))
+        lines = (REPO_ROOT / "llms.txt").read_text(encoding="utf-8").splitlines()
+        for entry in catalog["skills"]:
+            link = f"- [{entry['name']}](https://github.com/lennoxsaint/Skills/blob/main/{entry['path']}/SKILL.md)"
+            matches = [line for line in lines if line.startswith(link)]
+            self.assertEqual(len(matches), 1, entry["name"])
+            self.assertIn(f'Try: "{entry["try"]}"', matches[0], entry["name"])
+            self.assertIn(f"Needs: {entry['requires']}.", matches[0], entry["name"])
+
     def run_cli_with_homes(self, home, *args, check=True):
         environment = dict(os.environ)
         environment["CLAUDE_CONFIG_DIR"] = str(Path(home) / "claude-home")
