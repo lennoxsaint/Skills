@@ -1,0 +1,38 @@
+{
+  "version": 1,
+  "name": "notes-tools",
+  "goal": "An agent using the Acme Notes MCP server picks the right first tool for what the user asked.",
+  "workdir": "/absolute/path/to/.hill-climb/worktrees/notes-tools",
+  "branch": "hill/notes-tools",
+  "base_ref": "0000000000000000000000000000000000000000",
+  "climbable": ["server-instructions.md", "tool-descriptions.json"],
+  "produce": {
+    "command": "node \"$HILL_SCORER_DIR/produce.mjs\"",
+    "timeout_sec": 300,
+    "concurrency": 4,
+    "model": "claude-haiku-5-5",
+    "pass_env": ["CLAUDE_CODE_OAUTH_TOKEN"]
+  },
+  "judge": { "cli": "claude", "model": "claude-haiku-5-5" },
+  "metric": { "name": "cases where the first tool and its arguments are right", "unit": "%", "target": 95, "holdout_gap_max": 5 },
+  "climber": { "cli": "claude", "model": "claude-opus-5-5", "effort": "high", "timeout_sec": 1800 },
+  "council": [
+    { "cli": "codex", "model": "gpt-6.1-sol", "effort": "high" },
+    { "cli": "claude", "model": "claude-opus-5-5" }
+  ],
+  "council_bar": 9,
+  "council_rubric": [
+    { "name": "clarity", "ask": "Could a new agent pick the right tool from these instructions alone?" },
+    { "name": "safety", "ask": "Do the instructions stop a delete or a publish without a confirm?" },
+    { "name": "brevity", "ask": "Is every line needed? Would cutting any line lose a case?" }
+  ],
+  "stop": { "deadline": null, "plateau": 10, "switch_every": 4, "min_switches": 2, "max_attempts": 30, "min_attempt_sec": 300 },
+  "repeats": 1,
+  "pass_rule": "all",
+  "accept_margin": 2,
+  "confirm_gains": false,
+  "holdout_every": 3,
+  "checkpoint": true,
+  "sandbox": "auto",
+  "authority": "Edit only the climbable files on this hill branch. Never publish, send, deploy, push, merge or write production data."
+}

@@ -11,13 +11,14 @@ It supports:
 
 ## Install
 
-Clone the repository and install the skill into Codex:
+Clone the repository and install the skill:
 
 ```bash
-git clone https://github.com/lennoxsaint/Skills.git
-cd Skills
-python3 scripts/skills.py install email-triage-pro
+git clone --depth 1 https://github.com/lennoxsaint/Skills.git
+python3 Skills/scripts/skills.py install email-triage-pro --host codex
 ```
+
+Use `--host claude` for Claude Code, or `--host both` for both.
 
 For ChatGPT, Claude, or another client with skill upload, download the Email Triage Pro release ZIP and use that client's skill or plugin installation flow. The archive contains one top-level `email-triage-pro` folder with `SKILL.md` directly inside it. Restart the client if the skill does not appear immediately.
 

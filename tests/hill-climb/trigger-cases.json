@@ -1,0 +1,194 @@
+[
+  {
+    "prompt": "Hill climb this.",
+    "should_trigger": true
+  },
+  {
+    "prompt": "Hill climb my agent's tool choice until it hits 95%.",
+    "should_trigger": true
+  },
+  {
+    "prompt": "Build an eval from my logs and climb it.",
+    "should_trigger": true
+  },
+  {
+    "prompt": "Use hill-climb on the support bot until 90% of the cases pass.",
+    "should_trigger": true
+  },
+  {
+    "prompt": "Make the harness hit 95% on real transcripts and keep going until it does.",
+    "should_trigger": true
+  },
+  {
+    "prompt": "Use my session logs as a benchmark and improve the MCP server instructions against it.",
+    "should_trigger": true
+  },
+  {
+    "prompt": "Keep going until it passes: build the test set from real failures first.",
+    "should_trigger": true
+  },
+  {
+    "prompt": "Turn these bug reports into a locked answer key and climb to the target.",
+    "should_trigger": true
+  },
+  {
+    "prompt": "I want a measured climb on the onboarding flow, with hidden tests the agent can't see.",
+    "should_trigger": true
+  },
+  {
+    "prompt": "Set up a hill for the landing page and climb it until two outside judges would ship it.",
+    "should_trigger": true
+  },
+  {
+    "prompt": "Build a holdout set from my past posts and climb the writer prompt against it.",
+    "should_trigger": true
+  },
+  {
+    "prompt": "Run a hill climb overnight on the extraction prompt with a deadline of 9am.",
+    "should_trigger": true
+  },
+  {
+    "prompt": "Climb the eval score for my summariser from 70% to 90% using real examples.",
+    "should_trigger": true
+  },
+  {
+    "prompt": "Vibes are not enough here. Build an answer key from the data and prove the agent got better.",
+    "should_trigger": true
+  },
+  {
+    "prompt": "Start a new hill from this repo and freeze the answer key once it can tell good from bad.",
+    "should_trigger": true
+  },
+  {
+    "prompt": "Use hill climbing to get the UI to a 9 out of 10 from two judges from different labs.",
+    "should_trigger": true
+  },
+  {
+    "prompt": "Mine my Claude Code transcripts for tool-call failures and climb the server guidance on them.",
+    "should_trigger": true
+  },
+  {
+    "prompt": "Resume the hill that was killed last night and report the best score.",
+    "should_trigger": true
+  },
+  {
+    "prompt": "The climb says stuck. Read the report and propose the next move for the hill.",
+    "should_trigger": true
+  },
+  {
+    "prompt": "Raise the bar on the finished hill to 9.5 and climb again.",
+    "should_trigger": true
+  },
+  {
+    "prompt": "Build yes/no test cases from these support tickets, hold 30% back, and climb until the hidden score is within 5 points.",
+    "should_trigger": true
+  },
+  {
+    "prompt": "Hill climb the prompt but never let the climber see the hidden tests.",
+    "should_trigger": true
+  },
+  {
+    "prompt": "Create a locked benchmark from real data and run fresh agent sessions at it until the number hits the target.",
+    "should_trigger": true
+  },
+  {
+    "prompt": "Make the app pass every must-pass case and reach 95% overall, with proof on disk.",
+    "should_trigger": true
+  },
+  {
+    "prompt": "Polish this one draft.",
+    "should_trigger": false
+  },
+  {
+    "prompt": "Tighten the wording of this email.",
+    "should_trigger": false
+  },
+  {
+    "prompt": "Fix the typo on line 12.",
+    "should_trigger": false
+  },
+  {
+    "prompt": "Run the test suite and tell me what fails.",
+    "should_trigger": false
+  },
+  {
+    "prompt": "Write unit tests for this function.",
+    "should_trigger": false
+  },
+  {
+    "prompt": "Explain what hill climbing is in optimisation.",
+    "should_trigger": false
+  },
+  {
+    "prompt": "What is a holdout set?",
+    "should_trigger": false
+  },
+  {
+    "prompt": "Review this pull request.",
+    "should_trigger": false
+  },
+  {
+    "prompt": "Turn this plan into a goal prompt.",
+    "should_trigger": false
+  },
+  {
+    "prompt": "Go above and beyond on this sales page.",
+    "should_trigger": false
+  },
+  {
+    "prompt": "Summarise yesterday's logs.",
+    "should_trigger": false
+  },
+  {
+    "prompt": "Plan a hiking trip with a good hill climb near Perth.",
+    "should_trigger": false
+  },
+  {
+    "prompt": "Write a landing page for my app.",
+    "should_trigger": false
+  },
+  {
+    "prompt": "Compare these two prompts and tell me which reads better.",
+    "should_trigger": false
+  },
+  {
+    "prompt": "Set a reminder to check the eval tomorrow.",
+    "should_trigger": false
+  },
+  {
+    "prompt": "Audit my subscriptions and find savings.",
+    "should_trigger": false
+  },
+  {
+    "prompt": "Triage my inbox.",
+    "should_trigger": false
+  },
+  {
+    "prompt": "Refactor this module to use async functions.",
+    "should_trigger": false
+  },
+  {
+    "prompt": "Give me three ideas for a benchmark name.",
+    "should_trigger": false
+  },
+  {
+    "prompt": "Rewrite this post in my voice.",
+    "should_trigger": false
+  },
+  {
+    "prompt": "Deploy the staging branch.",
+    "should_trigger": false
+  },
+  {
+    "prompt": "Check why CI is red.",
+    "should_trigger": false
+  },
+  {
+    "prompt": "Score this essay out of 10.",
+    "should_trigger": false
+  },
+  {
+    "prompt": "Draft a quick reply to this comment.",
+    "should_trigger": false
+  }
+]

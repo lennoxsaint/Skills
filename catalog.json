@@ -1,6 +1,27 @@
 {
   "schema_version": "1.0",
   "repository": "https://github.com/lennoxsaint/Skills",
+  "agent_guide": "AGENTS.md",
+  "hosts": {
+    "claude": {
+      "name": "Claude Code",
+      "skills_dir": "~/.claude/skills",
+      "config_home_env": "CLAUDE_CONFIG_DIR",
+      "invoke": "/<skill-name>, or describe the task"
+    },
+    "codex": {
+      "name": "Codex",
+      "skills_dir": "~/.codex/skills",
+      "config_home_env": "CODEX_HOME",
+      "invoke": "$<skill-name>, or describe the task"
+    }
+  },
+  "install": {
+    "claude": "git clone --depth 1 https://github.com/lennoxsaint/Skills.git && python3 Skills/scripts/skills.py install <skill-name> --host claude",
+    "codex": "git clone --depth 1 https://github.com/lennoxsaint/Skills.git && python3 Skills/scripts/skills.py install <skill-name> --host codex",
+    "both": "git clone --depth 1 https://github.com/lennoxsaint/Skills.git && python3 Skills/scripts/skills.py install <skill-name> --host both",
+    "update": "git -C Skills pull && python3 Skills/scripts/skills.py install <skill-name> --host both --update"
+  },
   "skills": [
     {
       "name": "ambitious",
@@ -9,6 +30,9 @@
       "status": "stable",
       "version": "1.2.4",
       "summary": "Run a big task the way the field's best practitioner would: find the goal behind the goal and the money moment, build from raw material, red-team it, get an outside judge and report against stretch targets.",
+      "use_when": "The user asks for exceptional effort (\"go above and beyond\", \"max effort\", \"one-shot this\") or says the stakes are high. Not for quick fixes or routine work.",
+      "try": "Go above and beyond: find where my signup page loses people and fix the biggest leak.",
+      "hosts": ["claude", "codex"],
       "requires": "Node 18+ for the flight log and judge scripts; Codex CLI or Claude CLI for the outside judge",
       "docs": "docs/ambitious.md",
       "evaluation": "evaluations/ambitious.md",
@@ -22,6 +46,9 @@
       "status": "stable",
       "version": "1.0.0",
       "summary": "Review Gmail, surface important mail, draft a small reply queue, and learn archive and writing preferences.",
+      "use_when": "The user wants their Gmail inbox reviewed: important mail surfaced, a few replies drafted, and archive and writing preferences learned from feedback.",
+      "try": "Use email-triage-pro to connect my Gmail accounts, surface important mail, draft a few replies, and learn from my feedback.",
+      "hosts": ["claude", "codex"],
       "requires": "ChatGPT Gmail app, Claude Gmail connector, or gog 0.35+",
       "docs": "docs/email-triage-pro.md",
       "evaluation": "evaluations/email-triage-pro.md",
@@ -33,13 +60,32 @@
       "display_name": "Goal",
       "path": "goal",
       "status": "stable",
-      "version": "1.0.0",
+      "version": "1.1.0",
       "summary": "Turn a plan into a durable Codex goal packet or a concise Claude /goal prompt.",
+      "use_when": "The user has a plan, spec or task list and wants one bounded, steerable goal for a long agent run. Not for recurring routines or for writing the plan itself.",
+      "try": "Use goal to turn this plan into a durable goal: [paste the plan].",
+      "hosts": ["claude", "codex"],
       "requires": "Python 3.10+ for Codex packet creation; no helper runtime for Claude prompt mode",
       "docs": "docs/goal.md",
       "evaluation": "evaluations/goal.md",
       "examples": "examples/goal",
       "trigger_cases": "tests/goal/trigger-cases.json"
+    },
+    {
+      "name": "hill-climb",
+      "display_name": "Hill Climb",
+      "path": "hill-climb",
+      "status": "stable",
+      "version": "1.0.0",
+      "summary": "Turn real data into a locked answer key, then climb to a measured target with fresh agent sessions until the score and two outside judges say it is done.",
+      "use_when": "A long job must reach a quality bar you can prove: an eval score, a pass rate, or a design two outside judges would ship (\"hill climb this\", \"build an eval and climb it\", \"keep going until it passes\"). Not for quick polish of one draft.",
+      "try": "Hill climb this: build an answer key from my real logs, then climb until 90% of the cases pass.",
+      "hosts": ["claude", "codex"],
+      "requires": "Node 18+ and git; macOS sandbox-exec (the Linux bwrap path is untested); Claude Code or Codex CLI for the climber and the judges",
+      "docs": "docs/hill-climb.md",
+      "evaluation": "evaluations/hill-climb.md",
+      "examples": "examples/hill-climb",
+      "trigger_cases": "tests/hill-climb/trigger-cases.json"
     },
     {
       "name": "save-10-percent",
@@ -48,6 +94,9 @@
       "status": "stable",
       "version": "2.0.1",
       "summary": "Audit recurring costs, verify actual use, find 10% in safe net savings, and optionally execute an exact approved batch.",
+      "use_when": "The user wants recurring costs or subscriptions audited against real use, with 10% in safe savings found and an exact batch to approve.",
+      "try": "Use save-10-percent to audit my recurring costs and find 10% in safe savings.",
+      "hosts": ["claude", "codex"],
       "requires": "Python 3.10+",
       "docs": "docs/save-10-percent.md",
       "evaluation": "evaluations/save-10-percent.md",

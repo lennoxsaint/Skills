@@ -10,12 +10,24 @@ import re
 import shutil
 import sys
 import tempfile
+import time
 from pathlib import Path
 
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 CATALOG_PATH = REPO_ROOT / "catalog.json"
 NAME_PATTERN = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
+CODE_SPAN_PATTERN = re.compile(r"```.*?```|`[^`\n]*`", re.DOTALL)
+HOSTS = ("claude", "codex")
+
+
+def host_skill_root(host: str) -> Path:
+    """Return the personal skills folder for one host, honouring its config-home variable."""
+    if host == "claude":
+        return Path(os.environ.get("CLAUDE_CONFIG_DIR") or Path.home() / ".claude") / "skills"
+    if host == "codex":
+        return Path(os.environ.get("CODEX_HOME") or Path.home() / ".codex") / "skills"
+    raise CatalogError(f"Unknown host {host!r}. Use one of: {', '.join(HOSTS)}, both")
 
 
 class CatalogError(ValueError):
@@ -67,6 +79,7 @@ def validate_repository() -> list[str]:
     required_catalog_fields = {
         "name", "display_name", "path", "status", "version", "summary",
         "requires", "docs", "evaluation", "examples", "trigger_cases",
+        "use_when", "try", "hosts",
     }
 
     for entry in catalog["skills"]:
@@ -100,14 +113,20 @@ def validate_repository() -> list[str]:
         if frontmatter["name"] != name:
             errors.append(f"{name}: SKILL.md name is {frontmatter['name']!r}")
         skill_text = skill_md.read_text(encoding="utf-8")
-        if "TODO" in skill_text:
+        # A skill may name the literal word in code formatting (for example a "no `TODO` remains" check).
+        if "TODO" in CODE_SPAN_PATTERN.sub("", skill_text):
             errors.append(f"{name}: SKILL.md contains TODO")
+        for key in ("use_when", "try"):
+            if not isinstance(entry[key], str) or not entry[key].strip():
+                errors.append(f"{name}: catalog {key} must be a non-empty string")
+        if not isinstance(entry["hosts"], list) or not entry["hosts"] or set(entry["hosts"]) - set(HOSTS):
+            errors.append(f"{name}: catalog hosts must list one or more of {', '.join(HOSTS)}")
         if (skill_dir / "README.md").exists():
             errors.append(f"{name}: README.md belongs at repository level, not inside a skill folder")
         if not (skill_dir / "agents" / "openai.yaml").is_file():
             errors.append(f"{name}: missing agents/openai.yaml")
         for reference in re.findall(r"\]\((references/[^)]+)\)", skill_text):
-            if not (skill_dir / reference).is_file():
+            if not (skill_dir / reference.split("#", 1)[0]).is_file():
                 errors.append(f"{name}: missing linked reference {reference}")
         for script in (skill_dir / "scripts").glob("*.py"):
             try:
@@ -169,9 +188,9 @@ def validate_repository() -> list[str]:
 
 
 def command_list(_args: argparse.Namespace) -> int:
-    print("NAME                 STATUS   VERSION  DESCRIPTION")
+    print("NAME                 STATUS   VERSION  USE WHEN")
     for entry in load_catalog()["skills"]:
-        print(f"{entry['name']:<20} {entry['status']:<8} {entry['version']:<8} {entry['summary']}")
+        print(f"{entry['name']:<20} {entry['status']:<8} {entry['version']:<8} {entry['use_when']}")
     return 0
 
 
@@ -190,18 +209,20 @@ def command_validate(_args: argparse.Namespace) -> int:
     return 0
 
 
-def command_install(args: argparse.Namespace) -> int:
-    errors = validate_repository()
-    if errors:
-        raise CatalogError("Repository validation failed; run `python3 scripts/skills.py validate`")
-    entry = skill_by_name(args.name)
+def install_one(entry: dict, target_root: Path, update: bool) -> Path:
     source = REPO_ROOT / entry["path"]
-    target_root = Path(args.target_root).expanduser().resolve()
     destination = target_root / entry["name"]
+    backup = None
     if destination.exists():
-        raise CatalogError(
-            f"Refusing to overwrite {destination}. Rename or remove it after reviewing your local copy, then rerun."
-        )
+        if not update:
+            raise CatalogError(
+                f"Refusing to overwrite {destination}. Rerun with --update to replace it "
+                "(the old copy is moved to a backup folder first), or remove it yourself."
+            )
+        # The backup lives beside the skills folder, never inside it, so a host cannot load it as a second skill.
+        backup = target_root.parent / "skills-backup" / f"{entry['name']}-{time.strftime('%Y%m%d-%H%M%S')}"
+        if backup.exists():
+            raise CatalogError(f"Backup path already exists: {backup}. Wait a second and rerun.")
     target_root.mkdir(parents=True, exist_ok=True)
     with tempfile.TemporaryDirectory(prefix=f".{entry['name']}-", dir=target_root) as staging_root:
         staged = Path(staging_root) / entry["name"]
@@ -210,9 +231,46 @@ def command_install(args: argparse.Namespace) -> int:
             staged,
             ignore=shutil.ignore_patterns("__pycache__", "*.pyc", "*.pyo", "test_*.py"),
         )
+        if backup is not None:
+            backup.parent.mkdir(parents=True, exist_ok=True)
+            os.replace(destination, backup)
         os.replace(staged, destination)
-    print(f"Installed {entry['display_name']} to {destination}")
-    print(f"Try: Use ${entry['name']} to help me with this task.")
+    if backup is not None:
+        print(f"Moved the previous copy to {backup}")
+    return destination
+
+
+def command_install(args: argparse.Namespace) -> int:
+    errors = validate_repository()
+    if errors:
+        raise CatalogError("Repository validation failed; run `python3 scripts/skills.py validate`")
+    entries = [skill_by_name(name) for name in dict.fromkeys(args.names)]
+    if args.target_root is not None:
+        if not args.target_root.strip():
+            raise CatalogError("--target-root is empty. Name the skills folder to install into, or use --host.")
+        roots = [("custom", Path(args.target_root).expanduser().resolve())]
+    else:
+        hosts = HOSTS if args.host == "both" else (args.host,)
+        # Two hosts can share one folder (same config home, or a symlink). Install there once.
+        by_root: dict[Path, list[str]] = {}
+        for host in hosts:
+            by_root.setdefault(host_skill_root(host).expanduser().resolve(), []).append(host)
+        roots = [("+".join(names), root) for root, names in by_root.items()]
+    # Check every destination before writing anything, so a refusal leaves no half-finished install.
+    if not args.update:
+        blocked = [str(root / entry["name"]) for _host, root in roots for entry in entries if (root / entry["name"]).exists()]
+        if blocked:
+            raise CatalogError(
+                f"Refusing to overwrite {', '.join(blocked)}. Rerun with --update to replace "
+                "(the old copy is moved to a backup folder first), or remove it yourself."
+            )
+    for entry in entries:
+        for host, root in roots:
+            destination = install_one(entry, root, args.update)
+            print(f"Installed {entry['name']} {entry['version']} to {destination} ({host})")
+        print(f"Needs: {entry['requires']}")
+        print(f"Try: {entry['try']}")
+    print("Start a new session (or restart the app) if the skill does not show up right away.")
     return 0
 
 
@@ -224,12 +282,30 @@ def build_parser() -> argparse.ArgumentParser:
     show.add_argument("name")
     show.set_defaults(handler=command_show)
     subparsers.add_parser("validate", help="Validate the catalog and every skill").set_defaults(handler=command_validate)
-    install = subparsers.add_parser("install", help="Install one skill without overwriting an existing copy")
-    install.add_argument("name")
+    install = subparsers.add_parser(
+        "install",
+        help="Install one or more skills for Claude Code, Codex, or both",
+        description=(
+            "Copy skills into a host's personal skills folder. "
+            "claude: $CLAUDE_CONFIG_DIR/skills or ~/.claude/skills. "
+            "codex: $CODEX_HOME/skills or ~/.codex/skills."
+        ),
+    )
+    install.add_argument("names", nargs="+", metavar="name", help="Skill name from `list`; pass several to install several")
+    install.add_argument(
+        "--host",
+        choices=(*HOSTS, "both"),
+        default="codex",
+        help="Which agent to install for (default: codex)",
+    )
     install.add_argument(
         "--target-root",
-        default=str(Path(os.environ.get("CODEX_HOME", Path.home() / ".codex")) / "skills"),
-        help="Skills directory; defaults to $CODEX_HOME/skills or ~/.codex/skills",
+        help="Install into this skills directory instead of a host default",
+    )
+    install.add_argument(
+        "--update",
+        action="store_true",
+        help="Replace an installed copy; the old copy is moved to a skills-backup folder first",
     )
     install.set_defaults(handler=command_install)
     return parser

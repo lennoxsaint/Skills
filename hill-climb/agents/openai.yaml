@@ -1,0 +1,8 @@
+interface:
+  display_name: "Hill Climb"
+  short_description: "Lock an answer key, then climb to a measured target"
+  brand_color: "#16A34A"
+  default_prompt: "Use $hill-climb to turn my real data into a locked answer key, then climb until the score hits the target and two outside judges would ship it."
+
+policy:
+  allow_implicit_invocation: true

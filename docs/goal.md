@@ -7,12 +7,11 @@ Use it when a job is too important for a vague "keep going until it works" promp
 ## Install
 
 ```bash
-git clone https://github.com/lennoxsaint/Skills.git
-cd Skills
-python3 scripts/skills.py install goal
+git clone --depth 1 https://github.com/lennoxsaint/Skills.git
+python3 Skills/scripts/skills.py install goal --host codex
 ```
 
-Restart Codex if the skill does not appear immediately.
+Use `--host claude` for Claude Code, or `--host both` for both. Start a new session if the skill does not appear immediately.
 
 ## Use with Codex
 
@@ -49,3 +48,9 @@ The active thread remains the highest authority. Codex re-reads the goal before 
 Goal does not turn a broad objective into hidden permission. Sending, publishing, deleting, charging, deploying, merging, or writing production data still requires exact authorization in the source plan.
 
 Goal packets are local runtime artifacts. The skill does not stage or commit them unless the user explicitly asks.
+
+## Changelog
+
+**1.1.0** (10 Nov 2026) - two additions to the skill text. First, an entry guard: when a goal is already running and the host asks the agent to continue it, the agent carries on with the next authorized step. It does not rebuild the packet, return the launcher again or ask for the plan again. Second, a route: when the goal is a quality bar that real data can measure, the skill points to [Hill Climb](hill-climb.md) when it is installed. The packet format, the templates and the helper scripts are unchanged.
+
+**1.0.0** (20 Sep 2026) - first public release.

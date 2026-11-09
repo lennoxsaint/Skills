@@ -73,12 +73,11 @@ these are three tasks, not a big study. treat them as an early sign, not a law. 
 ## install
 
 ```bash
-git clone https://github.com/lennoxsaint/Skills.git
-cd Skills
-python3 scripts/skills.py install ambitious
+git clone --depth 1 https://github.com/lennoxsaint/Skills.git
+python3 Skills/scripts/skills.py install ambitious --host claude
 ```
 
-restart Codex if the skill does not show up right away. for Claude, upload the release ZIP through the normal skill upload flow.
+use `--host codex` for Codex, or `--host both` for both. start a new session if the skill does not show up right away.
 
 then try:
 
