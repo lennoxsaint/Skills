@@ -89,6 +89,45 @@ class PublicRepositoryTests(unittest.TestCase):
                 self.assertTrue((installed / "scripts" / name).is_file())
             self.assertFalse(any((installed / "scripts").glob("test_*.py")))
 
+    def test_text_only_skills_install_with_their_references(self):
+        expected = {
+            "loop": ["references/rubric-adapters.md"],
+            "adversarial-review": ["references/reviewer-contract.md"],
+            "strategy-prompt": [],
+        }
+        for name, references in expected.items():
+            payload = json.loads(self.run_cli("show", name).stdout)
+            self.assertEqual(payload["path"], name)
+            with tempfile.TemporaryDirectory() as directory:
+                self.run_cli("install", name, "--target-root", directory)
+                installed = Path(directory) / name
+                self.assertTrue((installed / "SKILL.md").is_file(), name)
+                self.assertTrue((installed / "agents" / "openai.yaml").is_file(), name)
+                for reference in references:
+                    self.assertTrue((installed / reference).is_file(), f"{name}: {reference}")
+
+    def test_finish_work_is_installable_and_writes_a_receipt(self):
+        with tempfile.TemporaryDirectory() as directory:
+            self.run_cli("install", "finish-work", "--target-root", directory)
+            installed = Path(directory) / "finish-work"
+            for name in ("research.md", "code.md", "ui.md", "release.md", "receipt.md"):
+                self.assertTrue((installed / "references" / name).is_file(), name)
+            self.assertFalse(any((installed / "scripts").glob("test_*.py")))
+            log_dir = Path(directory) / "log"
+            result = subprocess.run(
+                [
+                    sys.executable, str(installed / "scripts" / "log_receipt.py"),
+                    "--status", "blocked", "--objective", "Publish the page",
+                    "--outcome", "Not published: the token is missing", "--log-dir", str(log_dir),
+                ],
+                check=True,
+                capture_output=True,
+                text=True,
+            )
+            payload = json.loads(result.stdout)
+            self.assertEqual(payload["status"], "written")
+            self.assertIn("- Status: blocked", Path(payload["path"]).read_text(encoding="utf-8"))
+
     def test_catalog_entries_tell_an_agent_when_to_use_each_skill(self):
         catalog = json.loads((REPO_ROOT / "catalog.json").read_text(encoding="utf-8"))
         self.assertEqual(set(catalog["install"]), {"claude", "codex", "both", "update"})

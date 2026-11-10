@@ -1,0 +1,8 @@
+interface:
+  display_name: "Loop"
+  short_description: "Score a draft out of 100 and revise until it gets there"
+  brand_color: "#0EA5E9"
+  default_prompt: "Use $loop on this draft: make it 100/100 or tell me exactly what blocks it."
+
+policy:
+  allow_implicit_invocation: true

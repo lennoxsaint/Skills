@@ -103,7 +103,7 @@ export function audit(flight, dir) {
 
   const crew = flight.crew ?? [];
   if (!crew.some((c) => c && c.red_team === true)) problems.push('no red team in crew (step 6): add one entry with "red_team": true and the method you ran');
-  if (flight.tier !== 'lean' && crew.filter((c) => c && !c.red_team).length === 0) warnings.push('no crew fields besides the red team (step 6)');
+  if (flight.tier === 'max' && crew.filter((c) => c && !c.red_team).length === 0) warnings.push('max tier: no crew fields besides the red team (step 6)');
   for (const c of crew) if (c && blank(c.method)) problems.push(`crew member "${c.field ?? '?'}" has no method: a field without a method is role-play`);
 
   const deliverables = flight.deliverables ?? [];

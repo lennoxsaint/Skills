@@ -29,7 +29,7 @@ Rules:
 - The judge line gives the final verdict only. Earlier rounds, cold-run counts and instrument detail go on the review page.
 - If you edited after the last judged round, say which edits the judge didn't see.
 
-## The review page (visual work, decisions, skills)
+## The review page (only when the person has to look at the work to judge it, or asked for one)
 Make one private page that lets the person review without opening five files:
 - the deliverable embedded (the video player, the page in a frame, the decision table);
 - before and after, when there was a before;
@@ -37,7 +37,7 @@ Make one private page that lets the person review without opening five files:
 - the evidence (contact sheets, screenshots, source links);
 - the money move, with the exact yes.
 
-Where the host offers private hosted pages (for example Claude's Artifact tool), publish it there. Otherwise write `review.html` in the run folder and give the path. Never make the page public.
+Where the person's standing rules already use private hosted pages (for example Claude's private Artifacts), put it there: a private page for the owner is a delivery to them, not publishing. Otherwise write `review.html` in the run folder and give the path. Never make the page public or share it with anyone else; that stays behind contract item 7.
 
 ## The taste log
 File: `$AMBITIOUS_HOME/taste-log.md` (default `~/.ambitious/taste-log.md`). Create it if missing.

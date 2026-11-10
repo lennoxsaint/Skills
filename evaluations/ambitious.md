@@ -1,12 +1,19 @@
 # Ambitious evaluation
 
-Version: 1.2.4
+Version: 1.3.1
 
 ## What was tested
 
-This release is the private v1.2.3 body plus the 28 Oct 2026 trigger fix. The quality benchmark below ran on the v1.2.3 body (the same file, checked by hash). The trigger fix changes only the `description` that decides when the skill loads, so it was tested separately.
+This release is the private v1.3.1 skill: the v1.3.0 body plus the 28 Oct 2026 trigger fix. It is the version the author runs every day. The body is leaner than v1.2.3: extra crew fields, the working sketch, the review page and the taste log now run only when they fix a problem you can name for the real audience.
 
-## Quality benchmark: with the skill vs without
+Read the two benchmarks below together:
+
+- **With the skill vs without** ran on the **v1.2.3** body, the one published before this release. The v1.3 body has not been run against "no skill".
+- **v1.3.0 vs v1.2.3** ran head to head. The v1.3 body came out about even, a little cheaper, and it **missed the adoption rule that was set before that test**. The author chose to publish it anyway on 10 Nov 2026. The reasons and the numbers are under "Version choice".
+
+The trigger fix changes only the `description` that decides when the skill loads, so it was tested separately.
+
+## Quality benchmark: with the skill vs without (v1.2.3 body)
 
 Three tasks, each run three times with the skill and three times without it. The same executor model ran both arms. A different model judged every output blind: it saw the brief and the work, never which arm made it. Each output got six scores from 1 to 10 (fit, depth, craft, money moment, truth, delight). The table shows the mean.
 
@@ -23,7 +30,21 @@ The rule for calling a task a win, a lean win or a tie was written down before t
 
 ## Version choice
 
-A later private version (v1.3.0) was benchmarked against v1.2.3 under a rule set before the run. It fell short of that rule on one task, so v1.2.3 was kept. That is the body published here.
+On 27 Oct 2026 the v1.3.0 body was benchmarked against the v1.2.3 body: the same three tasks, three runs per version, the same executor model, and a different model judging blind. Each pair of outputs was compared in both orders and each output also got its own score (the mean of six 1 to 10 scores).
+
+| Task | v1.3.0 | v1.2.3 | Difference | Call for v1.3.0 |
+|---|---:|---:|---:|---|
+| Revenue-leak analysis | 6.50 | 6.61 | -0.11 | tie |
+| Coach landing page | 7.28 | 7.61 | -0.33 | tie |
+| Reel edit | 5.94 | 5.44 | +0.50 | win |
+
+Per run, v1.3.0 was about 12% faster, used 11% fewer tool calls and 12% fewer transcript tokens.
+
+**The rule, written before any run:** keep v1.3.0 only if it loses no task and its mean score is not more than 0.3 below v1.2.3 on any task. Otherwise go back to v1.2.3.
+
+**The result by that rule:** go back to v1.2.3. v1.3.0 lost no task, but on the coach landing page it was 0.33 below, against a limit of 0.30. That is a narrow miss and it sits inside the run-to-run spread (standard deviations of 0.54 and 0.70 on that task). The rule is mechanical, so the miss stands as a miss.
+
+**What was published, and why:** the first public release (v1.2.4) followed the rule and shipped the v1.2.3 body. This release ships the v1.3 body. That is the owner's decision on 10 Nov 2026, not a new test result: it is the version he has run every day since 28 Oct 2026, it costs less per run, and this repository is meant to hold the skills he uses. No new benchmark was run for this release. If you want the body that passed the rule, download the [`ambitious-v1.2.4` release](https://github.com/lennoxsaint/Skills/releases/tag/ambitious-v1.2.4) and unzip it into your skills folder.
 
 ## Trigger accuracy
 
@@ -50,6 +71,7 @@ CI runs the self test on every push.
 
 ## Limits
 
+- **The shipped body missed its own adoption rule by 0.03 on one task** and has no "with vs without" benchmark of its own. The 17% figure above belongs to the v1.2.3 body.
 - Three tasks and three runs per arm is a small sample. The run-to-run spread is wide enough that one task could flip with more runs.
 - The judge is a model. A blind judge can still have taste that differs from yours, so the flight report shows the evidence and not just the score.
 - The trigger numbers come from one private setup (Claude Opus 5.5, 26 probes run three times each). Other hosts, models and personal rule files may route skills differently.

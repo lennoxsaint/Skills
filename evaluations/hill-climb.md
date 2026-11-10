@@ -1,6 +1,8 @@
 # Hill Climb evaluation
 
-Version: 1.0.0
+Version: 1.0.1
+
+Version 1.0.1 changes one sentence in the `SKILL.md` description: quick polish of one draft now points at the Loop skill. The scripts are byte-identical to 1.0.0, and everything below was measured on 1.0.0. The effect of the new sentence on when the skill loads was not measured.
 
 ## What was tested
 

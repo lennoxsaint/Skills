@@ -53,7 +53,7 @@ it also gets one rule that never bends: the skill gives no new permission. it wi
 
 ## what it does to claude
 
-we tested the same instructions this release ships, before the 28 Oct trigger fix (that fix only changes when the skill loads, not what it does). there were three tasks. each task ran three times with the skill and three times without it. a different model scored every output blind, on a 1-10 scale. it never knew which one used the skill.
+we tested the instructions the first public release shipped (the v1.2.3 body), before the 28 Oct trigger fix (that fix only changes when the skill loads, not what it does). there were three tasks. each task ran three times with the skill and three times without it. a different model scored every output blind, on a 1-10 scale. it never knew which one used the skill.
 
 | test | with the skill | without |
 |---|---:|---:|
@@ -68,7 +68,22 @@ we tested the same instructions this release ships, before the 28 Oct trigger fi
 - does it turn on at the right time? when people asked for big effort, it turned on in 12 out of 12 runs. when people asked for something close but normal (like "write a sales page"), it wrongly turned on 67% of the time before the 28 Oct fix and 18% after.
 - the built-in self test passes 58 out of 58 checks.
 
-these are three tasks, not a big study. treat them as an early sign, not a law. more detail is in the [evaluation](../evaluations/ambitious.md).
+these are three tasks, not a big study. treat them as an early sign, not a law.
+
+**the version you get now (1.3.1) is leaner than the one in that table.** i ran the two head to head on the same three tasks:
+
+| task | 1.3 body | 1.2.3 body |
+|---|---:|---:|
+| revenue-leak task | 6.50 | 6.61 |
+| coach landing page | 7.28 | 7.61 |
+| reel edit | 5.94 | 5.44 |
+
+- about even on two tasks, better on the reel edit, and about 12% faster with 11% fewer tool calls.
+- it missed the bar i set before the test. the rule said "not more than 0.3 lower on any task" and the landing page came in 0.33 lower.
+- i publish it anyway because it is the one i run every day. it has not been tested against "no skill" on its own.
+- want the version that passed the rule? download the [`ambitious-v1.2.4` release](https://github.com/lennoxsaint/Skills/releases/tag/ambitious-v1.2.4) and unzip it into your skills folder.
+
+more detail is in the [evaluation](../evaluations/ambitious.md).
 
 ## install
 
@@ -103,6 +118,8 @@ you can keep a private file at `~/.ambitious/profile.md` (or wherever `AMBITIOUS
 - the judge sees only the brief and the work, with secret-looking strings blanked out.
 
 ## changelog
+
+**1.3.1** (10 Nov 2026) - the leaner body i run every day, plus the same 28 Oct trigger fix. every run is now five moves: brief, raw evidence, build, outside check, prepared next action. extra crew fields, the working sketch, the review page and the taste log only run when they fix a problem you can name for the real audience. the flight check now warns about a missing crew only on the max tier. said plainly: in a blind head-to-head this body missed the bar i set before the test, by 0.03 on one task (see above). i chose to publish it anyway.
 
 **1.2.4** (29 Oct 2026) - label only. the version number now follows the private history (v1.2.3 plus the trigger fix). the skill text is unchanged.
 
