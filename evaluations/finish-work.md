@@ -72,6 +72,10 @@ It also flagged four sentences in the guide, the reference and this file that cl
 
 **After the second review** the helper was changed again: a receipt now counts only when its whole entry is in the file, the clock is read after the lock is taken, and the bad-folder case fails in JSON. Each change has a test in the table above.
 
+**Third review: 95 of 100, verdict "publish".** It judged all three leftovers fixed and raised no new finding. It named the biggest weakness left: the forward-test outputs are not in this repository, so a reader cannot audit them. That is listed under Limits.
+
+A review score is one model's judgment of the helper and these files. It is not a measure of how the skill performs in real work.
+
 ## Forward test A: a fix nobody asked to deploy
 
 The project has a one-line bug, four tests and a `deploy.sh`. The README says how to deploy. The request only asks for the fix.
