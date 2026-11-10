@@ -10,6 +10,7 @@ What changed in this repository, newest first. Each skill also keeps its own not
 - **Loop 1.0.0.** New skill. It writes a 100-point rubric for one draft, revises and rescores it, and stops at 100/100 or says which points are missing. See the [guide](docs/loop.md) and the [evaluation](evaluations/loop.md).
 - **Adversarial Review 1.0.0.** New skill. An independent reviewer critiques a frozen draft against a fixed rubric, each finding is checked, and the loop stops at the bar or the budget. See the [guide](docs/adversarial-review.md) and the [evaluation](evaluations/adversarial-review.md).
 - **Strategy Prompt 1.0.0.** New skill. It steelmans every option, scores them in a weighted matrix, checks its own pick, then gives a final recommendation. See the [guide](docs/strategy-prompt.md) and the [evaluation](evaluations/strategy-prompt.md).
+- **Finish Work 1.0.0.** New skill. Before an agent says "done" it runs the right checks for the kind of work, keeps "local" apart from "live", and writes a receipt to a file you choose. See the [guide](docs/finish-work.md) and the [evaluation](evaluations/finish-work.md).
 - **Install for Claude Code, Codex or both.** `scripts/skills.py install <name> --host claude|codex|both`. It also takes several skill names at once, and prints what each skill needs and a prompt to try.
 - **`--update`.** Replaces a skill you already installed. Your old copy is moved to a `skills-backup` folder first.
 - **Installer safety.** An empty `--target-root` is refused. When both hosts share one skills folder, `--host both` installs there once.
@@ -19,6 +20,8 @@ What changed in this repository, newest first. Each skill also keeps its own not
 
 **Changed**
 
+- **Ambitious 1.3.1.** The leaner body the author runs every day: five moves per run, and the extras (more crew fields, the working sketch, the review page, the taste log) only when they fix a named audience problem. In a blind head-to-head on 27 Oct 2026 this body was about even with the 1.2.3 body and about 12% faster, and it missed the adoption rule set before that test by 0.03 on one task. It is published anyway as the owner's choice. The [evaluation](evaluations/ambitious.md) has the numbers, and the `ambitious-v1.2.4` release keeps the earlier body.
+- **Hill Climb 1.0.1.** One line changed after the first release earlier the same day: the description now sends quick polish of one draft to Loop. The method and the scripts are the same.
 - **Goal 1.1.0.** Goal now tells apart "create a goal" from "continue the goal that is already running", so a resumed run carries on with the next step and does not rebuild the packet. It also points measurable quality bars at Hill Climb.
 - **README.** New front page for Claude Code and Codex users, with one install command per host. The repository is no longer framed around one community.
 - **`skills.py list`** now shows when to use each skill.
@@ -26,7 +29,7 @@ What changed in this repository, newest first. Each skill also keeps its own not
 
 **Unchanged**
 
-- Ambitious 1.2.4, Email Triage Pro 1.0.0 and Save 10% 2.0.1 have the same skill text as before.
+- Email Triage Pro 1.0.0 and Save 10% 2.0.1 have the same skill text as before.
 
 ## 29 Oct 2026
 

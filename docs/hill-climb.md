@@ -22,7 +22,7 @@ it runs when you ask for it:
 - "use the logs as a benchmark"
 - "keep going until it passes"
 
-it is not for quick polish of one draft. if you can't say what the score measures, you are not ready for a hill yet.
+it is not for quick polish of one draft: use [Loop](loop.md) for that. if you can't say what the score measures, you are not ready for a hill yet.
 
 ## how a climb works
 
@@ -149,5 +149,7 @@ everything else stays on your disk, in `~/.hill-climb/` by default.
 a synthetic example lives in [`examples/hill-climb/`](../examples/hill-climb/worked-example.md). the test evidence is in the [evaluation](../evaluations/hill-climb.md).
 
 ## changelog
+
+**1.0.1** (10 Nov 2026) - one line changed. the description now sends quick polish of one draft to [Loop](loop.md), which is public as of today. the method and the scripts are the same as 1.0.0.
 
 **1.0.0** (10 Nov 2026) - first public release. this is the version i run, as of 4 Nov 2026, with the blind judge stage. private paths and product-specific notes were replaced with general ones. the method and the scripts are the same.

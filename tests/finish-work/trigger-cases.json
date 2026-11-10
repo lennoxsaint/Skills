@@ -1,0 +1,178 @@
+[
+  {
+    "prompt": "Finish this work properly before you tell me it's done.",
+    "should_trigger": true
+  },
+  {
+    "prompt": "Use finish-work to close out this task.",
+    "should_trigger": true
+  },
+  {
+    "prompt": "Close this out: run the checks and write the receipt.",
+    "should_trigger": true
+  },
+  {
+    "prompt": "Wrap this up and tell me what is actually proven.",
+    "should_trigger": true
+  },
+  {
+    "prompt": "Is this really done? Do a proper closeout.",
+    "should_trigger": true
+  },
+  {
+    "prompt": "We're stopping here for today. Write a checkpoint receipt for what's finished and what isn't.",
+    "should_trigger": true
+  },
+  {
+    "prompt": "The deploy is blocked on a missing key. Close out what you can and record the rest as blocked.",
+    "should_trigger": true
+  },
+  {
+    "prompt": "Before you call the refactor complete, verify it and log the outcome.",
+    "should_trigger": true
+  },
+  {
+    "prompt": "Do the closeout for this bug fix: checks, outcome, receipt.",
+    "should_trigger": true
+  },
+  {
+    "prompt": "Finish the job end to end and leave me a receipt I can read tomorrow.",
+    "should_trigger": true
+  },
+  {
+    "prompt": "You said it's done. Prove it, then write down what you checked.",
+    "should_trigger": true
+  },
+  {
+    "prompt": "Close this task with an honest summary of what was verified and what wasn't.",
+    "should_trigger": true
+  },
+  {
+    "prompt": "Run finish-work on the pricing page change.",
+    "should_trigger": true
+  },
+  {
+    "prompt": "I'm heading out. When the migration script is fixed, close it out properly.",
+    "should_trigger": true
+  },
+  {
+    "prompt": "Wrap up this research task and record what you could not confirm.",
+    "should_trigger": true
+  },
+  {
+    "prompt": "This is a good checkpoint. Log what we finished, the decisions and the next steps.",
+    "should_trigger": true
+  },
+  {
+    "prompt": "Don't just say done. Run the right checks for this kind of change and give me the receipt path.",
+    "should_trigger": true
+  },
+  {
+    "prompt": "Close out the UI change: check it on phone and desktop, then write the receipt.",
+    "should_trigger": true
+  },
+  {
+    "prompt": "The task is only half finished and I need to stop. Record it as partial with what is left.",
+    "should_trigger": true
+  },
+  {
+    "prompt": "Finish-work this: the feature is built, now verify and close.",
+    "should_trigger": true
+  },
+  {
+    "prompt": "Give this a proper closeout. I want to know if it is local only or actually live.",
+    "should_trigger": true
+  },
+  {
+    "prompt": "Wrap this session up with a work receipt.",
+    "should_trigger": true
+  },
+  {
+    "prompt": "What does this function do?",
+    "should_trigger": false
+  },
+  {
+    "prompt": "Fix the typo in the README.",
+    "should_trigger": false
+  },
+  {
+    "prompt": "Start a new project for a notes app.",
+    "should_trigger": false
+  },
+  {
+    "prompt": "Plan the work for next sprint.",
+    "should_trigger": false
+  },
+  {
+    "prompt": "Write a commit message for these changes.",
+    "should_trigger": false
+  },
+  {
+    "prompt": "Summarize this article in three bullets.",
+    "should_trigger": false
+  },
+  {
+    "prompt": "Deploy the site to production now.",
+    "should_trigger": false
+  },
+  {
+    "prompt": "Loop this draft until it is 100/100.",
+    "should_trigger": false
+  },
+  {
+    "prompt": "Hill climb the harness until 90% of the cases pass.",
+    "should_trigger": false
+  },
+  {
+    "prompt": "Turn this plan into a goal for a long agent run.",
+    "should_trigger": false
+  },
+  {
+    "prompt": "Red-team this plan with an independent reviewer.",
+    "should_trigger": false
+  },
+  {
+    "prompt": "What time is it in Perth?",
+    "should_trigger": false
+  },
+  {
+    "prompt": "Review this pull request for bugs.",
+    "should_trigger": false
+  },
+  {
+    "prompt": "Write unit tests for the parser.",
+    "should_trigger": false
+  },
+  {
+    "prompt": "Draft a reply to this email.",
+    "should_trigger": false
+  },
+  {
+    "prompt": "Explain how git rebase works.",
+    "should_trigger": false
+  },
+  {
+    "prompt": "Which of these two options should I pick?",
+    "should_trigger": false
+  },
+  {
+    "prompt": "Finish this sentence for me: the quick brown fox",
+    "should_trigger": false
+  },
+  {
+    "prompt": "Open the receipt PDF from my accountant and total the tax.",
+    "should_trigger": false
+  },
+  {
+    "prompt": "Rename the variable foo to total_count.",
+    "should_trigger": false
+  },
+  {
+    "prompt": "Remind me tomorrow to follow up with the supplier.",
+    "should_trigger": false
+  },
+  {
+    "prompt": "Go above and beyond on this launch page.",
+    "should_trigger": false
+  }
+]

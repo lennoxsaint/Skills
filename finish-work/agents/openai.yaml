@@ -1,0 +1,8 @@
+interface:
+  display_name: "Finish Work"
+  short_description: "Close a task with the right checks and a written receipt"
+  brand_color: "#16A34A"
+  default_prompt: "Use $finish-work to close out this task: run the right checks, say what is proven, and write the receipt."
+
+policy:
+  allow_implicit_invocation: true

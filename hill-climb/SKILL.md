@@ -1,6 +1,6 @@
 ---
 name: hill-climb
-description: Turn real data into a locked answer key, then climb toward a measured target with fresh agent sessions until the number and two outside judges say it is done. Use for long, ambitious work that must reach a provable quality bar - "hill climb this", "build an eval and climb it", "make the harness/app/agent hit X%", "use the logs as a benchmark", "keep going until it passes", or any big job where vibes are not enough. Not for quick polish of one draft.
+description: Turn real data into a locked answer key, then climb toward a measured target with fresh agent sessions until the number and two outside judges say it is done. Use for long, ambitious work that must reach a provable quality bar - "hill climb this", "build an eval and climb it", "make the harness/app/agent hit X%", "use the logs as a benchmark", "keep going until it passes", or any big job where vibes are not enough. For quick polish of one draft use `loop` instead.
 ---
 
 # Hill climb

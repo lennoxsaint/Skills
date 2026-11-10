@@ -5,7 +5,7 @@ description: "Runs a big task the way the field's best practitioner would, then 
 
 # Ambitious: A Way of Flying
 
-Version 1.2.4.
+Version 1.3.1.
 
 The method comes from Felix Rieseberg's essay [How to be more ambitious: A tutorial for humans with models](https://felixrieseberg.com/how-to-be-more-ambitious-a-tutorial-for-humans-with-models/). Its image is Goya's "Modo de volar" (*A Way of Flying*). Models are astounding in some directions. Most work under-uses them because the request is the person's best guess at a task, not the outcome they want. This skill makes you ask the deeper question yourself, and then prove the answer.
 
@@ -34,14 +34,14 @@ The spirit is **deeper, not bigger**. Go further on the thing that matters, with
 | Tier | When | Helpers | Judge rounds | Crew |
 |---|---|---|---|---|
 | Lean | Medium task, one-off | none | 1 (a tool or one model) | red team only |
-| **Standard** (default) | Big task, or anything reused | at most 2 at once, or the person's lower cap | up to 3 | 2–4 fields plus red team |
+| **Standard** (default) | Big task, or anything reused | at most 2 at once, or the person's lower cap | up to 3 | red team, plus a field only when it fixes a named audience problem |
 | Max | Only when the person says "max" | same cap. Build two variants and let a blind judge pick | up to 5. Two different judges must pass the same final version | full |
 
 **Leverage.** Reusable work (a skill, template, pipeline, sales page, onboarding email, recurring report) multiplies every flaw, like a leak in a funnel. Reuse raises the bar: test it on varied inputs, not just one, and look hardest at the parts that repeat.
 
 ## The flight
 
-Work through these steps in order. Steps 1–6 are thinking and usually take minutes. Keep them sharp and short; this is not a ceremony. Write their results into `flight.json` in one go before you build. On **Lean**, steps 2–6 collapse into one short note: the goal behind the goal, the money moment, the rawest source, one or two targets and the red-team method. Then build, check once, and report in five lines.
+The spine of every run is five moves: **brief → raw evidence → build → outside check → prepared next action**, with one compact receipt. The twelve steps below are that spine in detail; steps 1–6 are thinking and usually take minutes. Keep them sharp and short; this is not a ceremony. Anything beyond the spine (extra crew fields, a working sketch, a review page, the taste log) earns its place only by fixing a problem you can name for the real audience. If you can't name one, skip it. Write their results into `flight.json` in one go before you build. On **Lean**, steps 2–6 collapse into one short note: the goal behind the goal, the money moment, the rawest source, one or two targets and the red-team method. Then build, check once, and report in five lines.
 
 ```bash
 node <skill-dir>/scripts/flight_check.mjs init <run-dir> --task "<one line>" --tier standard --author-model <your model id>
@@ -82,13 +82,13 @@ Write the answers into `brief`:
 Then set **2–5 stretch targets**: specific, hard, and measurable before the run ends. Ask for 200 ms, not 5 s. If a number would be artificial, write a bounded qualitative bar instead, e.g. "a first-time viewer can say what the app does after five seconds." Anything that can only be measured later, like next week's sales, goes in `follow_ups` with a date, not in the run's targets.
 
 ### 6. Range: assemble the crew
-Write the work as verbs, then pick 2–4 fields whose *methods* serve those verbs (`references/crew.md`). For each one, record the field, the method you will actually run and what it should change. Always include a **red team**, a method built to find what is wrong: the short seller's bear-case research, a hostile first reader, a QA breaker, a forensic accountant's tie-out. Use helper agents for crew work when parallel work helps and the cap allows. Otherwise run the methods yourself. Never role-play.
+Always include a red team (below). Add other fields only when you can name the audience problem their method fixes ("viewers swipe before the proof" → a direct-response editor's hook test); on Max, pick 2–4. Write the work as verbs, then pick fields whose *methods* serve those verbs (`references/crew.md`). For each one, record the field, the method you will actually run and what it should change. Always include a **red team**, a method built to find what is wrong: the short seller's bear-case research, a hostile first reader, a QA breaker, a forensic accountant's tie-out. Use helper agents for crew work when parallel work helps and the cap allows. Otherwise run the methods yourself. Never role-play.
 
 ### 7. Clear the runway
 Ambition needs a computer that can actually do the thing. Get the instruments working: install what's needed (project-local and reversible), get read access to the data, make sure the render pipeline runs and the judge is reachable. Remove blockers within your authority, such as disk space or a missing dependency. If something can't be unblocked, record it as a gap and route around it.
 
 ### 8. Build
-Build the exact ask at full depth with the real instruments. Keep what you observed apart from what you inferred. Test early the assumption most likely to overturn your approach. If the altitude step found a bigger version, build a **working sketch** of it alongside: something that runs, renders or can be tried, not a paragraph. Label it clearly as optional.
+Build the exact ask at full depth with the real instruments. Keep what you observed apart from what you inferred. Test early the assumption most likely to overturn your approach. If the altitude step found a bigger version that fixes a named audience problem, build a **working sketch** of it alongside: something that runs, renders or can be tried, not a paragraph. Label it clearly as optional.
 
 When the work makes a claim about a real product, show the product's real output (a read-only capture of the actual screen, schedule, export or result) before any illustration of it. A mock-up of a promise is the weakest proof a viewer can get, and the real thing, even plain, is the strongest. If no real output is reachable, say so rather than quietly illustrating.
 
@@ -118,10 +118,10 @@ Run `flight_check.mjs check <run-dir>`. Fix whatever it flags, or record it hone
 - The money move and the exact yes it needs.
 - Gaps, and what is still unknown.
 
-For visual work, decisions and skills, also make a private review page with before and after, the scoreboard and the evidence. End with one question: **"What delighted you, and what missed?"**
+When the person has to look at the work to judge it (video, a page, a design) or asked for a review, also make a private review page with before and after, the scoreboard and the evidence. Otherwise the report and the sources note are enough. End with one question: **"What delighted you, and what missed?"**
 
 ### 12. Taste log
-When the person answers, add one line to `$AMBITIOUS_HOME/taste-log.md`: the date, the task, what delighted them and what missed. Every fifth entry, propose one to three rule changes for their profile. Propose them, never apply them. Taste belongs to the person, so it lives in their layer, not in this shared skill.
+Optional, and only when the person answers: add one line to `$AMBITIOUS_HOME/taste-log.md`: the date, the task, what delighted them and what missed. Every fifth entry, propose one to three rule changes for their profile. Propose them, never apply them. Taste belongs to the person, so it lives in their layer, not in this shared skill.
 
 ## Example: the money moment shaping a creative task
 
