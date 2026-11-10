@@ -5,7 +5,8 @@ The log folder is --log-dir, else $FINISH_WORK_LOG_DIR, else ~/.finish-work/log.
 One file per local day: YYYY-MM-DD.md. Entries are only ever appended.
 
 Every entry ends with a marker line. A receipt counts as already written only
-when its complete entry, marker included, is in today's or yesterday's file.
+when its whole entry, from the id line to the marker, is in today's or
+yesterday's file exactly as this helper would write it.
 
 Exit code 0 for `written` and `skipped`, 1 for `failed`, 2 for a usage error.
 Standard library only.
@@ -71,13 +72,17 @@ def end_marker(identifier: str) -> str:
     return f"<!-- receipt-end {identifier} -->"
 
 
-def has_complete_entry(text: str, identifier: str) -> bool:
-    """True only when the entry's own closing line is in the file.
+def current_time() -> datetime:
+    return datetime.now().astimezone()
 
-    Values passed on the command line are always written after a `- Name: ` or
-    `  - ` prefix on one line, so no argument can produce this exact line.
+
+def has_complete_entry(text: str, body: str) -> bool:
+    """True only when every line of the entry, id line to closing marker, is in the file in order.
+
+    A lone id line or a lone marker is a fragment, not a receipt. Values passed on the
+    command line are each written on one line, so no argument can contain this block.
     """
-    return end_marker(identifier) in text.splitlines()
+    return "\n" + body in "\n" + text
 
 
 def bullet_block(title: str, items: list[str]) -> list[str]:
@@ -86,10 +91,9 @@ def bullet_block(title: str, items: list[str]) -> list[str]:
     return [f"- {title}:"] + [f"  - {item}" for item in items]
 
 
-def render(fields: dict, identifier: str, now: datetime) -> str:
+def render_body(fields: dict, identifier: str) -> str:
+    """The part of an entry that depends only on what was recorded, not on when."""
     lines = [
-        f"## {now.strftime('%H:%M:%S %z').strip()} - {fields['status']} - {fields['objective']}",
-        "",
         f"- Entry: `{identifier}`",
         f"- Task: {fields['task_id'] or 'UNKNOWN'}",
         f"- Status: {fields['status']}",
@@ -104,9 +108,13 @@ def render(fields: dict, identifier: str, now: datetime) -> str:
         *bullet_block("Next steps", fields["next"]),
         "",
         end_marker(identifier),
-        "",
     ]
     return "\n".join(lines) + "\n"
+
+
+def render(fields: dict, identifier: str, now: datetime) -> str:
+    heading = f"## {now.strftime('%H:%M:%S %z').strip()} - {fields['status']} - {fields['objective']}"
+    return heading + "\n\n" + render_body(fields, identifier) + "\n"
 
 
 @contextlib.contextmanager
@@ -154,15 +162,19 @@ def main(argv: list[str] | None = None) -> int:
                 raise ValueError(f"--{name} is empty")
         identifier = entry_id(fields)
         result["entry_id"] = identifier
-        now = datetime.now().astimezone()
+        body = render_body(fields, identifier)
         log_dir = resolve_log_dir(args.log_dir)
-        path = log_dir / f"{now.strftime('%Y-%m-%d')}.md"
-        result["path"] = str(path)
+        result["path"] = str(log_dir / f"{current_time().strftime('%Y-%m-%d')}.md")
         log_dir.mkdir(parents=True, exist_ok=True)
         with log_lock(log_dir):
+            # Read the clock only once the lock is held: a run that waited past midnight
+            # must look in the new day's file, where the run it waited for has written.
+            now = current_time()
+            path = log_dir / f"{now.strftime('%Y-%m-%d')}.md"
+            result["path"] = str(path)
             yesterday = log_dir / f"{(now - timedelta(days=1)).strftime('%Y-%m-%d')}.md"
             for candidate in (path, yesterday):
-                if has_complete_entry(read_text(candidate), identifier):
+                if has_complete_entry(read_text(candidate), body):
                     result.update(status="skipped", reason="this receipt is already in the log", path=str(candidate))
                     print(json.dumps(result))
                     return 0
@@ -173,9 +185,9 @@ def main(argv: list[str] | None = None) -> int:
                 handle.write(header + separator + render(fields, identifier, now))
                 handle.flush()
                 os.fsync(handle.fileno())
-            if not has_complete_entry(read_text(path), identifier):
+            if not has_complete_entry(read_text(path), body):
                 raise OSError("the complete entry was not found in the log after writing")
-    except (OSError, ValueError) as error:
+    except (OSError, ValueError, RuntimeError) as error:  # RuntimeError: "~name" with no such user
         result.update(status="failed", error=str(error))
         print(json.dumps(result))
         return 1

@@ -50,7 +50,7 @@ The file is `~/.finish-work/log/2026-11-10.md`:
 <!-- receipt-end c81e5d2a9b60 -->
 ```
 
-Each entry ends with a `receipt-end` line. The helper uses it to tell a finished entry from one that was cut off.
+Each entry ends with a `receipt-end` line. The helper counts a receipt as written only when the whole entry is there, from the `Entry` line to that last line.
 
 The first entry is `completed` because the fix was the whole request. It still says "not deployed", so nobody reads it as shipped.
 

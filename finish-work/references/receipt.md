@@ -39,4 +39,4 @@ The helper appends one entry to `YYYY-MM-DD.md` in the log folder and prints one
 - `--error` holds a failure met along the way and what fixed it. A blocker that still stands goes in `--outcome` and `--next`.
 - For a release or other outside action, put the target, the tool, the before and after proof and the way back in `--check` lines.
 - Never include secrets or raw private source text.
-- Read back the printed `path` and `status`. `failed` is an outstanding closeout obligation, not a receipt. Retry a recoverable failure with the same arguments, from the same folder: the helper skips a receipt whose complete entry is already in today's or yesterday's file, and writes it in full when only a fragment got through.
+- Read back the printed `path` and `status`. `failed` is an outstanding closeout obligation, not a receipt. Retry a recoverable failure with the same arguments, from the same folder: the helper skips a receipt whose whole entry is already in today's or yesterday's file, and writes it in full when only a fragment got through.

@@ -205,6 +205,67 @@ class LogReceiptTests(unittest.TestCase):
             _, again = run(args + ["--log-dir", directory])
             self.assertEqual(again["status"], "skipped")
 
+    def test_a_closing_marker_or_id_line_alone_does_not_count_as_a_receipt(self):
+        with tempfile.TemporaryDirectory() as scratch:
+            args = BASE + ["--workspace", "/repo/a", "--task-id", "slug-1"]
+            _, probe = run(args + ["--log-dir", scratch])
+            wanted = probe["entry_id"]
+            name = Path(probe["path"]).name
+            fragments = {
+                "marker only": f"<!-- receipt-end {wanted} -->\n",
+                "id line and marker": f"- Entry: `{wanted}`\n\n<!-- receipt-end {wanted} -->\n",
+                "another receipt's body with this marker": (
+                    f"- Entry: `{wanted}`\n- Task: slug-1\n- Status: completed\n- Objective: Something else\n"
+                    f"\n<!-- receipt-end {wanted} -->\n"
+                ),
+            }
+            for label, fragment in fragments.items():
+                with tempfile.TemporaryDirectory() as directory:
+                    day_file = Path(directory) / name
+                    day_file.write_text(fragment, encoding="utf-8")
+                    _, payload = run(args + ["--log-dir", directory])
+                    self.assertEqual(payload["status"], "written", label)
+                    text = day_file.read_text(encoding="utf-8")
+                    self.assertTrue(text.startswith(fragment), label)
+                    self.assertIn("- Outcome: Trailing dashes are stripped", text, label)
+
+    def test_a_run_that_waited_for_the_lock_past_midnight_looks_in_the_new_day(self):
+        # A rival wrote the same receipt just after midnight while this run was still waiting
+        # for the lock with a clock reading from just before midnight.
+        helper = load_helper()
+        before = datetime(2026, 3, 10, 23, 59, 58).astimezone()
+        after = datetime(2026, 3, 11, 0, 0, 2).astimezone()
+        with tempfile.TemporaryDirectory() as directory:
+            args = [*BASE, "--workspace", "/repo/a", "--log-dir", directory]
+            clock = [after]
+            helper.current_time = lambda: clock[0]
+            with contextlib.redirect_stdout(io.StringIO()) as output:
+                helper.main(args)
+            rival = json.loads(output.getvalue())
+            self.assertEqual((rival["status"], Path(rival["path"]).name), ("written", "2026-03-11.md"))
+
+            real_lock = helper.log_lock
+
+            @contextlib.contextmanager
+            def lock_that_takes_until_after_midnight(log_dir):
+                with real_lock(log_dir):
+                    clock[0] = after
+                    yield
+
+            helper.log_lock = lock_that_takes_until_after_midnight
+            clock[0] = before
+            with contextlib.redirect_stdout(io.StringIO()) as output:
+                helper.main(args)
+            late = json.loads(output.getvalue())
+            self.assertEqual(late["status"], "skipped")
+            self.assertEqual(sorted(path.name for path in Path(directory).glob("*.md")), ["2026-03-11.md"])
+
+    def test_a_log_folder_under_a_user_that_does_not_exist_fails_in_json(self):
+        result, payload = run(BASE + ["--log-dir", "~no_such_user_for_receipt_tests_48151/log"])
+        self.assertEqual(result.returncode, 1, result.stderr)
+        self.assertEqual(payload["status"], "failed")
+        self.assertTrue(payload["error"])
+
     def test_receipts_that_differ_only_by_workspace_or_field_are_both_written(self):
         with tempfile.TemporaryDirectory() as directory:
             variants = [
@@ -221,6 +282,9 @@ class LogReceiptTests(unittest.TestCase):
                 self.assertEqual(payload["status"], "written", extra)
                 ids.add(payload["entry_id"])
             self.assertEqual(len(ids), len(variants))
+            # A named workspace is the identity: the same receipt sent from another folder is skipped.
+            _, elsewhere = run(BASE + ["--log-dir", directory, "--workspace", "/repo/a"], cwd=directory)
+            self.assertEqual(elsewhere["status"], "skipped")
 
     def test_a_retry_the_day_after_is_skipped_and_two_days_after_is_written(self):
         today = datetime.now().astimezone()

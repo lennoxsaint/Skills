@@ -8,7 +8,7 @@ This release is the private closeout skill made general. The private work log be
 
 Two things were tested on 10 Nov 2026:
 
-1. **The receipt helper**, with 19 unit tests and an outside review.
+1. **The receipt helper**, with 22 unit tests and three outside reviews.
 2. **The skill text**, with two forward tests. Each used a fresh Claude Sonnet session that had never seen the skill. It was given only the installed skill folder, a small project folder and the request from [`examples/finish-work/sample-task.md`](../examples/finish-work/sample-task.md). The exact Sonnet version was not recorded.
 
 The results below were checked by reading the files each session left behind and re-running the project's tests. They were not taken from the sessions' own summaries.
@@ -17,7 +17,7 @@ The evidence is about whether an agent can **follow the closeout and report it h
 
 ## Receipt helper
 
-`finish-work/scripts/test_log_receipt.py` holds 19 tests. All 19 pass on Python 3.9.6 and Python 3.15.2 on macOS.
+`finish-work/scripts/test_log_receipt.py` holds 22 tests. All 22 pass on Python 3.9.6 and Python 3.15.2 on macOS.
 
 | Behavior | Covered by a test |
 |---|---|
@@ -35,31 +35,42 @@ The evidence is about whether an agent can **follow the closeout and report it h
 | A current folder whose name has line breaks cannot forge an entry | Yes |
 | Text that quotes another receipt's markers cannot make that receipt be skipped | Yes |
 | An entry that was cut off halfway does not count: the retry writes it in full, and the next retry is skipped | Yes |
+| A closing marker alone, an id line with a marker, or another receipt's body under this marker does not count as this receipt | Yes |
 | Receipts that differ only by workspace, or by which field a value is in, are both written | Yes |
+| With `--workspace` given, the same receipt sent from another folder is skipped | Yes |
 | A retry the day after is skipped; two days after it is written again | Yes |
+| A run that waited for the lock past midnight looks in the new day's file and is skipped | Yes |
 | Four runs started together write the receipt once | Yes |
 | A second run that starts while the first is between its check and its write waits, then is skipped | Yes |
 | Text that UTF-8 cannot store is cleaned and the helper still answers in JSON | Yes |
+| A log folder under a user that does not exist fails in JSON | Yes |
 
-Each of the nine review-driven tests was checked the hard way: the fix it guards was removed from a copy of the helper, and the test failed.
+Eleven of the fixes below were each removed, one at a time, from a copy of the helper. Each time at least one test failed. The script for that check is not in this repository. One test did not earn its place that way: "four runs started together" still passed with the lock removed, so it is a smoke test. The test that guards the lock is the one after it in the table.
 
 ## Review
 
-A different model (GPT-6.1 Sol, through Codex) reviewed this skill read-only before release. It had the repository and no part of the author's reasoning.
+A different model (GPT-6.1 Sol, through Codex) reviewed this skill read-only before release. It had the repository and no part of the author's reasoning. It was asked to score "would a stranger trust and successfully use this" out of 100.
 
-It raised 6 findings on the first version of the receipt helper: 5 blocking and 1 lesser. Each blocking one was reproduced by the reviewer:
+**First review: 72 of 100.** It raised 6 findings on the first receipt helper, 5 blocking and 1 lesser, and reproduced each blocking one:
 
 - text inside one receipt could make the helper skip a different receipt
 - a write that failed halfway was treated as done on the retry
 - two different receipts could get the same id
 - two runs at the same moment could both write the same receipt
 - the same receipt retried across midnight was written twice
+- lesser: a failure did not always print the JSON the reference promised
 
-The lesser finding was that a failure did not always print the JSON the reference promised.
+It found no fault in `SKILL.md` or in the trigger bank's labels. It found two sentences, one in the guide and one in the receipt reference, that promised more than the helper did.
 
-All 6 were fixed, and each fix has a test in the table above. The reviewer scored that first version 72 out of 100 for "would a stranger trust and successfully use this".
+**Second review, after the fixes: 84 of 100.** It judged 3 of the 6 fixed and 3 partly fixed, and reproduced what was left:
 
-The same review found no fault in `SKILL.md` or in the trigger bank's labels. It found two sentences, one in the guide and one in the receipt reference, that promised more than the helper did. Both were rewritten to say what the helper does now. It also asked for the limits on retries and overlapping runs that are listed below.
+- a closing marker with no entry above it was still accepted as a receipt
+- the clock was read before the lock was taken, so a run that waited past midnight could write a second copy
+- a log folder under a user name that does not exist crashed with no JSON
+
+It also flagged four sentences in the guide, the reference and this file that claimed too much. All were rewritten.
+
+**After the second review** the helper was changed again: a receipt now counts only when its whole entry is in the file, the clock is read after the lock is taken, and the bad-folder case fails in JSON. Each change has a test in the table above.
 
 ## Forward test A: a fix nobody asked to deploy
 
@@ -112,8 +123,10 @@ Both forward tests ran on the text **before** these edits. The edited text has n
 - **The project's-own-log route was not exercised.** Neither project named a work log, so only the `FINISH_WORK_LOG_DIR` route was used by an agent. The default folder is covered by a unit test only.
 - **A failed receipt write was not seen by an agent.** The helper's failure paths are covered by unit tests only.
 - **A retry is only recognised for two days.** The helper looks in today's file and yesterday's. The same receipt sent again later than that is written again.
-- **A retry from a different folder is a different receipt.** The current folder is part of the receipt, so the same arguments run from somewhere else are written as a second entry.
+- **Without `--workspace`, a retry from a different folder is a different receipt.** The current folder stands in for the workspace, so the same arguments run from somewhere else are written as a second entry.
 - **The lock is not used on Windows.** There, two runs at the same moment can still write the same receipt twice. Windows was not run at all.
+- **Power loss was not tested.** The helper asks the system to flush each entry to disk. Whether an entry survives a crash at that moment was not measured.
+- **The forward-test outputs are not in this repository.** The checks on them were done on the author's machine, so a reader cannot repeat them from the files here.
 - **Overlap was tested with four runs, not load.** Many agents writing to one log folder at once was not measured.
 - **The trigger bank is narrower than its count.** Several of the 22 positive prompts say "verify, close and record" in different words.
 - **Codex was not run.** Both sessions were Claude. The helper is plain Python and the skill text names no host.
