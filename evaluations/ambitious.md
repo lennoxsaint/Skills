@@ -44,7 +44,7 @@ Per run, v1.3.0 was about 12% faster, used 11% fewer tool calls and 12% fewer tr
 
 **The result by that rule:** go back to v1.2.3. v1.3.0 lost no task, but on the coach landing page it was 0.33 below, against a limit of 0.30. That is a narrow miss and it sits inside the run-to-run spread (standard deviations of 0.54 and 0.70 on that task). The rule is mechanical, so the miss stands as a miss.
 
-**What was published, and why:** the first public release (v1.2.4) followed the rule and shipped the v1.2.3 body. This release ships the v1.3 body. That is the owner's decision on 10 Nov 2026, not a new test result: it is the version he has run every day since 28 Oct 2026, it costs less per run, and this repository is meant to hold the skills he uses. No new benchmark was run for this release. If you want the body that passed the rule, install the `ambitious-v1.2.4` release.
+**What was published, and why:** the first public release (v1.2.4) followed the rule and shipped the v1.2.3 body. This release ships the v1.3 body. That is the owner's decision on 10 Nov 2026, not a new test result: it is the version he has run every day since 28 Oct 2026, it costs less per run, and this repository is meant to hold the skills he uses. No new benchmark was run for this release. If you want the body that passed the rule, download the [`ambitious-v1.2.4` release](https://github.com/lennoxsaint/Skills/releases/tag/ambitious-v1.2.4) and unzip it into your skills folder.
 
 ## Trigger accuracy
 

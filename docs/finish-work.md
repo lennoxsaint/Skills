@@ -48,7 +48,7 @@ where it goes, first match wins:
 2. the folder in `FINISH_WORK_LOG_DIR`
 3. `~/.finish-work/log/`
 
-the status is one of `completed`, `in_progress`, `waiting`, `blocked`, `cancelled` or `unknown`. the helper only adds entries. it never edits an old one, and running the same command twice does not write the entry twice. it uses only what ships with Python and sends nothing anywhere.
+the status is one of `completed`, `in_progress`, `waiting`, `blocked`, `cancelled` or `unknown`. the helper only adds entries and never edits an old one. run the same command again today or tomorrow and it skips the receipt it already wrote. if a write was cut off halfway, the retry writes the whole entry. it uses only what ships with Python and sends nothing anywhere.
 
 ## what it will not do
 
@@ -91,4 +91,4 @@ two synthetic tasks live in [`examples/finish-work/`](../examples/finish-work/sa
 
 ## changelog
 
-**1.0.0** (10 Nov 2026) - first public release. this is the closeout i run on every real task, cleaned up for anyone to use. my private work log became a receipt file you choose, and one product's release rules were left out. four lines were made clearer after two tests with agents that had never seen the skill.
+**1.0.0** (10 Nov 2026) - first public release. this is the closeout i run on every real task, cleaned up for anyone to use. my private work log became a receipt file you choose, and one product's release rules were left out. four lines were made clearer after two tests with agents that had never seen the skill. a different model then reviewed the receipt helper and found five ways it could skip or double a receipt. all five were fixed before release.

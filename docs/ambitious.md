@@ -81,7 +81,7 @@ these are three tasks, not a big study. treat them as an early sign, not a law.
 - about even on two tasks, better on the reel edit, and about 12% faster with 11% fewer tool calls.
 - it missed the bar i set before the test. the rule said "not more than 0.3 lower on any task" and the landing page came in 0.33 lower.
 - i publish it anyway because it is the one i run every day. it has not been tested against "no skill" on its own.
-- want the version that passed the rule? install the `ambitious-v1.2.4` release.
+- want the version that passed the rule? download the [`ambitious-v1.2.4` release](https://github.com/lennoxsaint/Skills/releases/tag/ambitious-v1.2.4) and unzip it into your skills folder.
 
 more detail is in the [evaluation](../evaluations/ambitious.md).
 

@@ -30,7 +30,7 @@ python3 <skill-dir>/scripts/log_receipt.py \
 
 `--status` is one of `completed`, `in_progress`, `waiting`, `blocked`, `cancelled` or `unknown`. `--file`, `--check`, `--decision`, `--error` and `--next` repeat. Only `--status`, `--objective` and `--outcome` are required. Read `--help` if an argument is unfamiliar.
 
-The helper appends one entry to `YYYY-MM-DD.md` in the log folder and prints one line of JSON: `status` (`written`, `skipped` or `failed`), `path` and `entry_id`. It never edits or removes an earlier entry.
+The helper appends one entry to `YYYY-MM-DD.md` in the log folder and prints one line of JSON. `written` and `skipped` carry `status`, `path` and `entry_id`. `failed` carries `status` and `error`, plus `path` and `entry_id` when they were known. A missing or unknown argument prints the usage text and exits 2, with no JSON. The helper never edits or removes an earlier entry.
 
 ## Rules
 
@@ -39,4 +39,4 @@ The helper appends one entry to `YYYY-MM-DD.md` in the log folder and prints one
 - `--error` holds a failure met along the way and what fixed it. A blocker that still stands goes in `--outcome` and `--next`.
 - For a release or other outside action, put the target, the tool, the before and after proof and the way back in `--check` lines.
 - Never include secrets or raw private source text.
-- Read back the printed `path` and `status`. `failed` is an outstanding closeout obligation, not a receipt. Retry a recoverable failure with the same arguments: the helper skips an entry it has already written, so a retry cannot duplicate it.
+- Read back the printed `path` and `status`. `failed` is an outstanding closeout obligation, not a receipt. Retry a recoverable failure with the same arguments, from the same folder: the helper skips a receipt whose complete entry is already in today's or yesterday's file, and writes it in full when only a fragment got through.

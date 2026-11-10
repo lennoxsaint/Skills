@@ -4,21 +4,33 @@
 The log folder is --log-dir, else $FINISH_WORK_LOG_DIR, else ~/.finish-work/log.
 One file per local day: YYYY-MM-DD.md. Entries are only ever appended.
 
-Exit code 0 for `written` and `skipped`, 1 for `failed`. Standard library only.
+Every entry ends with a marker line. A receipt counts as already written only
+when its complete entry, marker included, is in today's or yesterday's file.
+
+Exit code 0 for `written` and `skipped`, 1 for `failed`, 2 for a usage error.
+Standard library only.
 """
 
 from __future__ import annotations
 
 import argparse
+import contextlib
 import hashlib
 import json
 import os
 import sys
-from datetime import datetime
+from datetime import datetime, timedelta
 from pathlib import Path
+
+try:
+    import fcntl
+except ImportError:  # no fcntl on Windows: the helper runs without the lock there
+    fcntl = None
 
 STATUSES = ("completed", "in_progress", "waiting", "blocked", "cancelled", "unknown")
 DEFAULT_LOG_DIR = "~/.finish-work/log"
+LOCK_NAME = ".receipts.lock"
+LISTS = ("file", "check", "decision", "error", "next")
 
 
 def resolve_log_dir(explicit: str | None) -> Path:
@@ -31,46 +43,88 @@ def resolve_log_dir(explicit: str | None) -> Path:
 
 
 def one_line(text: str) -> str:
-    return " ".join(text.split())
+    """Collapse all whitespace to single spaces and drop characters UTF-8 cannot store."""
+    return " ".join(text.encode("utf-8", "replace").decode("utf-8").split())
 
 
-def entry_id(args: argparse.Namespace) -> str:
-    identity = [
-        args.task_id or "",
-        args.status,
-        one_line(args.objective),
-        one_line(args.outcome),
-        one_line(args.scope or ""),
-        *[one_line(item) for group in (args.file, args.check, args.decision, args.error, args.next) for item in group],
-    ]
-    return hashlib.sha256("\x1f".join(identity).encode("utf-8")).hexdigest()[:12]
+def clean_fields(args: argparse.Namespace) -> dict:
+    """Every recorded value, cleaned once. The entry id and the entry text both come from this."""
+    fields = {
+        "task_id": one_line(args.task_id or ""),
+        "status": args.status,
+        "objective": one_line(args.objective),
+        "outcome": one_line(args.outcome),
+        "scope": one_line(args.scope or ""),
+        "workspace": one_line(args.workspace or os.getcwd()),
+    }
+    for name in LISTS:
+        fields[name] = [one_line(item) for item in getattr(args, name)]
+    return fields
+
+
+def entry_id(fields: dict) -> str:
+    canonical = json.dumps(fields, sort_keys=True, ensure_ascii=True, separators=(",", ":"))
+    return hashlib.sha256(canonical.encode("ascii")).hexdigest()[:12]
+
+
+def end_marker(identifier: str) -> str:
+    return f"<!-- receipt-end {identifier} -->"
+
+
+def has_complete_entry(text: str, identifier: str) -> bool:
+    """True only when the entry's own closing line is in the file.
+
+    Values passed on the command line are always written after a `- Name: ` or
+    `  - ` prefix on one line, so no argument can produce this exact line.
+    """
+    return end_marker(identifier) in text.splitlines()
 
 
 def bullet_block(title: str, items: list[str]) -> list[str]:
     if not items:
         return [f"- {title}: none recorded"]
-    return [f"- {title}:"] + [f"  - {one_line(item)}" for item in items]
+    return [f"- {title}:"] + [f"  - {item}" for item in items]
 
 
-def render(args: argparse.Namespace, identifier: str, now: datetime) -> str:
+def render(fields: dict, identifier: str, now: datetime) -> str:
     lines = [
-        f"## {now.strftime('%H:%M:%S %z').strip()} - {args.status} - {one_line(args.objective)}",
+        f"## {now.strftime('%H:%M:%S %z').strip()} - {fields['status']} - {fields['objective']}",
         "",
         f"- Entry: `{identifier}`",
-        f"- Task: {one_line(args.task_id) if args.task_id else 'UNKNOWN'}",
-        f"- Status: {args.status}",
-        f"- Objective: {one_line(args.objective)}",
-        f"- Outcome: {one_line(args.outcome)}",
-        f"- Scope: {one_line(args.scope) if args.scope else 'UNKNOWN'}",
-        f"- Workspace: {one_line(args.workspace) if args.workspace else os.getcwd()}",
-        *bullet_block("Files changed", args.file),
-        *bullet_block("Checks and outcomes", args.check),
-        *bullet_block("Decisions", args.decision),
-        *bullet_block("Errors and fixes", args.error),
-        *bullet_block("Next steps", args.next),
+        f"- Task: {fields['task_id'] or 'UNKNOWN'}",
+        f"- Status: {fields['status']}",
+        f"- Objective: {fields['objective']}",
+        f"- Outcome: {fields['outcome']}",
+        f"- Scope: {fields['scope'] or 'UNKNOWN'}",
+        f"- Workspace: {fields['workspace']}",
+        *bullet_block("Files changed", fields["file"]),
+        *bullet_block("Checks and outcomes", fields["check"]),
+        *bullet_block("Decisions", fields["decision"]),
+        *bullet_block("Errors and fixes", fields["error"]),
+        *bullet_block("Next steps", fields["next"]),
+        "",
+        end_marker(identifier),
         "",
     ]
     return "\n".join(lines) + "\n"
+
+
+@contextlib.contextmanager
+def log_lock(log_dir: Path):
+    """Let one helper at a time check and append. Without fcntl the block runs unlocked."""
+    if fcntl is None:
+        yield
+        return
+    with (log_dir / LOCK_NAME).open("a", encoding="utf-8") as handle:
+        fcntl.flock(handle, fcntl.LOCK_EX)
+        try:
+            yield
+        finally:
+            fcntl.flock(handle, fcntl.LOCK_UN)
+
+
+def read_text(path: Path) -> str:
+    return path.read_text(encoding="utf-8", errors="replace") if path.exists() else ""
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -92,31 +146,41 @@ def build_parser() -> argparse.ArgumentParser:
 
 def main(argv: list[str] | None = None) -> int:
     args = build_parser().parse_args(argv)
-    for name in ("objective", "outcome"):
-        if not getattr(args, name).strip():
-            print(json.dumps({"status": "failed", "error": f"--{name} is empty"}))
-            return 1
-    identifier = entry_id(args)
-    now = datetime.now().astimezone()
+    result: dict = {"status": "failed"}
     try:
+        fields = clean_fields(args)
+        for name in ("objective", "outcome"):
+            if not fields[name]:
+                raise ValueError(f"--{name} is empty")
+        identifier = entry_id(fields)
+        result["entry_id"] = identifier
+        now = datetime.now().astimezone()
         log_dir = resolve_log_dir(args.log_dir)
-        log_dir.mkdir(parents=True, exist_ok=True)
         path = log_dir / f"{now.strftime('%Y-%m-%d')}.md"
-        existing = path.read_text(encoding="utf-8") if path.exists() else ""
-        if f"- Entry: `{identifier}`" in existing:
-            print(json.dumps({"status": "skipped", "reason": "this entry is already in the log", "path": str(path), "entry_id": identifier}))
-            return 0
-        header = "" if existing else f"# Work receipts {now.strftime('%Y-%m-%d')}\n\n"
-        separator = "" if not existing or existing.endswith("\n\n") else ("\n" if existing.endswith("\n") else "\n\n")
-        with path.open("a", encoding="utf-8") as handle:
-            handle.write(header + separator + render(args, identifier, now))
-        written = path.read_text(encoding="utf-8")
-        if f"- Entry: `{identifier}`" not in written:
-            raise OSError("the entry was not found in the log after writing")
+        result["path"] = str(path)
+        log_dir.mkdir(parents=True, exist_ok=True)
+        with log_lock(log_dir):
+            yesterday = log_dir / f"{(now - timedelta(days=1)).strftime('%Y-%m-%d')}.md"
+            for candidate in (path, yesterday):
+                if has_complete_entry(read_text(candidate), identifier):
+                    result.update(status="skipped", reason="this receipt is already in the log", path=str(candidate))
+                    print(json.dumps(result))
+                    return 0
+            existing = read_text(path)
+            header = "" if existing else f"# Work receipts {now.strftime('%Y-%m-%d')}\n\n"
+            separator = "" if not existing or existing.endswith("\n\n") else ("\n" if existing.endswith("\n") else "\n\n")
+            with path.open("a", encoding="utf-8") as handle:
+                handle.write(header + separator + render(fields, identifier, now))
+                handle.flush()
+                os.fsync(handle.fileno())
+            if not has_complete_entry(read_text(path), identifier):
+                raise OSError("the complete entry was not found in the log after writing")
     except (OSError, ValueError) as error:
-        print(json.dumps({"status": "failed", "error": str(error), "entry_id": identifier}))
+        result.update(status="failed", error=str(error))
+        print(json.dumps(result))
         return 1
-    print(json.dumps({"status": "written", "path": str(path), "entry_id": identifier}))
+    result["status"] = "written"
+    print(json.dumps(result))
     return 0
 
 

@@ -1,25 +1,51 @@
 """Tests for the finish-work receipt helper. Standard library only."""
 
+import contextlib
+import importlib.util
+import io
 import json
 import os
 import subprocess
 import sys
 import tempfile
 import unittest
+from datetime import datetime, timedelta
 from pathlib import Path
 
 HELPER = Path(__file__).resolve().parent / "log_receipt.py"
 BASE = ["--status", "completed", "--objective", "Fix the slug bug", "--outcome", "Trailing dashes are stripped"]
 
 
-def run(args, env_extra=None, home=None):
+def clean_env(env_extra=None, home=None):
     env = {key: value for key, value in os.environ.items() if key != "FINISH_WORK_LOG_DIR"}
     if home is not None:
         env["HOME"] = str(home)
     env.update(env_extra or {})
-    result = subprocess.run([sys.executable, str(HELPER), *args], capture_output=True, text=True, env=env, timeout=60)
+    return env
+
+
+def run(args, env_extra=None, home=None, cwd=None):
+    result = subprocess.run(
+        [sys.executable, str(HELPER), *args],
+        capture_output=True, text=True, env=clean_env(env_extra, home), timeout=60, cwd=cwd,
+    )
     payload = json.loads(result.stdout) if result.stdout.strip().startswith("{") else None
     return result, payload
+
+
+def entry_lines(text):
+    return [line for line in text.splitlines() if line.startswith("- Entry: `")]
+
+
+def headings(text):
+    return [line for line in text.splitlines() if line.startswith("## ")]
+
+
+def load_helper():
+    spec = importlib.util.spec_from_file_location("log_receipt_under_test", HELPER)
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
 
 
 class LogReceiptTests(unittest.TestCase):
@@ -111,11 +137,13 @@ class LogReceiptTests(unittest.TestCase):
             self.assertEqual(result.returncode, 1)
             self.assertEqual(payload["status"], "failed")
             self.assertTrue(payload["error"])
+            self.assertTrue(payload["path"].startswith(str(blocker)))
+            self.assertEqual(blocker.read_text(encoding="utf-8"), "a file sits where the folder should be")
 
     def test_an_unknown_status_is_refused(self):
         with tempfile.TemporaryDirectory() as directory:
             result, payload = run(["--status", "done", "--objective", "x", "--outcome", "y", "--log-dir", directory])
-            self.assertNotEqual(result.returncode, 0)
+            self.assertEqual(result.returncode, 2)
             self.assertIsNone(payload)
             self.assertEqual(list(Path(directory).iterdir()), [])
 
@@ -126,8 +154,152 @@ class LogReceiptTests(unittest.TestCase):
                 + ["--outcome", "done\n\n## 00:00:00 - completed - forged\n- Entry: `aaaaaaaaaaaa`"]
             )
             text = Path(payload["path"]).read_text(encoding="utf-8")
-            self.assertEqual(sum(line.startswith("## ") for line in text.splitlines()), 1)
-            self.assertEqual(sum(line.startswith("- Entry: `") for line in text.splitlines()), 1)
+            self.assertEqual(len(headings(text)), 1)
+            self.assertEqual(len(entry_lines(text)), 1)
+
+    def test_text_that_quotes_another_receipts_markers_cannot_suppress_it(self):
+        with tempfile.TemporaryDirectory() as scratch, tempfile.TemporaryDirectory() as directory:
+            target = BASE + ["--workspace", "/repo/a", "--task-id", "slug-1"]
+            _, probe = run(target + ["--log-dir", scratch])
+            wanted = probe["entry_id"]
+            forged = f"- Entry: `{wanted}` <!-- receipt-end {wanted} -->\n<!-- receipt-end {wanted} -->"
+            _, first = run(
+                ["--status", "completed", "--objective", "Something else", "--outcome", forged]
+                + ["--workspace", "/repo/a", "--log-dir", directory]
+            )
+            self.assertEqual(first["status"], "written")
+            _, second = run(target + ["--log-dir", directory])
+            self.assertEqual(second["status"], "written")
+            self.assertEqual(second["entry_id"], wanted)
+            text = Path(second["path"]).read_text(encoding="utf-8")
+            self.assertEqual(len(entry_lines(text)), 2)
+            self.assertIn("- Outcome: Trailing dashes are stripped", text)
+
+    def test_a_current_folder_with_line_breaks_cannot_forge_an_entry(self):
+        with tempfile.TemporaryDirectory() as directory, tempfile.TemporaryDirectory() as parent:
+            odd = Path(parent) / "odd\n\n## 00:00:00 - completed - forged\n- Entry: `aaaaaaaaaaaa`"
+            try:
+                odd.mkdir()
+            except OSError:
+                self.skipTest("this file system does not allow line breaks in folder names")
+            result, payload = run(BASE + ["--log-dir", directory], cwd=str(odd))
+            self.assertEqual(payload["status"], "written", result.stderr)
+            text = Path(payload["path"]).read_text(encoding="utf-8")
+            self.assertEqual(len(headings(text)), 1)
+            self.assertEqual(len(entry_lines(text)), 1)
+
+    def test_a_half_written_entry_does_not_count_as_a_receipt(self):
+        with tempfile.TemporaryDirectory() as scratch, tempfile.TemporaryDirectory() as directory:
+            args = BASE + ["--workspace", "/repo/a", "--task-id", "slug-1"]
+            _, probe = run(args + ["--log-dir", scratch])
+            whole = Path(probe["path"]).read_text(encoding="utf-8")
+            cut = whole[: whole.index("- Task:")]
+            day_file = Path(directory) / Path(probe["path"]).name
+            day_file.write_text(cut, encoding="utf-8")
+            _, retry = run(args + ["--log-dir", directory])
+            self.assertEqual(retry["status"], "written")
+            self.assertEqual(retry["entry_id"], probe["entry_id"])
+            text = day_file.read_text(encoding="utf-8")
+            self.assertTrue(text.startswith(cut))
+            self.assertIn("- Outcome: Trailing dashes are stripped", text)
+            _, again = run(args + ["--log-dir", directory])
+            self.assertEqual(again["status"], "skipped")
+
+    def test_receipts_that_differ_only_by_workspace_or_field_are_both_written(self):
+        with tempfile.TemporaryDirectory() as directory:
+            variants = [
+                ["--workspace", "/repo/a"],
+                ["--workspace", "/repo/b"],
+                ["--workspace", "/repo/a", "--file", "pytest: PASS"],
+                ["--workspace", "/repo/a", "--check", "pytest: PASS"],
+                ["--workspace", "/repo/a", "--file", "a", "--file", "b"],
+                ["--workspace", "/repo/a", "--file", "a", "--check", "b"],
+            ]
+            ids = set()
+            for extra in variants:
+                _, payload = run(BASE + ["--log-dir", directory] + extra)
+                self.assertEqual(payload["status"], "written", extra)
+                ids.add(payload["entry_id"])
+            self.assertEqual(len(ids), len(variants))
+
+    def test_a_retry_the_day_after_is_skipped_and_two_days_after_is_written(self):
+        today = datetime.now().astimezone()
+        for days_ago, expected in ((1, "skipped"), (2, "written")):
+            with tempfile.TemporaryDirectory() as directory:
+                args = BASE + ["--workspace", "/repo/a", "--log-dir", directory]
+                _, first = run(args)
+                older = Path(directory) / f"{(today - timedelta(days=days_ago)).strftime('%Y-%m-%d')}.md"
+                Path(first["path"]).rename(older)
+                _, retry = run(args)
+                self.assertEqual(retry["status"], expected, days_ago)
+                if expected == "skipped":
+                    self.assertEqual(retry["path"], str(older))
+                    self.assertFalse(Path(first["path"]).exists())
+
+    def test_four_overlapping_runs_write_the_receipt_once(self):
+        helper = load_helper()
+        if helper.fcntl is None:
+            self.skipTest("no file lock on this platform")
+        with tempfile.TemporaryDirectory() as directory:
+            command = [sys.executable, str(HELPER), *BASE, "--workspace", "/repo/a", "--log-dir", directory]
+            processes = [
+                subprocess.Popen(command, stdout=subprocess.PIPE, text=True, env=clean_env()) for _ in range(4)
+            ]
+            statuses = sorted(json.loads(process.communicate(timeout=60)[0])["status"] for process in processes)
+            self.assertEqual(statuses, ["skipped", "skipped", "skipped", "written"])
+            day_files = list(Path(directory).glob("*.md"))
+            self.assertEqual(len(day_files), 1)
+            self.assertEqual(len(entry_lines(day_files[0].read_text(encoding="utf-8"))), 1)
+
+    def test_a_second_run_that_starts_inside_the_first_ones_gap_waits_and_is_skipped(self):
+        # Replays the race in a fixed order: the first run has checked the log and is about to
+        # append when a second identical run starts. The second one must wait for the lock,
+        # then find the finished entry.
+        helper = load_helper()
+        if helper.fcntl is None:
+            self.skipTest("no file lock on this platform")
+        with tempfile.TemporaryDirectory() as directory:
+            args = [*BASE, "--workspace", "/repo/a", "--log-dir", directory]
+            original = helper.render
+            rivals = []
+            finished_early = []
+
+            def render_while_a_rival_runs(*positional):
+                rival = subprocess.Popen(
+                    [sys.executable, str(HELPER), *args], stdout=subprocess.PIPE, text=True, env=clean_env()
+                )
+                rivals.append(rival)
+                try:
+                    rival.wait(timeout=1.5)
+                    finished_early.append(True)
+                except subprocess.TimeoutExpired:
+                    finished_early.append(False)
+                return original(*positional)
+
+            helper.render = render_while_a_rival_runs
+            with contextlib.redirect_stdout(io.StringIO()) as output:
+                code = helper.main(args)
+            first = json.loads(output.getvalue())
+            rival = json.loads(rivals[0].communicate(timeout=60)[0])
+            self.assertEqual(finished_early, [False])
+            self.assertEqual((code, first["status"], rival["status"]), (0, "written", "skipped"))
+            self.assertEqual(len(entry_lines(Path(first["path"]).read_text(encoding="utf-8"))), 1)
+
+    def test_text_that_utf8_cannot_store_is_cleaned_and_still_answers_in_json(self):
+        helper = load_helper()
+        with tempfile.TemporaryDirectory() as directory:
+            with contextlib.redirect_stdout(io.StringIO()) as output:
+                code = helper.main([*BASE, "--file", "bad\udcffname.txt", "--log-dir", directory])
+            payload = json.loads(output.getvalue())
+            self.assertEqual((code, payload["status"]), (0, "written"))
+            self.assertIn("  - bad?name.txt", Path(payload["path"]).read_text(encoding="utf-8"))
+
+    def test_an_empty_objective_fails_in_json_and_writes_nothing(self):
+        with tempfile.TemporaryDirectory() as directory:
+            result, payload = run(["--status", "completed", "--objective", "  ", "--outcome", "y", "--log-dir", directory])
+            self.assertEqual(result.returncode, 1)
+            self.assertEqual(payload["status"], "failed")
+            self.assertEqual(list(Path(directory).iterdir()), [])
 
 
 if __name__ == "__main__":

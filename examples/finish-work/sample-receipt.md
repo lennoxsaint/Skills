@@ -26,6 +26,8 @@ The file is `~/.finish-work/log/2026-11-10.md`:
 - Next steps:
   - Run ./deploy.sh when ready to ship
 
+<!-- receipt-end 3f9a1c07b2d4 -->
+
 ## 09:12:41 +0000 - blocked - Update pricing.md and publish it with ./publish.sh
 
 - Entry: `c81e5d2a9b60`
@@ -44,7 +46,11 @@ The file is `~/.finish-work/log/2026-11-10.md`:
 - Errors and fixes: none recorded
 - Next steps:
   - Site owner supplies ACME_PUBLISH_TOKEN, then run ./publish.sh
+
+<!-- receipt-end c81e5d2a9b60 -->
 ```
+
+Each entry ends with a `receipt-end` line. The helper uses it to tell a finished entry from one that was cut off.
 
 The first entry is `completed` because the fix was the whole request. It still says "not deployed", so nobody reads it as shipped.
 
