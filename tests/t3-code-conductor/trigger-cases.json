@@ -1,0 +1,194 @@
+[
+  {
+    "prompt": "Conduct my T3 threads and keep every lane moving.",
+    "should_trigger": true
+  },
+  {
+    "prompt": "Be my T3 conductor.",
+    "should_trigger": true
+  },
+  {
+    "prompt": "Run my T3 agents as me and only show me the decisions that need me.",
+    "should_trigger": true
+  },
+  {
+    "prompt": "Set up a review desk for my agents on my phone, refreshed every few hours.",
+    "should_trigger": true
+  },
+  {
+    "prompt": "Use t3-code-conductor to take over my agent factory.",
+    "should_trigger": true
+  },
+  {
+    "prompt": "Do a census of every T3 Code thread on every machine I have connected.",
+    "should_trigger": true
+  },
+  {
+    "prompt": "Run T3 Code as an agent factory from this one conductor thread.",
+    "should_trigger": true
+  },
+  {
+    "prompt": "Give each lane a whole outcome and keep an append-only ledger of what they do.",
+    "should_trigger": true
+  },
+  {
+    "prompt": "Take over as conductor for all my T3 Code threads and keep a roster.",
+    "should_trigger": true
+  },
+  {
+    "prompt": "Count all my T3 threads across my laptop and my other computers and tell me who owns what.",
+    "should_trigger": true
+  },
+  {
+    "prompt": "Build me a phone page of just the decisions my T3 lanes need from me, updated on a schedule.",
+    "should_trigger": true
+  },
+  {
+    "prompt": "Answer my lanes' questions from the decisions I already made, and bring me only what is new.",
+    "should_trigger": true
+  },
+  {
+    "prompt": "Get an outside review on a different model at the exact head before any lane merges.",
+    "should_trigger": true
+  },
+  {
+    "prompt": "I have too many T3 threads. Be the conductor and drive them to done.",
+    "should_trigger": true
+  },
+  {
+    "prompt": "Start the T3 conductor loop and refresh the review page every three hours.",
+    "should_trigger": true
+  },
+  {
+    "prompt": "Run my T3 Code lanes while I sleep and leave a review page for the morning.",
+    "should_trigger": true
+  },
+  {
+    "prompt": "Make a roster of every T3 thread, assign lanes and keep the ledger append-only.",
+    "should_trigger": true
+  },
+  {
+    "prompt": "Be the one thread that runs all my other T3 threads.",
+    "should_trigger": true
+  },
+  {
+    "prompt": "Check every T3 lane, answer the easy questions yourself and queue the hard ones for me.",
+    "should_trigger": true
+  },
+  {
+    "prompt": "Set up the agent factory in T3 Code with a conductor, lanes and a review page.",
+    "should_trigger": true
+  },
+  {
+    "prompt": "Invoke t3-code-conductor and show me the roster.",
+    "should_trigger": true
+  },
+  {
+    "prompt": "Act as me over my T3 agents and get a second model to review each change.",
+    "should_trigger": true
+  },
+  {
+    "prompt": "Create a review desk where I approve the few decisions my T3 agents cannot make.",
+    "should_trigger": true
+  },
+  {
+    "prompt": "Take every open T3 thread on every connected machine and turn them into lanes with whole outcomes.",
+    "should_trigger": true
+  },
+  {
+    "prompt": "Create one new T3 thread for the billing bug.",
+    "should_trigger": false
+  },
+  {
+    "prompt": "Read this one T3 thread and tell me what happened.",
+    "should_trigger": false
+  },
+  {
+    "prompt": "Delegate this one task to a helper agent.",
+    "should_trigger": false
+  },
+  {
+    "prompt": "Conduct my Claude Code sessions and push each one to done.",
+    "should_trigger": false
+  },
+  {
+    "prompt": "Build a generic dashboard for my sales numbers.",
+    "should_trigger": false
+  },
+  {
+    "prompt": "Review this diff and point out risks.",
+    "should_trigger": false
+  },
+  {
+    "prompt": "Set a reminder for 3pm to call the plumber.",
+    "should_trigger": false
+  },
+  {
+    "prompt": "Explain how much T3 Code costs.",
+    "should_trigger": false
+  },
+  {
+    "prompt": "Fix the failing test in this repo.",
+    "should_trigger": false
+  },
+  {
+    "prompt": "Summarize my last five commits.",
+    "should_trigger": false
+  },
+  {
+    "prompt": "Rename this T3 thread.",
+    "should_trigger": false
+  },
+  {
+    "prompt": "How do I connect a second machine to T3 Code?",
+    "should_trigger": false
+  },
+  {
+    "prompt": "Schedule a nightly task that runs the linter.",
+    "should_trigger": false
+  },
+  {
+    "prompt": "Write a plan for the next release.",
+    "should_trigger": false
+  },
+  {
+    "prompt": "Check on all my Claude sessions and unblock the stuck ones.",
+    "should_trigger": false
+  },
+  {
+    "prompt": "Make a status page for my website uptime.",
+    "should_trigger": false
+  },
+  {
+    "prompt": "Open a pull request for this branch.",
+    "should_trigger": false
+  },
+  {
+    "prompt": "What is the difference between a thread and a worktree?",
+    "should_trigger": false
+  },
+  {
+    "prompt": "Install a skill from the skills repo.",
+    "should_trigger": false
+  },
+  {
+    "prompt": "Send this thread to a different project.",
+    "should_trigger": false
+  },
+  {
+    "prompt": "Stop the agent that is running in this thread.",
+    "should_trigger": false
+  },
+  {
+    "prompt": "Write a README for this project.",
+    "should_trigger": false
+  },
+  {
+    "prompt": "Give me a daily email with my calendar and tasks.",
+    "should_trigger": false
+  },
+  {
+    "prompt": "Run one background agent to refactor this file.",
+    "should_trigger": false
+  }
+]

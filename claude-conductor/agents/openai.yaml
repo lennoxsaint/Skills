@@ -1,0 +1,8 @@
+interface:
+  display_name: "Claude Conductor"
+  short_description: "Move every open Claude Code thread to a finished, proven outcome"
+  brand_color: "#D97706"
+  default_prompt: "Use $claude-conductor to go through every open thread in my projects, rank them, and move each one to a finished outcome with proof."
+
+policy:
+  allow_implicit_invocation: true

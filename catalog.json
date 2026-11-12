@@ -24,6 +24,38 @@
   },
   "skills": [
     {
+      "name": "claude-conductor",
+      "display_name": "Claude Conductor",
+      "path": "claude-conductor",
+      "status": "stable",
+      "version": "1.0.0",
+      "summary": "Run the Claude Code threads you already have as you: count every open thread, keep a ranked ledger, hand each owner a whole outcome and finish with proof.",
+      "use_when": "The user wants many existing Claude Code threads or projects moved to finished outcomes on their behalf (\"conduct my Claude sessions\", \"run my projects as me\", \"move every open thread forward\"). Not for one task in one session; for T3 Code use t3-code-conductor.",
+      "try": "Use claude-conductor: count every open thread in my projects, rank them against my goals, and move each one to a proven finish.",
+      "hosts": ["claude", "codex"],
+      "requires": "Claude Code; a thread or browser tool that can read your sessions",
+      "docs": "docs/claude-conductor.md",
+      "evaluation": "evaluations/claude-conductor.md",
+      "examples": "examples/claude-conductor",
+      "trigger_cases": "tests/claude-conductor/trigger-cases.json"
+    },
+    {
+      "name": "t3-code-conductor",
+      "display_name": "T3 Code Conductor",
+      "path": "t3-code-conductor",
+      "status": "stable",
+      "version": "1.0.0",
+      "summary": "Turn one T3 Code thread into the conductor of all the others: census, roster, append-only ledger, outside review on a different model, and one phone review page of only the decisions that need you.",
+      "use_when": "The user runs agents in T3 Code and wants one thread to conduct all of them (\"be my T3 conductor\", \"conduct my T3 threads\", \"set up a review desk for my agents\"). Not for a single task; for Claude Code without T3 use claude-conductor.",
+      "try": "Use t3-code-conductor: be my conductor. Take a census of every T3 thread, give each lane a whole outcome, and keep one phone review page of what needs me.",
+      "hosts": ["claude", "codex"],
+      "requires": "T3 Code with its thread and delegation tools; Python 3.9+ for the desk helper",
+      "docs": "docs/t3-code-conductor.md",
+      "evaluation": "evaluations/t3-code-conductor.md",
+      "examples": "examples/t3-code-conductor",
+      "trigger_cases": "tests/t3-code-conductor/trigger-cases.json"
+    },
+    {
       "name": "adversarial-review",
       "display_name": "Adversarial Review",
       "path": "adversarial-review",

@@ -1,0 +1,194 @@
+[
+  {
+    "prompt": "Conduct my Claude sessions and get every open thread to done.",
+    "should_trigger": true
+  },
+  {
+    "prompt": "Oversee all my open Claude Code sessions and tell me what is stuck.",
+    "should_trigger": true
+  },
+  {
+    "prompt": "Act as me across my projects and keep every Claude Code thread moving.",
+    "should_trigger": true
+  },
+  {
+    "prompt": "Inventory every thread I have open in Claude Code and push each one to finished.",
+    "should_trigger": true
+  },
+  {
+    "prompt": "Use claude-conductor to run my projects while I am away.",
+    "should_trigger": true
+  },
+  {
+    "prompt": "Check on all my agents and unblock the ones that are waiting on me.",
+    "should_trigger": true
+  },
+  {
+    "prompt": "Move every open thread forward today, local sessions and cloud project threads both.",
+    "should_trigger": true
+  },
+  {
+    "prompt": "Run my projects as me: count the open threads, rank them and drive the top ones home.",
+    "should_trigger": true
+  },
+  {
+    "prompt": "I have about twenty Claude Code sessions going. Be the conductor and get them all to an outcome.",
+    "should_trigger": true
+  },
+  {
+    "prompt": "Go through my claude.ai/code project threads and make sure each one has an owner and a next step.",
+    "should_trigger": true
+  },
+  {
+    "prompt": "Take over my background agents, keep a ranked list of what is open and follow each fix through review.",
+    "should_trigger": true
+  },
+  {
+    "prompt": "Invoke claude-conductor and give me a status on every session I have running.",
+    "should_trigger": true
+  },
+  {
+    "prompt": "Keep all my Claude Code sessions honest: find the ones that stalled and hand each a whole outcome.",
+    "should_trigger": true
+  },
+  {
+    "prompt": "Be my chief of staff for my Claude threads and merge what is allowed to merge once checks pass.",
+    "should_trigger": true
+  },
+  {
+    "prompt": "Sweep every project thread I own, list what is open, and push the fixes through review and tests.",
+    "should_trigger": true
+  },
+  {
+    "prompt": "I want one conductor over all my Claude sessions. Count them, rank them and keep going until they are done.",
+    "should_trigger": true
+  },
+  {
+    "prompt": "Run my whole queue of Claude Code work as me and show proof when each item lands.",
+    "should_trigger": true
+  },
+  {
+    "prompt": "Find every unfinished thread across my projects and get an owner moving on each.",
+    "should_trigger": true
+  },
+  {
+    "prompt": "Please conduct my Claude Code sessions end to end, including review and permitted merges.",
+    "should_trigger": true
+  },
+  {
+    "prompt": "Look at all my open agents, pick the most important outcomes and push them forward.",
+    "should_trigger": true
+  },
+  {
+    "prompt": "Act on my behalf over every Claude Code session and report only what needs me.",
+    "should_trigger": true
+  },
+  {
+    "prompt": "Start claude-conductor on my projects and keep a ledger of every open thread.",
+    "should_trigger": true
+  },
+  {
+    "prompt": "Nudge each of my stuck Claude sessions with the answer it needs and follow the fix to a merged change.",
+    "should_trigger": true
+  },
+  {
+    "prompt": "Orchestrate all my cloud and local Claude Code threads so nothing sits open without a next step.",
+    "should_trigger": true
+  },
+  {
+    "prompt": "Fix this one bug in the login form.",
+    "should_trigger": false
+  },
+  {
+    "prompt": "Review this pull request and leave comments.",
+    "should_trigger": false
+  },
+  {
+    "prompt": "Summarize this one thread for me.",
+    "should_trigger": false
+  },
+  {
+    "prompt": "Write a plan for migrating our database.",
+    "should_trigger": false
+  },
+  {
+    "prompt": "Schedule a cron job that runs the backup every night.",
+    "should_trigger": false
+  },
+  {
+    "prompt": "Build a dashboard showing signups per day.",
+    "should_trigger": false
+  },
+  {
+    "prompt": "Conduct my T3 Code threads and keep a roster of every lane.",
+    "should_trigger": false
+  },
+  {
+    "prompt": "Install the hill-climb skill for me.",
+    "should_trigger": false
+  },
+  {
+    "prompt": "Explain what a conductor does in an orchestra.",
+    "should_trigger": false
+  },
+  {
+    "prompt": "Check this one agent's output and tell me if it looks right.",
+    "should_trigger": false
+  },
+  {
+    "prompt": "Run the tests and tell me which ones fail.",
+    "should_trigger": false
+  },
+  {
+    "prompt": "Rename this session to something shorter.",
+    "should_trigger": false
+  },
+  {
+    "prompt": "Start a new Claude Code session in my docs project.",
+    "should_trigger": false
+  },
+  {
+    "prompt": "What did the agent in this session change in the last hour?",
+    "should_trigger": false
+  },
+  {
+    "prompt": "Write a commit message for my staged changes.",
+    "should_trigger": false
+  },
+  {
+    "prompt": "Delegate this refactor to a single subagent.",
+    "should_trigger": false
+  },
+  {
+    "prompt": "Be my T3 conductor and run my T3 agents as me.",
+    "should_trigger": false
+  },
+  {
+    "prompt": "Set up a review desk page for my T3 agents.",
+    "should_trigger": false
+  },
+  {
+    "prompt": "Compare the two approaches in this thread and pick one.",
+    "should_trigger": false
+  },
+  {
+    "prompt": "Remind me tomorrow morning to check the deploy.",
+    "should_trigger": false
+  },
+  {
+    "prompt": "Resume the session I closed yesterday.",
+    "should_trigger": false
+  },
+  {
+    "prompt": "Explain how Claude Code sessions store their history.",
+    "should_trigger": false
+  },
+  {
+    "prompt": "Draft a weekly status email about my projects.",
+    "should_trigger": false
+  },
+  {
+    "prompt": "Merge this branch once the tests pass.",
+    "should_trigger": false
+  }
+]
