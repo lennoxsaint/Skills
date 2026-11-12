@@ -11,7 +11,7 @@ export CONDUCTOR_HOME=~/conductor
 python3 <skill-dir>/scripts/desk.py init
 ```
 
-`init` creates these files and never overwrites one that exists:
+`init` creates the files below, except `review.html`, and never overwrites one that exists. `--dir` can go before or after the command.
 
 | File | What it holds |
 |---|---|

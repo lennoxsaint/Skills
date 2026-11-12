@@ -24,7 +24,7 @@ Before you add a card, make it a one-tap decision: the work done, the evidence r
 
 ```bash
 D=<skill-dir>/scripts/desk.py          # needs Python 3.9+
-python3 $D init                         # once; uses $CONDUCTOR_HOME or --dir
+python3 $D init --dir ~/conductor       # once; or set $CONDUCTOR_HOME and drop --dir
 python3 $D add c-pricing --title "Ship the new pricing page?" \
   --why "Copy and layout passed review at commit 3f2a1c9. Staging link below." \
   --yes "Ship it" --no "Hold it" --lane web --due 2026-11-20 --priority 2 \

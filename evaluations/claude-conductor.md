@@ -37,6 +37,13 @@ The session listed 13 places where the text made it guess. Seven lines were made
 
 The forward test ran on the text **before** these edits. The edited text has not been run again.
 
+## Outside review and cold install
+
+Before merge, on 12 Nov 2026:
+
+- **Outside review.** A read-only reviewer on a different model (GPT-6.1 Sol), given the pull request, the exact commit and the leak rules but not the author's notes, checked commit `473a9f5`. Private data: PASS, after reading all 1,847 added lines. Would a stranger get it running from the README: FAIL, on one blocker. The T3 guide ran `desk.py` with no path, so the command could not be found. The guide now gives the installed path. The review rounds are recorded on [pull request #4](https://github.com/lennoxsaint/Skills/pull/4).
+- **Cold install.** A fresh Claude Sonnet session cloned the repository from GitHub, picked both skills from the README and `AGENTS.md` for two plain requests, installed them into a temporary folder, and checked that all 15 relative links in the installed files resolve. It reported three wrong turns. `desk.py init --dir X` failed because `--dir` had to come first; it now works in either place. `setup.md` said `init` writes `review.html`; it does not, and the text now says so. The third came from the test itself: the temporary install folder had the same name as the clone on a case-insensitive disk, and the installer correctly refused to overwrite it.
+
 ## Trigger cases
 
 [`tests/claude-conductor/trigger-cases.json`](../tests/claude-conductor/trigger-cases.json) holds 24 prompts that should load the skill and 24 that should not, including T3 Code requests that belong to T3 Code Conductor and single tasks. It is a regression bank for future description changes. It has not been run as a measured trigger benchmark, so no trigger rate is claimed.

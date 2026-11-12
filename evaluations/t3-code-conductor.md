@@ -8,7 +8,7 @@ The author ran this method by hand in T3 Code before it was a skill. This is the
 
 ### The review page helper
 
-`scripts/test_desk.py` has 11 unit tests. All 11 pass locally, and CI runs them on every push. They cover:
+`scripts/test_desk.py` has 12 unit tests. All 12 pass locally, and CI runs them on every push. They cover:
 
 - `init` writes each file once and never overwrites one that exists
 - the ledger only appends, and one call cannot forge a second line
@@ -19,7 +19,7 @@ The author ran this method by hand in T3 Code before it was a skill. This is the
 - the page escapes every value and loads no scripts or remote files
 - cards rank by due date, then priority, then age
 - six writers at once lose no card
-- the run folder can come from `CONDUCTOR_HOME`
+- the run folder can come from `CONDUCTOR_HOME`, or from `--dir` before or after the command
 
 ### Forward test
 
@@ -53,6 +53,14 @@ The session listed 15 places where the text made it guess. These were made clear
 - the page headline now reads "1 decision needs you" for one card
 
 The forward test ran on the text **before** these edits. The edited text has not been run again.
+
+## Outside review and cold install
+
+Before merge, on 12 Nov 2026:
+
+- **Outside review.** A read-only reviewer on a different model (GPT-6.1 Sol), given the pull request, the exact commit and the leak rules but not the author's notes, checked commit `473a9f5`. Private data: PASS, after reading all 1,847 added lines. Would a stranger get it running from the README: FAIL, on one blocker. The T3 guide ran `desk.py` with no path, so the command could not be found. The guide now gives the installed path. The review rounds are recorded on [pull request #4](https://github.com/lennoxsaint/Skills/pull/4).
+- **Cold install.** A fresh Claude Sonnet session cloned the repository from GitHub, picked both skills from the README and `AGENTS.md` for two plain requests, installed them into a temporary folder, and checked that all 15 relative links in the installed files resolve. It reported three wrong turns. `desk.py init --dir X` failed because `--dir` had to come first; it now works in either place. `setup.md` said `init` writes `review.html`; it does not, and the text now says so. The third came from the test itself: the temporary install folder had the same name as the clone on a case-insensitive disk, and the installer correctly refused to overwrite it.
+- **Python 3.9.** The 12 desk tests also pass on Python 3.9.6.
 
 ## Trigger cases
 

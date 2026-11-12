@@ -26,15 +26,18 @@ it is for many threads at once. for one task, just ask for the task. if you use 
 
 ## the review page
 
-`scripts/desk.py` keeps the cards, checks them and renders `review.html`:
+`scripts/desk.py` keeps the cards, checks them and renders `review.html`. the conductor runs it for you; to try it yourself after installing for Claude Code (for Codex, swap `~/.claude` for `~/.codex`):
 
 ```bash
-python3 desk.py init
-python3 desk.py add c-pricing --title "Ship the new pricing page?" \
+DESK=~/.claude/skills/t3-code-conductor/scripts/desk.py
+python3 $DESK --dir ~/conductor init
+python3 $DESK --dir ~/conductor add c-pricing --title "Ship the new pricing page?" \
   --why "Passed outside review at commit 3f2a1c9." \
   --yes "Ship it" --no "Hold it" --lane web --link https://staging.example.com/pricing
-python3 desk.py lint && python3 desk.py render
+python3 $DESK --dir ~/conductor lint && python3 $DESK --dir ~/conductor render
 ```
+
+the page lands at `~/conductor/review.html`. set `CONDUCTOR_HOME=~/conductor` once and you can drop `--dir`.
 
 the page has no scripts and loads nothing from the internet. `lint` refuses local file paths, non-https links and cards with no recommended answer, so nothing on the page only works on your computer. it is plain Python 3.9+ with no packages.
 

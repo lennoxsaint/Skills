@@ -120,6 +120,13 @@ class DeskTests(unittest.TestCase):
         subprocess.run([sys.executable, str(DESK), "init"], check=True, capture_output=True, env=env)
         self.assertTrue((other / "desk.json").is_file())
 
+    def test_dir_works_after_the_command_too(self):
+        later = Path(self.temp.name) / "after"
+        subprocess.run([sys.executable, str(DESK), "init", "--dir", str(later)], check=True, capture_output=True)
+        subprocess.run([sys.executable, str(DESK), "add", "c-late", "--title", "Late?", "--yes", "y", "--dir", str(later)],
+                       check=True, capture_output=True)
+        self.assertIn("c-late", (later / "desk.json").read_text(encoding="utf-8"))
+
 
 if __name__ == "__main__":
     unittest.main()
