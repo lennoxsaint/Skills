@@ -24,7 +24,8 @@ Before you add a card, make it a one-tap decision: the work done, the evidence r
 
 ```bash
 D=<skill-dir>/scripts/desk.py          # needs Python 3.9+
-python3 $D init --dir ~/conductor       # once; or set $CONDUCTOR_HOME and drop --dir
+export CONDUCTOR_HOME=~/conductor       # the run folder for every command below
+python3 $D init                         # once
 python3 $D add c-pricing --title "Ship the new pricing page?" \
   --why "Copy and layout passed review at commit 3f2a1c9. Staging link below." \
   --yes "Ship it" --no "Hold it" --lane web --due 2026-11-20 --priority 2 \
@@ -34,9 +35,11 @@ python3 $D lint                         # PASS, or the problems that stop a card
 python3 $D render                       # writes review.html
 python3 $D answer c-pricing --choice yes --note "after the Friday call"
 python3 $D routed c-pricing --lane web  # after the answer reached the lane
-python3 $D close c-old --result "no longer needed: the lane found another way"
+python3 $D close c-pricing --result "shipped and checked on the live site"
 python3 $D ledger "c-pricing: owner said yes, sent to web"
 ```
+
+Without `CONDUCTOR_HOME`, pass the same `--dir <run-folder>` to every command; otherwise the helper uses `./conductor` in the current folder.
 
 Every command prints one line of JSON (`show` without `--json` prints a list). A failure prints `desk.py: <reason>` and exits 1.
 

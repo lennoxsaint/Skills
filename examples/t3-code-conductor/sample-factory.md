@@ -54,11 +54,13 @@ The ledger already holds this line from last week: `- 2026-11-02 owner: newslett
 ## The desk after the cycle
 
 ```bash
-python3 desk.py add c-main-merge --title "Merge the sign-up fix to main?" \
+D=<skill-dir>/scripts/desk.py
+export CONDUCTOR_HOME=~/conductor
+python3 $D add c-main-merge --title "Merge the sign-up fix to main?" \
   --why "PR 12 passed outside review at commit 9b1e4d2. Staging sign-up works: recording below." \
   --yes "Merge to main" --no "Keep it on staging" --lane signup-bug --priority 1 \
   --link https://example.com/recordings/signup-staging
-python3 desk.py lint && python3 desk.py render
+python3 $D lint && python3 $D render
 ```
 
 The page headline reads "1 decision needs you". The owner sends `answer c-main-merge yes` to the conductor thread. The conductor records it, tells the lane, marks the card routed and adds one ledger line.
