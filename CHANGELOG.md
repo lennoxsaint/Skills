@@ -2,6 +2,13 @@
 
 What changed in this repository, newest first. Each skill also keeps its own notes in `docs/<skill-name>.md`.
 
+## 12 Nov 2026
+
+**Added**
+
+- **Claude Conductor 1.0.0.** New skill. It runs the Claude Code threads you already have as you: one run contract, a count of every open thread, a ranked ledger, whole outcomes for each owner, proof before "done", and one private review page. See the [guide](docs/claude-conductor.md) and the [evaluation](evaluations/claude-conductor.md).
+- **T3 Code Conductor 1.0.0.** New skill. One T3 Code thread conducts all the others: census, roster, append-only ledger, outside review on a different model at the exact commit, answers from standing decisions, and one phone review page of only the decisions that need you. It ships `desk.py`, a tested helper that keeps the cards and renders the page. See the [guide](docs/t3-code-conductor.md) and the [evaluation](evaluations/t3-code-conductor.md).
+
 ## 10 Nov 2026
 
 **Added**

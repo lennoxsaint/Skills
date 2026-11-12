@@ -1,0 +1,8 @@
+interface:
+  display_name: "T3 Code Conductor"
+  short_description: "Run your T3 Code threads as one agent factory with a phone review page"
+  brand_color: "#7C3AED"
+  default_prompt: "Use $t3-code-conductor to take a census of every T3 thread, give each lane a whole outcome, and keep one phone review page of what needs me."
+
+policy:
+  allow_implicit_invocation: true

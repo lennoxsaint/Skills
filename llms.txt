@@ -13,6 +13,8 @@
 
 Each line gives what the skill does, when to use it, a prompt to try and what it needs. Install any of them with `python3 scripts/skills.py install <skill-name> --host claude|codex|both` from a clone.
 
+- [claude-conductor](https://github.com/lennoxsaint/Skills/blob/main/claude-conductor/SKILL.md): Run the Claude Code threads you already have as you: count every open thread, keep a ranked ledger, hand each owner a whole outcome and finish with proof. Use when the user wants many existing Claude Code threads moved to finished outcomes on their behalf. Try: "Use claude-conductor: count every open thread in my projects, rank them against my goals, and move each one to a proven finish." Needs: Claude Code; a thread or browser tool that can read your sessions.
+- [t3-code-conductor](https://github.com/lennoxsaint/Skills/blob/main/t3-code-conductor/SKILL.md): Turn one T3 Code thread into the conductor of all the others: census, roster, append-only ledger, outside review on a different model, and one phone review page of only the decisions that need you. Use when the user wants one T3 Code thread to conduct all their other threads. Try: "Use t3-code-conductor: be my conductor. Take a census of every T3 thread, give each lane a whole outcome, and keep one phone review page of what needs me." Needs: T3 Code with its thread and delegation tools; Python 3.9+ for the desk helper.
 - [hill-climb](https://github.com/lennoxsaint/Skills/blob/main/hill-climb/SKILL.md): Turn real data into a locked answer key, then climb to a measured target until the score and two outside judges say it is done. Use when a long job must reach a quality bar you can prove. Try: "Hill climb this: build an answer key from my real logs, then climb until 90% of the cases pass." Needs: Node 18+ and git; macOS sandbox-exec (the Linux bwrap path is untested); Claude Code or Codex CLI for the climber and the judges.
 - [ambitious](https://github.com/lennoxsaint/Skills/blob/main/ambitious/SKILL.md): Run a big task the way the field's best practitioner would, then get an outside judge. Use when the user asks for exceptional effort or says the stakes are high. Try: "Go above and beyond: find where my signup page loses people and fix the biggest leak." Needs: Node 18+ for the flight log and judge scripts; Codex CLI or Claude CLI for the outside judge.
 - [goal](https://github.com/lennoxsaint/Skills/blob/main/goal/SKILL.md): Turn a plan into a durable Codex goal packet or a concise Claude /goal prompt. Use when the user has a plan and wants one bounded goal for a long agent run. Try: "Use goal to turn this plan into a durable goal: [paste the plan]." Needs: Python 3.10+ for Codex packet creation; no helper runtime for Claude prompt mode.
@@ -25,6 +27,8 @@ Each line gives what the skill does, when to use it, a prompt to try and what it
 
 ## Guides
 
+- [Claude Conductor guide](https://github.com/lennoxsaint/Skills/blob/main/docs/claude-conductor.md)
+- [T3 Code Conductor guide](https://github.com/lennoxsaint/Skills/blob/main/docs/t3-code-conductor.md)
 - [Hill Climb guide](https://github.com/lennoxsaint/Skills/blob/main/docs/hill-climb.md)
 - [Ambitious guide](https://github.com/lennoxsaint/Skills/blob/main/docs/ambitious.md)
 - [Goal guide](https://github.com/lennoxsaint/Skills/blob/main/docs/goal.md)

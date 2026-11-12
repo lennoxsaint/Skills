@@ -10,6 +10,8 @@ Works in Claude Code and Codex. One command to install. By [Lennox Saint](https:
 
 | Skill | What it does | Try saying | Version |
 |---|---|---|---:|
+| [Claude Conductor](claude-conductor/SKILL.md) | Runs the Claude Code threads you already have as you: counts every open one, ranks them against your goals, and moves each to a proven finish. | "Conduct my Claude sessions." | 1.0.0 |
+| [T3 Code Conductor](t3-code-conductor/SKILL.md) | Turns one T3 Code thread into the conductor of all the others, with outside review on a different model and one phone page of only the decisions that need you. | "Be my T3 conductor." | 1.0.0 |
 | [Hill Climb](hill-climb/SKILL.md) | Turns your real data into locked tests, then keeps improving the work until the score and two outside judges say it is done. | "Hill climb this until 90% of the cases pass." | 1.0.1 |
 | [Ambitious](ambitious/SKILL.md) | Goes deeper on a big task you flag as important, then has a different AI model score the work instead of grading itself. | "Go above and beyond on this." | 1.3.1 |
 | [Goal](goal/SKILL.md) | Turns a plan into one bounded goal an agent can run for hours: a durable Codex goal packet or a compact Claude `/goal` prompt. | "Turn this plan into a goal." | 1.1.0 |
