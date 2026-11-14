@@ -6,10 +6,11 @@ What changed in this repository, newest first. Each skill also keeps its own not
 
 **Changed**
 
-- **Front page rebuilt for two readers.** The README now opens with a diagram of what a skill changes, a plain "What this is", and a "Start here" table of the four skills to try first, each with its proof and what it needs. The full table shows every skill's proof level and headline result with a link to its evidence. No skill's behaviour or version changed.
+- **Front page rebuilt for two readers.** The README now opens with a diagram of what a skill changes, a plain "What this is", and "Start here": the four skills to try first, each with what it does, its proof and what it needs. The original "Try saying" prompts are kept. The full table shows every skill's proof level and headline result with a link to its evidence. No skill's behaviour or version changed.
 - **Proof in the catalog.** Every entry in `catalog.json` now has `best_for` and a `proof` block (`level`, `headline`, `caption`, `summary`, `limit`) quoted from its evaluation file, plus top-level `start_here`, `proof_levels` and `cold_run`. `llms.txt` and `EVALUATION.md` carry the same proof, and a test keeps `llms.txt` in step with the catalog.
 - **Diagrams drawn from the data.** `scripts/build_readme_art.py` draws the README diagrams in light and dark from `catalog.json`. CI fails if they are out of date.
 - **Answer path for visiting agents.** `AGENTS.md` and the README's "For agents" section say how to answer "what's good here?" from the repository, with the proof quoted at its real level.
+- **Hill Climb needs, corrected.** Its default judges use both Claude Code and Codex. `catalog.json` said either one was enough.
 - **Guides in sentence case.** The guides in `docs/` now use normal sentence case, and a few phrases that read as filler were rewritten. Facts, numbers and commands are unchanged.
 
 ## 12 Nov 2026

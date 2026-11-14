@@ -23,19 +23,19 @@ A skill is a short instruction file your agent reads before it starts. These ski
 
 ### Your agent says "done" too early
 
-**Use [Finish Work](docs/finish-work.md).** An outside AI review scored it 72, then 84, then 95 of 100. In 2 cold runs it left an unrequested deploy alone and called a failed publish "blocked". **Needs:** Python 3.9+.
+**Use [Finish Work](docs/finish-work.md).** It runs the right checks before your agent says "done", says what is proven and what is not, and writes a receipt you can read later. An outside AI review scored it 72, then 84, then 95 of 100. In 2 cold runs it left an unrequested deploy alone and called a failed publish "blocked". **Needs:** Python 3.9+.
 
 ### Its best work on a task that really matters
 
-**Use [Ambitious](docs/ambitious.md).** Blind A/B test on 3 tasks: 7.06 with the skill vs 6.00 without, about 17% higher. That test used the older 1.2.3 version. **Needs:** Node 18+, plus the Codex or Claude CLI.
+**Use [Ambitious](docs/ambitious.md).** It goes deeper on a task you flag as important, then has a different AI model score the work instead of grading itself. Blind A/B test on 3 tasks: 7.06 with the skill vs 6.00 without, about 17% higher. That test used the older 1.2.3 version. **Needs:** Node 18+, plus the Codex or Claude CLI.
 
 ### A second AI to attack your plan before you commit
 
-**Use [Adversarial Review](docs/adversarial-review.md).** In one cold run it found all 3 planted faults. It scored 9, then 52 of 100, ran out of rounds below its 90 bar, and said so. **Needs:** another model, or a fresh session of the same model, as the reviewer. A different model gives a stronger check.
+**Use [Adversarial Review](docs/adversarial-review.md).** It sends your draft to an independent reviewer, checks every finding, fixes what holds up, and reports the score history and what is still open. In one cold run it found all 3 planted faults. It scored 9, then 52 of 100, ran out of rounds below its 90 bar, and said so. **Needs:** another model, or a fresh session of the same model, as the reviewer. A different model gives a stronger check.
 
 ### A long job to hit a score you can prove
 
-**Use [Hill Climb](docs/hill-climb.md).** 261 of 261 self-test checks pass on its runner. No real-work benchmark yet. **Needs:** Node 18+ and git, macOS for its `sandbox-exec` sandbox (the Linux `bwrap` path is untested), plus Claude Code or Codex. Its default judges use both Claude Code and Codex.
+**Use [Hill Climb](docs/hill-climb.md).** It turns your real data into a locked answer key, then climbs with fresh agent sessions until the score target is met and two outside judges say it is done. 261 of 261 self-test checks pass on its runner. No real-work benchmark yet. **Needs:** Node 18+ and git, macOS for its `sandbox-exec` sandbox (the Linux `bwrap` path is untested), plus Claude Code or Codex. Its default judges use both Claude Code and Codex.
 
 **Not sure? Start with Finish Work.** It helps on any task, it needs only Python, and an outside model reviewed it three times.
 
