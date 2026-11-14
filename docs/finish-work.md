@@ -1,37 +1,37 @@
 # Finish Work
 
-finish-work is what your agent runs before it says "done".
+Finish Work is what your agent runs before it says "done".
 
-most agents stop when the code compiles or the draft exists. this skill makes the agent prove the thing it changed, say plainly what is proven and what is not, and leave a receipt you can read next week.
+This skill makes the agent prove the thing it changed, say plainly what is proven and what is not, and leave a receipt you can read next week.
 
-## when it runs
+## When it runs
 
-- a real task is about to be called done
-- the work hits a checkpoint worth writing down
-- the work stops early: partial, waiting or blocked
-- you say "finish this", "close this out", "wrap this up" or "is it really done?"
+- A real task is about to be called done
+- The work hits a checkpoint worth writing down
+- The work stops early: partial, waiting or blocked
+- You say "finish this", "close this out", "wrap this up" or "is it really done?"
 
-it is not for a quick answer or routine chat.
+It is not for a quick answer or routine chat.
 
-## what it does
+## What it does
 
-1. **picks the right checks.** it reads only the closeout guide that fits the work.
+1. **Picks the right checks.** It reads only the closeout guide that fits the work.
 
-   | kind of work | what the agent checks |
+   | Kind of work | What the agent checks |
    |---|---|
-   | research, advice, documents | the answer against the request and its sources. no test suite needed. |
-   | code and config | the project's own checks, the whole final diff, and the changed behavior through its real entry point |
-   | anything you can see | the running app at desktop and phone sizes, plus console errors |
-   | a release or outside action | only what you said yes to. then it reads back the real result from the provider. |
+   | Research, advice, documents | The answer against the request and its sources. No test suite needed. |
+   | Code and config | The project's own checks, the whole final diff, and the changed behavior through its real entry point |
+   | Anything you can see | The running app at desktop and phone sizes, plus console errors |
+   | A release or outside action | Only what you said yes to. Then it reads back the real result from the provider. |
 
-2. **keeps proof states apart.** local, visible, staged, scheduled, published and delivered are six different claims. a passing test proves the test passed. it does not prove the thing is live.
-3. **stops patching after two failed fixes.** it writes down what it learned and starts again from fresh evidence.
-4. **writes a receipt.** one entry in a dated file: what was asked, what is true now, the checks and their results, the decisions, what is left.
-5. **closes in a few lines.** the outcome, what could not be verified, what is left, and where the receipt is.
+2. **Keeps proof states apart.** Local, visible, staged, scheduled, published and delivered are six different claims. A passing test proves the test passed. It does not prove the thing is live.
+3. **Stops patching after two failed fixes.** It writes down what it learned and starts again from fresh evidence.
+4. **Writes a receipt.** One entry in a dated file: what was asked, what is true now, the checks and their results, the decisions, what is left.
+5. **Closes in a few lines.** The outcome, what could not be verified, what is left, and where the receipt is.
 
-## the receipt
+## The receipt
 
-a small helper writes it, so every entry has the same shape:
+A small helper writes it, so every entry has the same shape:
 
 ```bash
 python3 <skill-dir>/scripts/log_receipt.py \
@@ -42,53 +42,53 @@ python3 <skill-dir>/scripts/log_receipt.py \
   --next "get the token, then run ./publish.sh"
 ```
 
-where it goes, first match wins:
+Where it goes, first match wins:
 
-1. the work log your project's own instructions name
-2. the folder in `FINISH_WORK_LOG_DIR`
+1. The work log your project's own instructions name
+2. The folder in `FINISH_WORK_LOG_DIR`
 3. `~/.finish-work/log/`
 
-the status is one of `completed`, `in_progress`, `waiting`, `blocked`, `cancelled` or `unknown`. the helper only adds entries and never edits an old one. run the same command again from the same folder, today or tomorrow, and it skips the receipt it already wrote. if a write was cut off halfway, the retry writes the whole entry. it uses only what ships with Python and sends nothing anywhere.
+The status is one of `completed`, `in_progress`, `waiting`, `blocked`, `cancelled` or `unknown`. The helper only adds entries and never edits an old one. Run the same command again from the same folder, today or tomorrow, and it skips the receipt it already wrote. If a write was cut off halfway, the retry writes the whole entry. It uses only what ships with Python and sends nothing anywhere.
 
-## what it will not do
+## What it will not do
 
-it gives the agent no new permission. a fix on your machine does not mean "deploy it". if a release needs a yes, the agent gets everything ready and names the one step that is left.
+It gives the agent no new permission. A fix on your machine does not mean "deploy it". If a release needs a yes, the agent gets everything ready and names the one step that is left.
 
-it will not call blocked work complete.
+It will not call blocked work complete.
 
-## install
+## Install
 
 ```bash
 git clone --depth 1 https://github.com/lennoxsaint/Skills.git
 python3 Skills/scripts/skills.py install finish-work --host claude
 ```
 
-use `--host codex` for Codex, or `--host both` for both. start a new session if the skill does not show up right away.
+Use `--host codex` for Codex, or `--host both` for both. Start a new session if the skill does not show up right away.
 
-then try:
+Then try:
 
 ```text
 Use finish-work to close this out: run the right checks, tell me what is proven, and write the receipt.
 ```
 
-## what you need
+## What you need
 
-Python 3.9 or newer for the receipt helper. nothing else to install.
+Python 3.9 or newer for the receipt helper. Nothing else to install.
 
-## files in the skill
+## Files in the skill
 
-| file | what it is |
+| File | What it is |
 |---|---|
-| `SKILL.md` | the proof rules and how to close |
-| `references/research.md` | closeout for research, advice and documents |
-| `references/code.md` | closeout for code and config |
-| `references/ui.md` | closeout for anything you can see |
-| `references/release.md` | closeout for a release or outside action |
-| `references/receipt.md` | where the receipt goes and how to write it |
-| `scripts/log_receipt.py` | the receipt helper |
+| `SKILL.md` | The proof rules and how to close |
+| `references/research.md` | Closeout for research, advice and documents |
+| `references/code.md` | Closeout for code and config |
+| `references/ui.md` | Closeout for anything you can see |
+| `references/release.md` | Closeout for a release or outside action |
+| `references/receipt.md` | Where the receipt goes and how to write it |
+| `scripts/log_receipt.py` | The receipt helper |
 
-two synthetic tasks live in [`examples/finish-work/`](../examples/finish-work/sample-task.md), with the receipts they should leave. the test evidence is in the [evaluation](../evaluations/finish-work.md).
+Two synthetic tasks live in [`examples/finish-work/`](../examples/finish-work/sample-task.md), with the receipts they should leave. The test evidence is in the [evaluation](../evaluations/finish-work.md).
 
-## changelog
+## Changelog
 
-**1.0.0** (10 Nov 2026) - first public release. this is the closeout i run on every real task, cleaned up for anyone to use. my private work log became a receipt file you choose, and one product's release rules were left out. four lines were made clearer after two tests with agents that had never seen the skill. a different model then reviewed the receipt helper twice and found ways it could skip or double a receipt. the [evaluation](../evaluations/finish-work.md) lists each one and what was done.
+**1.0.0** (10 Nov 2026) - first public release. This is the closeout I run on every real task, cleaned up for anyone to use. My private work log became a receipt file you choose, and one product's release rules were left out. Four lines were made clearer after two tests with agents that had never seen the skill. A different model then reviewed the receipt helper twice and found ways it could skip or double a receipt. The [evaluation](../evaluations/finish-work.md) lists each one and what was done.

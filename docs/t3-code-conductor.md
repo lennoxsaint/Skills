@@ -1,32 +1,32 @@
 # T3 Code Conductor
 
-t3 code conductor turns one T3 Code thread into the conductor of all your others.
+T3 Code Conductor turns one T3 Code thread into the conductor of all your others.
 
-it counts every thread on every machine T3 can reach, keeps a roster and an append-only ledger, gives each lane a whole outcome, gets an outside review on a different model before anything counts, and answers lane questions from your standing decisions. only the decisions that are truly yours reach you, as cards on one review page you can read on your phone.
+It counts every thread on every machine T3 can reach, keeps a roster and an append-only ledger, gives each lane a whole outcome, gets an outside review on a different model before anything counts, and answers lane questions from your standing decisions. Only the decisions that are yours reach you, as cards on one review page you can read on your phone.
 
-## when it runs
+## When it runs
 
-it runs when you ask for it:
+It runs when you ask for it:
 
-- "be my T3 conductor"
-- "conduct my T3 threads"
-- "run my T3 agents as me"
-- "set up a review desk for my agents"
+- "Be my T3 conductor"
+- "Conduct my T3 threads"
+- "Run my T3 agents as me"
+- "Set up a review desk for my agents"
 
-it is for many threads at once. for one task, just ask for the task. if you use Claude Code without T3, use [Claude Conductor](claude-conductor.md).
+It is for many threads at once. For one task, just ask for the task. If you use Claude Code without T3, use [Claude Conductor](claude-conductor.md).
 
-## how it works
+## How it works
 
-1. **one conductor.** one thread holds the role. its id lives in `CONDUCTOR.md`, so every lane and timer knows who to report to.
-2. **census first.** every open thread gets a lane, a closed state, an "owner's own" label (read, never steered) or a named gap. the count of open threads with nothing is zero before ranking starts.
-3. **whole outcomes.** each lane gets the full job in one brief: the result, the facts, what it may use, the finish line and the proof that will be checked.
-4. **outside review.** the thread that built something never grades it. a fresh reviewer on a different model checks the exact commit. any change after that needs a new review.
-5. **answer before asking.** when a lane asks something, the conductor checks your standing decisions and the ledger first. it only asks you when the call is truly yours.
-6. **one phone page.** each card is one decision with the recommended answer as the big choice. you reply `answer <card> yes`. the page refreshes on a schedule and after any change.
+1. **One conductor.** One thread holds the role. Its id lives in `CONDUCTOR.md`, so every lane and timer knows who to report to.
+2. **Census first.** Every open thread gets a lane, a closed state, an "owner's own" label (read, never steered) or a named gap. The count of open threads with nothing is zero before ranking starts.
+3. **Whole outcomes.** Each lane gets the full job in one brief: the result, the facts, what it may use, the finish line and the proof that will be checked.
+4. **Outside review.** The thread that built something never grades it. A fresh reviewer on a different model checks the exact commit. Any change after that needs a new review.
+5. **Answer before asking.** When a lane asks something, the conductor checks your standing decisions and the ledger first. It only asks you when the call is yours.
+6. **One phone page.** Each card is one decision with the recommended answer as the big choice. You reply `answer <card> yes`. The page refreshes on a schedule and after any change.
 
-## the review page
+## The review page
 
-`scripts/desk.py` keeps the cards, checks them and renders `review.html`. the conductor runs it for you; to try it yourself after installing for Claude Code (for Codex, swap `~/.claude` for `~/.codex`):
+`scripts/desk.py` keeps the cards, checks them and renders `review.html`. The conductor runs it for you; to try it yourself after installing for Claude Code (for Codex, swap `~/.claude` for `~/.codex`):
 
 ```bash
 DESK=~/.claude/skills/t3-code-conductor/scripts/desk.py
@@ -37,49 +37,49 @@ python3 $DESK --dir ~/conductor add c-pricing --title "Ship the new pricing page
 python3 $DESK --dir ~/conductor lint && python3 $DESK --dir ~/conductor render
 ```
 
-the page lands at `~/conductor/review.html`. set `CONDUCTOR_HOME=~/conductor` once and you can drop `--dir`.
+The page lands at `~/conductor/review.html`. Set `CONDUCTOR_HOME=~/conductor` once and you can drop `--dir`.
 
-the page has no scripts and loads nothing from the internet. `lint` refuses local file paths, non-https links and cards with no recommended answer, so nothing on the page only works on your computer. it is plain Python 3.9+ with no packages.
+The page has no scripts and loads nothing from the internet. `lint` refuses local file paths, non-https links and cards with no recommended answer, so nothing on the page only works on your computer. It is plain Python 3.9+ with no packages.
 
-the page is a file. getting it to your phone is up to you: a private file sync, or a private page on a host you already use. never put it on the open internet. [`references/setup.md`](../t3-code-conductor/references/setup.md) has the options.
+The page is a file. Getting it to your phone is up to you: a private file sync, or a private page on a host you already use. Never put it on the open internet. [`references/setup.md`](../t3-code-conductor/references/setup.md) has the options.
 
-## what it will not do
+## What it will not do
 
-it will not publish, send to real people, spend, delete, merge to production or change access unless you named that exact action. a tap on a card approves only what that card names. it waits for lanes to finish. it does not poll, and it never sends a bare "status?".
+It will not publish, send to real people, spend, delete, merge to production or change access unless you named that exact action. A tap on a card approves only what that card names. It waits for lanes to finish. It does not poll, and it never sends a bare "status?".
 
-## install
+## Install
 
 ```bash
 git clone --depth 1 https://github.com/lennoxsaint/Skills.git
 python3 Skills/scripts/skills.py install t3-code-conductor --host claude
 ```
 
-use `--host codex` if your T3 conductor thread runs on Codex, or `--host both` for both. start a new thread if the skill does not show up right away.
+Use `--host codex` if your T3 conductor thread runs on Codex, or `--host both` for both. Start a new thread if the skill does not show up right away.
 
-then, in a fresh T3 thread, try:
+Then, in a fresh T3 thread, try:
 
 ```text
 Use t3-code-conductor: be my conductor. Take a census of every T3 thread, give each lane a whole outcome, and keep one phone review page of what needs me.
 ```
 
-## what you need
+## What you need
 
-- T3 Code, with its thread tools (list, read, send, wait) and `delegate_task` for outside reviewers. a scheduling tool is optional: without it, the page refreshes when you ask.
+- T3 Code, with its thread tools (list, read, send, wait) and `delegate_task` for outside reviewers. A scheduling tool is optional: without it, the page refreshes when you ask.
 - Python 3.9+ for `desk.py`.
-- a short `STANDING.md`: your goals in order, what the conductor may do alone, and what always needs you. `desk.py init` writes a template.
+- A short `STANDING.md`: your goals in order, what the conductor may do alone, and what always needs you. `desk.py init` writes a template.
 
-## files in the skill
+## Files in the skill
 
-| file | what it is |
+| File | What it is |
 |---|---|
-| `SKILL.md` | the ground rules, census, lanes, review, the phone page, proof, handover |
-| `references/setup.md` | the run folder, standing decisions, launch prompt, scheduled refresh, phone options |
-| `references/cycle.md` | one pass step by step, the brief template, the review stack, handover |
-| `references/desk.md` | the card contract and every `desk.py` command |
-| `scripts/desk.py` | the review page helper |
+| `SKILL.md` | The ground rules, census, lanes, review, the phone page, proof, handover |
+| `references/setup.md` | The run folder, standing decisions, launch prompt, scheduled refresh, phone options |
+| `references/cycle.md` | One pass step by step, the brief template, the review stack, handover |
+| `references/desk.md` | The card contract and every `desk.py` command |
+| `scripts/desk.py` | The review page helper |
 
-a synthetic example lives in [`examples/t3-code-conductor/`](../examples/t3-code-conductor/sample-factory.md). the test evidence is in the [evaluation](../evaluations/t3-code-conductor.md).
+A synthetic example lives in [`examples/t3-code-conductor/`](../examples/t3-code-conductor/sample-factory.md). The test evidence is in the [evaluation](../evaluations/t3-code-conductor.md).
 
-## changelog
+## Changelog
 
-**1.0.0** (12 Nov 2026) - first public release. this is the method i run my T3 Code threads with, written up as a skill for the first time, with my machines, accounts, thread ids and private rules taken out. the review page helper is new and tested. after a test with an agent that had never seen the skill, the text now says what to do with a "completed" thread that has no proof, an existing thread with no lane, an unreadable thread, earlier ledger lines, an unknown conductor id and non-code briefs, and that a decision still waiting on review stays off the page.
+**1.0.0** (12 Nov 2026) - first public release. This is the method I run my T3 Code threads with, written up as a skill for the first time, with my machines, accounts, thread ids and private rules taken out. The review page helper is new and tested. After a test with an agent that had never seen the skill, the text now says what to do with a "completed" thread that has no proof, an existing thread with no lane, an unreadable thread, earlier ledger lines, an unknown conductor id and non-code briefs, and that a decision still waiting on review stays off the page.

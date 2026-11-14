@@ -14,6 +14,8 @@ jobs:
           python-version: "3.12"
       - name: Validate public catalog and skill structure
         run: python3 scripts/skills.py validate
+      - name: Check the README diagrams match catalog.json
+        run: python3 scripts/build_readme_art.py --check
       - name: Run repository tests
         run: python3 -m unittest discover -v -s tests -p 'test_*.py'
       - name: Run every catalogued skill test suite

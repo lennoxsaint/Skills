@@ -2,6 +2,19 @@
   "schema_version": "1.0",
   "repository": "https://github.com/lennoxsaint/Skills",
   "agent_guide": "AGENTS.md",
+  "start_here": [
+    "finish-work",
+    "ambitious",
+    "adversarial-review",
+    "hill-climb"
+  ],
+  "proof_levels": {
+    "blind-ab": "Tested against no skill, judged blind by a different AI model.",
+    "outside-review": "A different AI model reviewed it, plus tests or a cold run.",
+    "tested": "Unit tests or one cold run, checked by script or by hand.",
+    "spec": "Expected results and file checks only; no measured run is published."
+  },
+  "cold_run": "A fresh agent that had never seen the skill ran it on a made-up task; its output was checked by script or by hand, not taken from its own summary.",
   "hosts": {
     "claude": {
       "name": "Claude Code",
@@ -24,52 +37,31 @@
   },
   "skills": [
     {
-      "name": "claude-conductor",
-      "display_name": "Claude Conductor",
-      "path": "claude-conductor",
+      "name": "finish-work",
+      "display_name": "Finish Work",
+      "path": "finish-work",
       "status": "stable",
       "version": "1.0.0",
-      "summary": "Run the Claude Code threads you already have as you: count every open thread, keep a ranked ledger, hand each owner a whole outcome and finish with proof.",
-      "use_when": "The user wants many existing Claude Code threads or projects moved to finished outcomes on their behalf (\"conduct my Claude sessions\", \"run my projects as me\", \"move every open thread forward\"). Not for one task in one session; for T3 Code use t3-code-conductor.",
-      "try": "Use claude-conductor: count every open thread in my projects, rank them against my goals, and move each one to a proven finish.",
-      "hosts": ["claude", "codex"],
-      "requires": "Claude Code; a thread or browser tool that can read your sessions",
-      "docs": "docs/claude-conductor.md",
-      "evaluation": "evaluations/claude-conductor.md",
-      "examples": "examples/claude-conductor",
-      "trigger_cases": "tests/claude-conductor/trigger-cases.json"
-    },
-    {
-      "name": "t3-code-conductor",
-      "display_name": "T3 Code Conductor",
-      "path": "t3-code-conductor",
-      "status": "stable",
-      "version": "1.0.0",
-      "summary": "Turn one T3 Code thread into the conductor of all the others: census, roster, append-only ledger, outside review on a different model, and one phone review page of only the decisions that need you.",
-      "use_when": "The user runs agents in T3 Code and wants one thread to conduct all of them (\"be my T3 conductor\", \"conduct my T3 threads\", \"set up a review desk for my agents\"). Not for a single task; for Claude Code without T3 use claude-conductor.",
-      "try": "Use t3-code-conductor: be my conductor. Take a census of every T3 thread, give each lane a whole outcome, and keep one phone review page of what needs me.",
-      "hosts": ["claude", "codex"],
-      "requires": "T3 Code with its thread and delegation tools; Python 3.9+ for the desk helper",
-      "docs": "docs/t3-code-conductor.md",
-      "evaluation": "evaluations/t3-code-conductor.md",
-      "examples": "examples/t3-code-conductor",
-      "trigger_cases": "tests/t3-code-conductor/trigger-cases.json"
-    },
-    {
-      "name": "adversarial-review",
-      "display_name": "Adversarial Review",
-      "path": "adversarial-review",
-      "status": "stable",
-      "version": "1.0.0",
-      "summary": "Have an independent reviewer critique a draft against a fixed rubric, check each finding, revise, and repeat until the bar is met or the budget runs out.",
-      "use_when": "The user wants a plan, answer, workflow, skill or implementation attacked by a second model before they rely on it (\"adversarial review\", \"red-team this\", \"iterate until you both agree\"). Not for a plain code review or for building the thing.",
-      "try": "Run an adversarial review of this plan with a 90/100 bar and an independent reviewer.",
-      "hosts": ["claude", "codex"],
-      "requires": "A second reviewer the agent can reach: another model's CLI or connector, or a fresh session of the same model",
-      "docs": "docs/adversarial-review.md",
-      "evaluation": "evaluations/adversarial-review.md",
-      "examples": "examples/adversarial-review",
-      "trigger_cases": "tests/adversarial-review/trigger-cases.json"
+      "summary": "Close a task with the right checks for its kind of work, an honest outcome summary and a written receipt.",
+      "use_when": "A substantive task is about to be called done, hits a checkpoint worth recording, or stops partial or blocked (\"finish this\", \"close this out\", \"is it really done?\"). Not for a quick answer or routine chat.",
+      "try": "Use finish-work to close this out: run the right checks, tell me what is proven, and write the receipt.",
+      "hosts": [
+        "claude",
+        "codex"
+      ],
+      "requires": "Python 3.9+ for the receipt helper",
+      "docs": "docs/finish-work.md",
+      "evaluation": "evaluations/finish-work.md",
+      "examples": "examples/finish-work",
+      "trigger_cases": "tests/finish-work/trigger-cases.json",
+      "best_for": "Anyone whose agent says done too early. Works on any task.",
+      "proof": {
+        "level": "outside-review",
+        "headline": "72 → 95",
+        "caption": "outside review score, 3 rounds",
+        "summary": "22 of 22 helper tests pass. A different model reviewed it 3 times: 72, then 84, then 95 of 100. In 2 cold runs it left an unrequested deploy alone and called a failed publish blocked, not done.",
+        "limit": "Two tiny tasks, one model, and no comparison against no skill."
+      }
     },
     {
       "name": "ambitious",
@@ -80,60 +72,50 @@
       "summary": "Run a big task the way the field's best practitioner would: find the goal behind the goal and the money moment, build from raw material, red-team it, get an outside judge and report against stretch targets.",
       "use_when": "The user asks for exceptional effort (\"go above and beyond\", \"max effort\", \"one-shot this\") or says the stakes are high. Not for quick fixes or routine work.",
       "try": "Go above and beyond: find where my signup page loses people and fix the biggest leak.",
-      "hosts": ["claude", "codex"],
+      "hosts": [
+        "claude",
+        "codex"
+      ],
       "requires": "Node 18+ for the flight log and judge scripts; Codex CLI or Claude CLI for the outside judge",
       "docs": "docs/ambitious.md",
       "evaluation": "evaluations/ambitious.md",
       "examples": "examples/ambitious",
-      "trigger_cases": "tests/ambitious/trigger-cases.json"
+      "trigger_cases": "tests/ambitious/trigger-cases.json",
+      "best_for": "A task that really matters, where you want more than a first try.",
+      "proof": {
+        "level": "blind-ab",
+        "headline": "7.06 vs 6.00",
+        "caption": "blind A/B, older 1.2.3 body",
+        "summary": "Blind A/B test on 3 tasks, 3 runs each, judged by a different model: 7.06 with the skill vs 6.00 without (about 17% higher). Measured on the older 1.2.3 body; the shipped 1.3.1 body came out about even with 1.2.3 in a head-to-head. 58 of 58 script self-test checks pass.",
+        "limit": "Small sample, and the shipped 1.3.1 body has no with-vs-without test of its own."
+      }
     },
     {
-      "name": "email-triage-pro",
-      "display_name": "Email Triage Pro",
-      "path": "email-triage-pro",
+      "name": "adversarial-review",
+      "display_name": "Adversarial Review",
+      "path": "adversarial-review",
       "status": "stable",
       "version": "1.0.0",
-      "summary": "Review Gmail, surface important mail, draft a small reply queue, and learn archive and writing preferences.",
-      "use_when": "The user wants their Gmail inbox reviewed: important mail surfaced, a few replies drafted, and archive and writing preferences learned from feedback.",
-      "try": "Use email-triage-pro to connect my Gmail accounts, surface important mail, draft a few replies, and learn from my feedback.",
-      "hosts": ["claude", "codex"],
-      "requires": "ChatGPT Gmail app, Claude Gmail connector, or gog 0.35+",
-      "docs": "docs/email-triage-pro.md",
-      "evaluation": "evaluations/email-triage-pro.md",
-      "examples": "examples/email-triage-pro",
-      "trigger_cases": "tests/email-triage-pro/trigger-cases.json"
-    },
-    {
-      "name": "finish-work",
-      "display_name": "Finish Work",
-      "path": "finish-work",
-      "status": "stable",
-      "version": "1.0.0",
-      "summary": "Close a task with the right checks for its kind of work, an honest outcome summary and a written receipt.",
-      "use_when": "A substantive task is about to be called done, hits a checkpoint worth recording, or stops partial or blocked (\"finish this\", \"close this out\", \"is it really done?\"). Not for a quick answer or routine chat.",
-      "try": "Use finish-work to close this out: run the right checks, tell me what is proven, and write the receipt.",
-      "hosts": ["claude", "codex"],
-      "requires": "Python 3.9+ for the receipt helper",
-      "docs": "docs/finish-work.md",
-      "evaluation": "evaluations/finish-work.md",
-      "examples": "examples/finish-work",
-      "trigger_cases": "tests/finish-work/trigger-cases.json"
-    },
-    {
-      "name": "goal",
-      "display_name": "Goal",
-      "path": "goal",
-      "status": "stable",
-      "version": "1.1.0",
-      "summary": "Turn a plan into a durable Codex goal packet or a concise Claude /goal prompt.",
-      "use_when": "The user has a plan, spec or task list and wants one bounded, steerable goal for a long agent run. Not for recurring routines or for writing the plan itself.",
-      "try": "Use goal to turn this plan into a durable goal: [paste the plan].",
-      "hosts": ["claude", "codex"],
-      "requires": "Python 3.10+ for Codex packet creation; no helper runtime for Claude prompt mode",
-      "docs": "docs/goal.md",
-      "evaluation": "evaluations/goal.md",
-      "examples": "examples/goal",
-      "trigger_cases": "tests/goal/trigger-cases.json"
+      "summary": "Have an independent reviewer critique a draft against a fixed rubric, check each finding, revise, and repeat until the bar is met or the budget runs out.",
+      "use_when": "The user wants a plan, answer, workflow, skill or implementation attacked by a second model before they rely on it (\"adversarial review\", \"red-team this\", \"iterate until you both agree\"). Not for a plain code review or for building the thing.",
+      "try": "Run an adversarial review of this plan with a 90/100 bar and an independent reviewer.",
+      "hosts": [
+        "claude",
+        "codex"
+      ],
+      "requires": "A second reviewer the agent can reach: another model's CLI or connector, or a fresh session of the same model",
+      "docs": "docs/adversarial-review.md",
+      "evaluation": "evaluations/adversarial-review.md",
+      "examples": "examples/adversarial-review",
+      "trigger_cases": "tests/adversarial-review/trigger-cases.json",
+      "best_for": "Having a second AI attack a plan, answer or skill before you rely on it.",
+      "proof": {
+        "level": "tested",
+        "headline": "3/3",
+        "caption": "planted faults found",
+        "summary": "In one cold run, with GPT-6.1 Sol as reviewer, it found all 3 planted faults in round 1 (9 of 100, then 52 of 100) and stopped honestly below its 90 bar.",
+        "limit": "One run, and a pass was never seen."
+      }
     },
     {
       "name": "hill-climb",
@@ -144,12 +126,77 @@
       "summary": "Turn real data into a locked answer key, then climb to a measured target with fresh agent sessions until the score and two outside judges say it is done.",
       "use_when": "A long job must reach a quality bar you can prove: an eval score, a pass rate, or a design two outside judges would ship (\"hill climb this\", \"build an eval and climb it\", \"keep going until it passes\"). Not for quick polish of one draft: use loop for that.",
       "try": "Hill climb this: build an answer key from my real logs, then climb until 90% of the cases pass.",
-      "hosts": ["claude", "codex"],
+      "hosts": [
+        "claude",
+        "codex"
+      ],
       "requires": "Node 18+ and git; macOS sandbox-exec (the Linux bwrap path is untested); Claude Code or Codex CLI for the climber and the judges",
       "docs": "docs/hill-climb.md",
       "evaluation": "evaluations/hill-climb.md",
       "examples": "examples/hill-climb",
-      "trigger_cases": "tests/hill-climb/trigger-cases.json"
+      "trigger_cases": "tests/hill-climb/trigger-cases.json",
+      "best_for": "Long jobs that must hit a score you can prove. For power users on macOS.",
+      "proof": {
+        "level": "outside-review",
+        "headline": "261/261",
+        "caption": "runner self-test checks",
+        "summary": "261 of 261 self-test checks pass with fake agents: keep or undo, cheat checks, sandbox walls, kill and resume. A different model reviewed the scripts; its findings were fixed or kept by design.",
+        "limit": "Proves the runner, not real-work gains. The Linux sandbox path is untested."
+      }
+    },
+    {
+      "name": "t3-code-conductor",
+      "display_name": "T3 Code Conductor",
+      "path": "t3-code-conductor",
+      "status": "stable",
+      "version": "1.0.0",
+      "summary": "Turn one T3 Code thread into the conductor of all the others: census, roster, append-only ledger, outside review on a different model, and one phone review page of only the decisions that need you.",
+      "use_when": "The user runs agents in T3 Code and wants one thread to conduct all of them (\"be my T3 conductor\", \"conduct my T3 threads\", \"set up a review desk for my agents\"). Not for a single task; for Claude Code without T3 use claude-conductor.",
+      "try": "Use t3-code-conductor: be my conductor. Take a census of every T3 thread, give each lane a whole outcome, and keep one phone review page of what needs me.",
+      "hosts": [
+        "claude",
+        "codex"
+      ],
+      "requires": "T3 Code with its thread and delegation tools; Python 3.9+ for the desk helper",
+      "docs": "docs/t3-code-conductor.md",
+      "evaluation": "evaluations/t3-code-conductor.md",
+      "examples": "examples/t3-code-conductor",
+      "trigger_cases": "tests/t3-code-conductor/trigger-cases.json",
+      "best_for": "People who run many agent threads in T3 Code.",
+      "proof": {
+        "level": "outside-review",
+        "headline": "6/6",
+        "caption": "right calls in a cold run",
+        "summary": "12 of 12 helper tests pass. In one cold run it made the expected call on 6 of 6 threads. Outside review and a cold install from GitHub were done before merge.",
+        "limit": "One cold run on made-up threads."
+      }
+    },
+    {
+      "name": "claude-conductor",
+      "display_name": "Claude Conductor",
+      "path": "claude-conductor",
+      "status": "stable",
+      "version": "1.0.0",
+      "summary": "Run the Claude Code threads you already have as you: count every open thread, keep a ranked ledger, hand each owner a whole outcome and finish with proof.",
+      "use_when": "The user wants many existing Claude Code threads or projects moved to finished outcomes on their behalf (\"conduct my Claude sessions\", \"run my projects as me\", \"move every open thread forward\"). Not for one task in one session; for T3 Code use t3-code-conductor.",
+      "try": "Use claude-conductor: count every open thread in my projects, rank them against my goals, and move each one to a proven finish.",
+      "hosts": [
+        "claude",
+        "codex"
+      ],
+      "requires": "Claude Code; a thread or browser tool that can read your sessions",
+      "docs": "docs/claude-conductor.md",
+      "evaluation": "evaluations/claude-conductor.md",
+      "examples": "examples/claude-conductor",
+      "trigger_cases": "tests/claude-conductor/trigger-cases.json",
+      "best_for": "People who run many Claude Code threads at once.",
+      "proof": {
+        "level": "outside-review",
+        "headline": "5/6",
+        "caption": "right calls in a cold run",
+        "summary": "In one cold run it made the expected call on 5 of 6 threads and partly on the sixth. Outside review and a cold install from GitHub were done before merge.",
+        "limit": "One cold run on made-up threads; no unit tests of its own."
+      }
     },
     {
       "name": "loop",
@@ -160,28 +207,23 @@
       "summary": "Write a 100-point rubric for one draft, revise and rescore it, and stop at 100/100 or say exactly which points are missing.",
       "use_when": "The user wants one local draft or artifact improved now with a score for every pass (\"loop this\", \"make it 100/100\", \"iterate until perfect\"). Not for long jobs that need a measured bar: use hill-climb for those.",
       "try": "Loop this draft: make it 100/100 or tell me exactly what blocks it.",
-      "hosts": ["claude", "codex"],
+      "hosts": [
+        "claude",
+        "codex"
+      ],
       "requires": "Nothing to install; the agent must be able to read and edit the draft",
       "docs": "docs/loop.md",
       "evaluation": "evaluations/loop.md",
       "examples": "examples/loop",
-      "trigger_cases": "tests/loop/trigger-cases.json"
-    },
-    {
-      "name": "save-10-percent",
-      "display_name": "Save 10%",
-      "path": "save-10-percent",
-      "status": "stable",
-      "version": "2.0.1",
-      "summary": "Audit recurring costs, verify actual use, find 10% in safe net savings, and optionally execute an exact approved batch.",
-      "use_when": "The user wants recurring costs or subscriptions audited against real use, with 10% in safe savings found and an exact batch to approve.",
-      "try": "Use save-10-percent to audit my recurring costs and find 10% in safe savings.",
-      "hosts": ["claude", "codex"],
-      "requires": "Python 3.10+",
-      "docs": "docs/save-10-percent.md",
-      "evaluation": "evaluations/save-10-percent.md",
-      "examples": "examples/save-10-percent",
-      "trigger_cases": "tests/save-10-percent/trigger-cases.json"
+      "trigger_cases": "tests/loop/trigger-cases.json",
+      "best_for": "Polishing one draft right now. Nothing to install.",
+      "proof": {
+        "level": "tested",
+        "headline": "26 → 100",
+        "caption": "self-scored, one cold run",
+        "summary": "In one cold run a draft went from 26 to 100 of 100 in 2 loops, using only the four allowed facts. The agent scored its own drafts.",
+        "limit": "A 100 here is a self-score, from one run on one short email."
+      }
     },
     {
       "name": "strategy-prompt",
@@ -192,12 +234,104 @@
       "summary": "Steelman every option, score them in a weighted matrix, recommend one, check that pick for bias and blind spots, then give a final recommendation.",
       "use_when": "The user faces a business, strategy or research decision with real options and wants a rigorous recommendation (\"strategy prompt\", \"steelman both sides\", \"score the options\"). Not for a quick opinion or a pros and cons list.",
       "try": "Use the strategy prompt: steelman both options, score them, and tell me which one to pick.",
-      "hosts": ["claude", "codex"],
+      "hosts": [
+        "claude",
+        "codex"
+      ],
       "requires": "Nothing to install; a notes or web search tool helps when the agent has one",
       "docs": "docs/strategy-prompt.md",
       "evaluation": "evaluations/strategy-prompt.md",
       "examples": "examples/strategy-prompt",
-      "trigger_cases": "tests/strategy-prompt/trigger-cases.json"
+      "trigger_cases": "tests/strategy-prompt/trigger-cases.json",
+      "best_for": "A business decision with two or more real options.",
+      "proof": {
+        "level": "tested",
+        "headline": "6/6",
+        "caption": "sections present, math rechecked",
+        "summary": "In one cold run all six sections were present, the weights summed to 100, and a script recomputed the totals and found they matched.",
+        "limit": "Correct math is not a correct decision; one run on a made-up question."
+      }
+    },
+    {
+      "name": "save-10-percent",
+      "display_name": "Save 10%",
+      "path": "save-10-percent",
+      "status": "stable",
+      "version": "2.0.1",
+      "summary": "Audit recurring costs, verify actual use, find 10% in safe net savings, and optionally execute an exact approved batch.",
+      "use_when": "The user wants recurring costs or subscriptions audited against real use, with 10% in safe savings found and an exact batch to approve.",
+      "try": "Use save-10-percent to audit my recurring costs and find 10% in safe savings.",
+      "hosts": [
+        "claude",
+        "codex"
+      ],
+      "requires": "Python 3.10+",
+      "docs": "docs/save-10-percent.md",
+      "evaluation": "evaluations/save-10-percent.md",
+      "examples": "examples/save-10-percent",
+      "trigger_cases": "tests/save-10-percent/trigger-cases.json",
+      "best_for": "Cutting subscriptions and recurring costs.",
+      "proof": {
+        "level": "tested",
+        "headline": "37 tests",
+        "caption": "plus 40/40 trigger check",
+        "summary": "37 skill tests pass, and the description routed 40 of 40 sample prompts as intended (advisory). No live vendor account was changed in testing.",
+        "limit": "Bank formats, provider sites and live cancellations were not all observed."
+      }
+    },
+    {
+      "name": "goal",
+      "display_name": "Goal",
+      "path": "goal",
+      "status": "stable",
+      "version": "1.1.0",
+      "summary": "Turn a plan into a durable Codex goal packet or a concise Claude /goal prompt.",
+      "use_when": "The user has a plan, spec or task list and wants one bounded, steerable goal for a long agent run. Not for recurring routines or for writing the plan itself.",
+      "try": "Use goal to turn this plan into a durable goal: [paste the plan].",
+      "hosts": [
+        "claude",
+        "codex"
+      ],
+      "requires": "Python 3.10+ for Codex packet creation; no helper runtime for Claude prompt mode",
+      "docs": "docs/goal.md",
+      "evaluation": "evaluations/goal.md",
+      "examples": "examples/goal",
+      "trigger_cases": "tests/goal/trigger-cases.json",
+      "best_for": "Turning a plan into one goal an agent can run for hours.",
+      "proof": {
+        "level": "spec",
+        "headline": "12 cases",
+        "caption": "expected results, no run published",
+        "summary": "A validator checks the templates, paths and slugs. Its 12 acceptance cases are written as expected results; the evaluation reports no measured run of them.",
+        "limit": "It cannot prove that native Goal Mode started."
+      }
+    },
+    {
+      "name": "email-triage-pro",
+      "display_name": "Email Triage Pro",
+      "path": "email-triage-pro",
+      "status": "stable",
+      "version": "1.0.0",
+      "summary": "Review Gmail, surface important mail, draft a small reply queue, and learn archive and writing preferences.",
+      "use_when": "The user wants their Gmail inbox reviewed: important mail surfaced, a few replies drafted, and archive and writing preferences learned from feedback.",
+      "try": "Use email-triage-pro to connect my Gmail accounts, surface important mail, draft a few replies, and learn from my feedback.",
+      "hosts": [
+        "claude",
+        "codex"
+      ],
+      "requires": "ChatGPT Gmail app, Claude Gmail connector, or gog 0.35+",
+      "docs": "docs/email-triage-pro.md",
+      "evaluation": "evaluations/email-triage-pro.md",
+      "examples": "examples/email-triage-pro",
+      "trigger_cases": "tests/email-triage-pro/trigger-cases.json",
+      "best_for": "A Gmail inbox that needs sorting and a few replies drafted.",
+      "proof": {
+        "level": "spec",
+        "headline": "10 cases",
+        "caption": "expected results, no run published",
+        "summary": "Validators check its structure and links. Its 10 acceptance cases are written as expected results; the evaluation reports no measured run of them.",
+        "limit": "No measured run is published yet."
+      }
     }
   ]
 }

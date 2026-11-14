@@ -1,155 +1,155 @@
 # Hill Climb
 
-hill-climb is for the long jobs where "looks good to me" is not enough.
+Hill Climb is for the long jobs where "looks good to me" is not enough.
 
-you give it real data. it turns that data into a locked set of yes/no tests. then it sends fresh agent sessions at the work, one small change at a time, and keeps only the changes that raise the score. it stops when the number hits the target and two outside judges say they would ship it.
+You give it real data. It turns that data into a locked set of yes/no tests. Then it sends fresh agent sessions at the work, one small change at a time, and keeps only the changes that raise the score. It stops when the number hits the target and two outside judges say they would ship it.
 
-## the idea
+## The idea
 
-a **hill** is one goal with an **answer key**. the answer key is a set of test cases built from things that really happened: logs, transcripts, posts you rewrote, bugs people reported.
+A **hill** is one goal with an **answer key**. The answer key is a set of test cases built from things that really happened, such as logs, transcripts, posts you rewrote and bugs people reported.
 
-the agent that does the climbing never sees the hidden tests. it can't grade its own work. it can't edit the tests. every attempt is scored by a script, and every result is written to disk.
+The agent that does the climbing never sees the hidden tests. It can't grade its own work. It can't edit the tests. Every attempt is scored by a script, and every result is written to disk.
 
-most of the work is building a good answer key. the climb itself is a script.
+Most of the work is building a good answer key. The climb itself is a script.
 
-## when it runs
+## When it runs
 
-it runs when you ask for it:
+It runs when you ask for it:
 
-- "hill climb this"
-- "build an eval and climb it"
-- "make the agent hit 90%"
-- "use the logs as a benchmark"
-- "keep going until it passes"
+- "Hill climb this"
+- "Build an eval and climb it"
+- "Make the agent hit 90%"
+- "Use the logs as a benchmark"
+- "Keep going until it passes"
 
-it is not for quick polish of one draft: use [Loop](loop.md) for that. if you can't say what the score measures, you are not ready for a hill yet.
+It is not for quick polish of one draft: use [Loop](loop.md) for that. If you can't say what the score measures, you are not ready for a hill yet.
 
-## how a climb works
+## How a climb works
 
 ```mermaid
 flowchart LR
-  A[frame the hill] --> B[mine real data]
-  B --> C[write the answer key]
-  C --> D[split, check, freeze]
-  D --> E[you approve once]
-  E --> F[climb]
-  F -->|score up| G[keep the change]
-  F -->|score flat or down| H[undo it]
+  A[Frame the hill] --> B[Mine real data]
+  B --> C[Write the answer key]
+  C --> D[Split, check, freeze]
+  D --> E[You approve once]
+  E --> F[Climb]
+  F -->|Score up| G[Keep the change]
+  F -->|Score flat or down| H[Undo it]
   G --> F
   H --> F
-  F --> I[two outside judges]
-  I -->|critiques| F
-  I --> J[done]
+  F --> I[Two outside judges]
+  I -->|Critiques| F
+  I --> J[Done]
 ```
 
-**1. frame the hill.** one sentence each for the goal, the files the agent may change, what the score measures, and a target number.
+**1. Frame the hill.** One sentence each for the goal, the files the agent may change, what the score measures, and a target number.
 
-**2. mine real data.** at least 20 real examples, each with where it came from. the skill ships a miner that turns Claude Code and Codex transcripts into one row per user turn.
+**2. Mine real data.** At least 20 real examples, each with where it came from. The skill ships a miner that turns Claude Code and Codex transcripts into one row per user turn.
 
-**3. pick examples of good and bad.** 3 to 10 real outputs you already know are good or bad. these test the tests.
+**3. Pick examples of good and bad.** 3 to 10 real outputs you already know are good or bad. These test the tests.
 
-**4. write the answer key.** yes/no checks only. code checks first (exact value, regex, length, a command). a yes/no model question only for what code can't see. no 1-10 scores inside a test.
+**4. Write the answer key.** Yes/no checks only. Code checks first (exact value, regex, length, a command). A yes/no model question only for what code can't see. No 1-10 scores inside a test.
 
-**5. grow the cases.** turn each real example into a case, then add more around the edges until you have about 50. some cases must never fail. some are "the right move is to do nothing".
+**5. Grow the cases.** Turn each real example into a case, then add more around the edges until you have about 50. Some cases must never fail. Some are "the right move is to do nothing".
 
-**6. split, check, freeze.** about 30% of the cases become hidden tests. the key has to pass your good examples and fail your bad ones at least 80% of the time. then it is hashed and locked.
+**6. Split, check, freeze.** About 30% of the cases become hidden tests. The key has to pass your good examples and fail your bad ones at least 80% of the time. Then it is hashed and locked.
 
-**7. you approve once.** the skill builds a one-page checkpoint: the goal, today's score, the target, sample tests, the stop rules. this is the only stop. after your yes, the climb is hands-off.
+**7. You approve once.** The skill builds a one-page checkpoint: the goal, today's score, the target, sample tests, the stop rules. This is the only stop. After your yes, the climb is hands-off.
 
-**8. climb.** each attempt is a new agent session. it sees the goal, the score, the failing visible tests and notes from past attempts. it makes one change and stops. the runner scores it, then keeps it as a commit or undoes it.
+**8. Climb.** Each attempt is a new agent session. It sees the goal, the score, the failing visible tests and notes from past attempts. It makes one change and stops. The runner scores it, then keeps it as a commit or undoes it.
 
-**9. land it.** the result sits on its own git branch. you get the board, the numbers and a PR or a clear next move.
+**9. Land it.** The result sits on its own git branch. You get the board, the numbers and a PR or a clear next move.
 
-## how "done" is decided
+## How "done" is decided
 
-two stages. both have to pass.
+Two stages. Both have to pass.
 
-| stage | what has to be true |
+| Stage | What has to be true |
 |---|---|
-| tests | the visible score reaches the target, the hidden score is within 5 points of it, and no must-pass case fails |
-| judges | two models from different labs score the result per category, 1 to 10. every judge has to give the bar (9 by default) in every category and say it would ship |
+| Tests | The visible score reaches the target, the hidden score is within 5 points of it, and no must-pass case fails |
+| Judges | Two models from different labs score the result per category, 1 to 10. Every judge has to give the bar (9 by default) in every category and say it would ship |
 
-the judges are blind. they never see the target, the bar or the test score. for visual work they score screenshots of your work next to the best products you picked, shuffled under letters.
+The judges are blind. They never see the target, the bar or the test score. For visual work they score screenshots of your work next to the best products you picked, shuffled under letters.
 
-if the climb stops for another reason, it says so: `stuck`, `deadline`, `max_attempts`, `budget`. it never calls a miss a win.
+If the climb stops for another reason, it says so: `stuck`, `deadline`, `max_attempts`, `budget`. It never calls a miss a win.
 
-## what keeps it honest
+## What keeps it honest
 
-- **the agent can't see the hidden tests.** every climber, test and judge runs in the machine's sandbox, with the hill folder hidden.
-- **the agent can't edit the tests.** the answer key is hashed. if a hash changes mid-run, the climb stops as `tampered`.
-- **pasting test text into the work is rejected.** a change that copies a test's input is thrown out.
-- **only the allowed files change.** any other changed file rejects the attempt.
-- **the log can't be quietly rewritten.** every entry carries the hash of the one before it.
-- **it never ships.** the runner does not push, merge, publish, send or deploy. landing the result is your call.
-- **a killed run loses nothing.** start the same command again and it picks up where it stopped.
+- **The agent can't see the hidden tests.** Every climber, test and judge runs in the machine's sandbox, with the hill folder hidden.
+- **The agent can't edit the tests.** The answer key is hashed. If a hash changes mid-run, the climb stops as `tampered`.
+- **Pasting test text into the work is rejected.** A change that copies a test's input is thrown out.
+- **Only the allowed files change.** Any other changed file rejects the attempt.
+- **The log can't be quietly rewritten.** Every entry carries the hash of the one before it.
+- **It never ships.** The runner does not push, merge, publish, send or deploy. Landing the result is your call.
+- **A killed run loses nothing.** Start the same command again and it picks up where it stopped.
 
-## install
+## Install
 
-for Claude Code:
+For Claude Code:
 
 ```bash
 git clone --depth 1 https://github.com/lennoxsaint/Skills.git
 python3 Skills/scripts/skills.py install hill-climb --host claude
 ```
 
-for Codex:
+For Codex:
 
 ```bash
 git clone --depth 1 https://github.com/lennoxsaint/Skills.git
 python3 Skills/scripts/skills.py install hill-climb --host codex
 ```
 
-use `--host both` for both. start a new session if the skill does not show up right away.
+Use `--host both` for both. Start a new session if the skill does not show up right away.
 
-then try:
+Then try:
 
 ```text
 Hill climb this: build an answer key from my real logs, then climb until 90% of the cases pass.
 ```
 
-check that the runner works on your machine (no model calls, no cost, about 10 minutes). use the path the installer printed:
+Check that the runner works on your machine (no model calls, no cost, about 10 minutes). Use the path the installer printed:
 
 ```bash
 node ~/.claude/skills/hill-climb/scripts/selftest.mjs   # Claude Code
 node ~/.codex/skills/hill-climb/scripts/selftest.mjs    # Codex
 ```
 
-## what you need
+## What you need
 
-- Node 18 or newer and git. no packages to install.
-- `zstd`, only if you mine Codex sessions that are stored compressed (`.jsonl.zst`). without it the miner skips those files and tells you how many.
-- macOS, for `sandbox-exec`. on Linux the runner uses `bwrap`, but that path is untested.
-- Claude Code or Codex on the command line. climbers and judges are fresh `claude -p` or `codex exec` sessions.
-- two labs for the judge stage. the default is one Codex judge and one Claude judge. set `council` to `[]` in `hill.json` to skip the judges while you learn the tool. then the tests alone decide `done`, and the stop reason says `no council configured`.
+- Node 18 or newer and git. No packages to install.
+- `zstd`, only if you mine Codex sessions that are stored compressed (`.jsonl.zst`). Without it the miner skips those files and tells you how many.
+- macOS, for `sandbox-exec`. On Linux the runner uses `bwrap`, but that path is untested.
+- Claude Code or Codex on the command line. Climbers and judges are fresh `claude -p` or `codex exec` sessions.
+- Two labs for the judge stage. The default is one Codex judge and one Claude judge. Set `council` to `[]` in `hill.json` to skip the judges while you learn the tool. Then the tests alone decide `done`, and the stop reason says `no council configured`.
 
-## what it costs
+## What it costs
 
-a climb is many agent sessions. each attempt is one climber session plus scoring, and the judge stage adds two or more judge calls per round. set `stop.max_attempts`, `stop.deadline` or `stop.budget_usd` before you start.
+A climb is many agent sessions. Each attempt is one climber session plus scoring, and the judge stage adds two or more judge calls per round. Set `stop.max_attempts`, `stop.deadline` or `stop.budget_usd` before you start.
 
-the dollar cap only counts what the tools report. Claude reports its cost. Codex runs are counted as "unknown cost", never as $0.
+The dollar cap only counts what the tools report. Claude reports its cost. Codex runs are counted as "unknown cost", never as $0.
 
-## your data
+## Your data
 
-the judges are outside models. the work, the diff and the test results go to each judge's provider. decide what they may read before you climb, and keep secrets out of every case and example.
+The judges are outside models. The work, the diff and the test results go to each judge's provider. Decide what they may read before you climb, and keep secrets out of every case and example.
 
-everything else stays on your disk, in `~/.hill-climb/` by default.
+Everything else stays on your disk, in `~/.hill-climb/` by default.
 
-## files in the skill
+## Files in the skill
 
-| file | what it is |
+| File | What it is |
 |---|---|
-| `SKILL.md` | the nine steps |
-| `references/answer-key.md` | how to mine data and write checks |
-| `references/hill-json.md` | every setting in `hill.json` |
-| `references/safety.md` | the sandbox, git safety and known limits |
-| `scripts/hill.mjs` | set up, score, freeze, brief, approve, verify |
-| `scripts/climb.mjs` | the runner |
-| `scripts/selftest.mjs` | proves the runner with fake agents |
+| `SKILL.md` | The nine steps |
+| `references/answer-key.md` | How to mine data and write checks |
+| `references/hill-json.md` | Every setting in `hill.json` |
+| `references/safety.md` | The sandbox, git safety and known limits |
+| `scripts/hill.mjs` | Set up, score, freeze, brief, approve, verify |
+| `scripts/climb.mjs` | The runner |
+| `scripts/selftest.mjs` | Proves the runner with fake agents |
 
-a synthetic example lives in [`examples/hill-climb/`](../examples/hill-climb/worked-example.md). the test evidence is in the [evaluation](../evaluations/hill-climb.md).
+A synthetic example lives in [`examples/hill-climb/`](../examples/hill-climb/worked-example.md). The test evidence is in the [evaluation](../evaluations/hill-climb.md).
 
-## changelog
+## Changelog
 
-**1.0.1** (10 Nov 2026) - one line changed. the description now sends quick polish of one draft to [Loop](loop.md), which is public as of today. the method and the scripts are the same as 1.0.0.
+**1.0.1** (10 Nov 2026) - one line changed. The description now sends quick polish of one draft to [Loop](loop.md), which is public as of today. The method and the scripts are the same as 1.0.0.
 
-**1.0.0** (10 Nov 2026) - first public release. this is the version i run, as of 4 Nov 2026, with the blind judge stage. private paths and product-specific notes were replaced with general ones. the method and the scripts are the same.
+**1.0.0** (10 Nov 2026) - first public release. This is the version I run, as of 4 Nov 2026, with the blind judge stage. Private paths and product-specific notes were replaced with general ones. The method and the scripts are the same.

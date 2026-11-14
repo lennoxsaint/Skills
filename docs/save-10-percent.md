@@ -12,7 +12,7 @@ Install the skill, then say:
 Use $save-10-percent to audit my recurring costs. Help me collect the right files first, then keep working until you find 10% in safe net savings or prove the shortfall.
 ```
 
-The skill accepts CSV, JSON, OFX/QFX, QIF, text PDFs, invoices, and read-only billing sources. Python 3.10 or newer is required for the deterministic local scripts. Text PDF support also requires local `pdftotext`; scanned or ambiguous PDFs correctly fall back to a machine-readable export.
+The skill accepts CSV, JSON, OFX/QFX, QIF, text PDFs, invoices, and read-only billing sources. Python 3.10 or newer is required for the deterministic local scripts. Text PDF support also requires local `pdftotext`; scanned or ambiguous PDFs fall back to a machine-readable export.
 
 ## What happens
 
@@ -76,7 +76,7 @@ A recommendation is not money saved. A provider confirmation is not yet an affec
 - Durable cases live under `~/.save10/cases/` by default.
 - Case events are append-only, hash-chained, and secret-rejecting.
 - Raw inputs are read in place; durable artifacts store hashes and redacted evidence.
-- Changed or expired approval stops execution rather than silently widening authority.
+- Changed or expired approval stops execution and does not widen authority.
 - A blocked provider does not stop independent approved rows.
 - File deletion is not a claim of forensic erasure on modern filesystems.
 

@@ -6,8 +6,8 @@ It supports:
 
 - ChatGPT through connected Gmail app accounts
 - Claude through its native Gmail connector for one Google account
-- multi-account Claude runs through the open-source [`gog` CLI](https://github.com/openclaw/gogcli) on a local-capable Claude surface
-- local Codex clients through an available Gmail connection or `gog`
+- Multi-account Claude runs through the open-source [`gog` CLI](https://github.com/openclaw/gogcli) on a local-capable Claude surface
+- Local Codex clients through an available Gmail connection or `gog`
 
 ## Install
 
@@ -30,12 +30,12 @@ After a successful dry run, it asks whether the user wants a daily 8:00 AM sched
 
 ## What a run returns
 
-- important mail to handle now
-- up to three proposed replies by default
-- uncertain or protected mail left untouched
-- archive candidates, with proposed and provider-verified states kept separate
-- the classification and voice rules applied
-- a short feedback prompt
+- Important mail to handle now
+- Up to three proposed replies by default
+- Uncertain or protected mail left untouched
+- Archive candidates, with proposed and provider-verified states kept separate
+- The classification and voice rules applied
+- A short feedback prompt
 
 The feedback system learns narrow archive, surface, and protection rules. It also learns tone, length, greeting, sign-off, and phrase preferences for replies. One correction stays attached to one message. A reusable rule requires an explicit general instruction or the same correction on at least two distinct examples.
 

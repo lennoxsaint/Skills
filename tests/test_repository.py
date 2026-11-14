@@ -150,6 +150,42 @@ class PublicRepositoryTests(unittest.TestCase):
             self.assertIn(f'Try: "{entry["try"]}"', matches[0], entry["name"])
             self.assertIn(f"Needs: {entry['requires']}.", matches[0], entry["name"])
 
+    def test_every_catalog_entry_carries_proof_an_agent_can_quote(self):
+        catalog = json.loads((REPO_ROOT / "catalog.json").read_text(encoding="utf-8"))
+        levels = set(catalog["proof_levels"])
+        self.assertEqual(levels, {"blind-ab", "outside-review", "tested", "spec"})
+        names = {entry["name"] for entry in catalog["skills"]}
+        self.assertTrue(set(catalog["start_here"]) <= names)
+        readme = (REPO_ROOT / "README.md").read_text(encoding="utf-8")
+        evaluation_index = (REPO_ROOT / "EVALUATION.md").read_text(encoding="utf-8")
+        for entry in catalog["skills"]:
+            proof = entry["proof"]
+            self.assertIn(proof["level"], levels, entry["name"])
+            for key in ("headline", "caption", "summary", "limit"):
+                self.assertTrue(proof[key].strip(), f"{entry['name']}: proof.{key}")
+            self.assertTrue(entry["best_for"].strip(), entry["name"])
+            self.assertIn(f"]({entry['evaluation']})", readme, entry["name"])
+            self.assertIn(proof["headline"], evaluation_index, entry["name"])
+
+    def test_llms_txt_carries_each_skill_with_its_proof(self):
+        catalog = json.loads((REPO_ROOT / "catalog.json").read_text(encoding="utf-8"))
+        text = (REPO_ROOT / "llms.txt").read_text(encoding="utf-8")
+        for entry in catalog["skills"]:
+            self.assertIn(entry["proof"]["summary"], text, entry["name"])
+            self.assertIn(entry["proof"]["limit"], text, entry["name"])
+            self.assertIn(entry["best_for"], text, entry["name"])
+
+    def test_readme_diagrams_match_the_catalog(self):
+        result = subprocess.run(
+            [sys.executable, str(REPO_ROOT / "scripts" / "build_readme_art.py"), "--check"],
+            cwd=REPO_ROOT, capture_output=True, text=True,
+        )
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        readme = (REPO_ROOT / "README.md").read_text(encoding="utf-8")
+        for name in ("how-it-works", "proof"):
+            for theme in ("light", "dark"):
+                self.assertIn(f"docs/assets/{name}-{theme}.svg", readme)
+
     def run_cli_with_homes(self, home, *args, check=True):
         environment = dict(os.environ)
         environment["CLAUDE_CONFIG_DIR"] = str(Path(home) / "claude-home")
