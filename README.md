@@ -2,29 +2,38 @@
 
 **Agent skills that make your AI finish the job and show receipts.**
 
-11 free skills for Claude Code and Codex. One command installs any of them. Every skill shows its own test results, including the weak ones. Made by [Lennox Saint](https://github.com/lennoxsaint).
+11 free skills for Claude Code and Codex. One command installs any of them. Every skill lists its evidence and its limits, even when no run is published yet. Made by [Lennox Saint](https://github.com/lennoxsaint).
 
 [![Validate skills](https://github.com/lennoxsaint/Skills/actions/workflows/validate.yml/badge.svg)](https://github.com/lennoxsaint/Skills/actions/workflows/validate.yml)
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="docs/assets/how-it-works-dark.svg">
-  <img src="docs/assets/how-it-works-light.svg" width="800" alt="What a skill changes, from 'done!' to a receipt you can check. Step 1, do the work on your real files. Step 2, check it for real with tests, renders and a re-read of what went live. Step 3, get a second opinion: a different AI model scores the work. Step 4, wait for your yes before it sends, posts, buys or deploys. Then it writes a receipt. The sample receipt says blocked: prices saved locally, not published, because the publish token is missing.">
+  <img src="docs/assets/how-it-works-light.svg" width="560" alt="What a skill changes, from 'done!' to a receipt you can check. Step 1, do the work on your real files. Step 2, check it for real with tests, renders and a re-read of what went live. Step 3, get a second opinion: a second AI, usually a different model, scores the work. Step 4, wait for your yes before it sends, posts, buys or deploys. Then it writes a receipt. The sample receipt says blocked: prices saved locally, not published, because the publish token is missing.">
 </picture>
 
 ## What this is
 
 AI agents can now work for hours on their own. The weak spot is the end. An agent can grade its own work, say "done" before anything was checked, or send something you never approved.
 
-A skill is a short instruction file your agent reads before it starts. These skills change how the agent ends a job. It checks the work with real tools. On some skills, a different AI model scores the work. It stops and waits for you before it sends, posts, buys or deploys. Then it tells you what is proven and what is not.
+A skill is a short instruction file your agent reads before it starts. These skills change how the agent ends a job. It checks the work with real tools. On some skills, a second AI, usually a different model, scores the work. It stops and waits for you before it sends, posts, buys or deploys. Then it tells you what is proven and what is not.
 
 ## Start here
 
-| If you want | Use | Proof so far | Needs |
-|---|---|---|---|
-| Your agent to stop saying "done" too early | [Finish Work](docs/finish-work.md) | An outside AI review scored it 72, then 84, then 95 of 100. In 2 cold runs it left an unrequested deploy alone and called a failed publish "blocked". | Python 3.9+ |
-| Its best work on a task that really matters | [Ambitious](docs/ambitious.md) | Blind A/B test on 3 tasks: 7.06 with the skill vs 6.00 without, about 17% higher. That test used the older 1.2.3 version. | Node 18+, plus the Codex or Claude CLI |
-| A second AI to attack your plan before you commit | [Adversarial Review](docs/adversarial-review.md) | In one cold run it found all 3 planted faults. It ran out of rounds at 52 of 100, below its 90 bar, and said so. | A second model the agent can reach |
-| A long job to hit a score you can prove | [Hill Climb](docs/hill-climb.md) | 261 of 261 self-test checks pass on its runner. No real-work benchmark yet. | Node 18+, git, macOS, plus Claude Code or Codex |
+### Your agent says "done" too early
+
+**Use [Finish Work](docs/finish-work.md).** An outside AI review scored it 72, then 84, then 95 of 100. In 2 cold runs it left an unrequested deploy alone and called a failed publish "blocked". **Needs:** Python 3.9+.
+
+### Its best work on a task that really matters
+
+**Use [Ambitious](docs/ambitious.md).** Blind A/B test on 3 tasks: 7.06 with the skill vs 6.00 without, about 17% higher. That test used the older 1.2.3 version. **Needs:** Node 18+, plus the Codex or Claude CLI.
+
+### A second AI to attack your plan before you commit
+
+**Use [Adversarial Review](docs/adversarial-review.md).** In one cold run it found all 3 planted faults. It scored 9, then 52 of 100, ran out of rounds below its 90 bar, and said so. **Needs:** another model, or a fresh session of the same model, as the reviewer. A different model gives a stronger check.
+
+### A long job to hit a score you can prove
+
+**Use [Hill Climb](docs/hill-climb.md).** 261 of 261 self-test checks pass on its runner. No real-work benchmark yet. **Needs:** Node 18+, git, macOS (the Linux path is untested), plus Claude Code or Codex.
 
 **Not sure? Start with Finish Work.** It helps on any task, it needs only Python, and an outside model reviewed it three times.
 
@@ -32,22 +41,22 @@ A skill is a short instruction file your agent reads before it starts. These ski
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="docs/assets/proof-dark.svg">
-  <img src="docs/assets/proof-light.svg" width="800" alt="Proof so far, by skill. Blind A/B test: Ambitious, 7.06 vs 6.00 on the older 1.2.3 body. Outside review: Finish Work, review score 72 to 95 over 3 rounds; Hill Climb, 261 of 261 runner self-test checks; T3 Code Conductor, right calls on 6 of 6 threads in a cold run; Claude Conductor, 5 of 6. Tested: Adversarial Review, 3 of 3 planted faults found; Loop, 26 to 100, self-scored; Strategy Prompt, 6 of 6 sections with math rechecked; Save 10%, 37 tests. Spec only: Goal, 12 cases, and Email Triage Pro, 10 cases, written as expected results with no run published.">
+  <img src="docs/assets/proof-light.svg" width="560" alt="Proof so far, by skill. Blind A/B test: Ambitious, 7.06 vs 6.00 on the older 1.2.3 body. Outside review: Finish Work, review score 72 to 95 over 3 rounds; Hill Climb, 261 of 261 runner self-test checks; T3 Code Conductor, right calls on 6 of 6 threads in a cold run; Claude Conductor, 5 of 6. Tested: Adversarial Review, 3 of 3 planted faults found; Loop, 26 to 100, self-scored; Strategy Prompt, 6 of 6 sections with math rechecked; Save 10%, 37 tests. Spec only: Goal, 12 cases, and Email Triage Pro, 10 cases, written as expected results with no run published.">
 </picture>
 
-| Skill | What it does | Proof so far | Version |
-|---|---|---|---:|
-| [Finish Work](finish-work/SKILL.md) | Runs the right checks before your agent says "done", says what is proven and what is not, and writes a receipt you can read later. | **Outside review.** 22 of 22 helper tests. Review score 72 → 84 → 95. Two tiny test tasks. [Evidence](evaluations/finish-work.md) | 1.0.0 |
-| [Ambitious](ambitious/SKILL.md) | Goes deeper on a task you flag as important, then has a different AI model score the work instead of grading itself. | **Blind A/B.** 7.06 vs 6.00 without the skill, measured on the older 1.2.3 body. [Evidence](evaluations/ambitious.md) | 1.3.1 |
-| [Adversarial Review](adversarial-review/SKILL.md) | Sends your draft to an independent reviewer, checks every finding, fixes what holds up, and reports the score history and what is still open. | **Tested.** One cold run: 3 of 3 planted faults found. A pass was never seen. [Evidence](evaluations/adversarial-review.md) | 1.0.0 |
-| [Hill Climb](hill-climb/SKILL.md) | Turns your real data into locked tests, then keeps improving the work until the score and two outside judges say it is done. | **Outside review.** 261 of 261 runner checks with fake agents. Not a real-work benchmark. [Evidence](evaluations/hill-climb.md) | 1.0.1 |
-| [T3 Code Conductor](t3-code-conductor/SKILL.md) | Turns one T3 Code thread into the conductor of all the others, with outside review on a different model and one phone page of only the decisions that need you. | **Outside review.** 12 of 12 helper tests. Right call on 6 of 6 threads in one cold run. [Evidence](evaluations/t3-code-conductor.md) | 1.0.0 |
-| [Claude Conductor](claude-conductor/SKILL.md) | Runs the Claude Code threads you already have as you: counts every open one, ranks them against your goals, and moves each to a proven finish. | **Outside review.** Right call on 5 of 6 threads in one cold run, partly on the sixth. [Evidence](evaluations/claude-conductor.md) | 1.0.0 |
-| [Loop](loop/SKILL.md) | Writes a 100-point rubric for one draft, fixes and rescores it, and stops at 100/100 or tells you exactly which points are missing. | **Tested.** One cold run went 26 → 100. The agent scored its own drafts. [Evidence](evaluations/loop.md) | 1.0.0 |
-| [Strategy Prompt](strategy-prompt/SKILL.md) | Steelmans every option, scores them in a weighted matrix, then attacks its own pick before it gives a final recommendation. | **Tested.** One cold run. A script rechecked the math and it matched. [Evidence](evaluations/strategy-prompt.md) | 1.0.0 |
-| [Save 10%](save-10-percent/SKILL.md) | Audits recurring costs, checks actual use, finds 10% in safe net savings, and can carry out an exact batch you approve. | **Tested.** 37 skill tests. No live vendor account was changed in testing. [Evidence](evaluations/save-10-percent.md) | 2.0.1 |
-| [Goal](goal/SKILL.md) | Turns a plan into one bounded goal an agent can run for hours: a durable Codex goal packet or a compact Claude `/goal` prompt. | **Spec only.** A validator checks its files. Its 12 cases are expected results, with no run published. [Evidence](evaluations/goal.md) | 1.1.0 |
-| [Email Triage Pro](email-triage-pro/SKILL.md) | Reviews Gmail, surfaces important mail, drafts a few replies, and learns your archive and writing preferences. | **Spec only.** Validators check its files. Its 10 cases are expected results, with no run published. [Evidence](evaluations/email-triage-pro.md) | 1.0.0 |
+| Skill | What it does | Proof so far | Needs | Version |
+|---|---|---|---|---:|
+| [Finish Work](finish-work/SKILL.md) | Runs the right checks before your agent says "done", says what is proven and what is not, and writes a receipt you can read later. | **Outside review.** 22 of 22 helper tests. Review score 72 → 84 → 95. Two tiny test tasks. [Evidence](evaluations/finish-work.md) | Python 3.9+ for the receipt helper | 1.0.0 |
+| [Ambitious](ambitious/SKILL.md) | Goes deeper on a task you flag as important, then has a different AI model score the work instead of grading itself. | **Blind A/B.** 7.06 vs 6.00 without the skill, measured on the older 1.2.3 body. [Evidence](evaluations/ambitious.md) | Node 18+ for the flight log and judge scripts; Codex CLI or Claude CLI for the outside judge | 1.3.1 |
+| [Adversarial Review](adversarial-review/SKILL.md) | Sends your draft to an independent reviewer, checks every finding, fixes what holds up, and reports the score history and what is still open. | **Tested.** One cold run: 3 of 3 planted faults found in round 1. It scored 9, then 52 of 100, and stopped below its 90 bar. A pass was never seen. [Evidence](evaluations/adversarial-review.md) | A second reviewer the agent can reach: another model's CLI or connector, or a fresh session of the same model | 1.0.0 |
+| [Hill Climb](hill-climb/SKILL.md) | Turns your real data into a locked answer key, then climbs with fresh agent sessions until the score target is met and two outside judges say it is done. | **Outside review.** 261 of 261 runner checks with fake agents. Not a real-work benchmark. [Evidence](evaluations/hill-climb.md) | Node 18+ and git; macOS sandbox-exec (the Linux bwrap path is untested); Claude Code or Codex CLI for the climber and the judges | 1.0.1 |
+| [T3 Code Conductor](t3-code-conductor/SKILL.md) | Turns one T3 Code thread into the conductor of all the others, with outside review on a different model and one phone page of only the decisions that need you. | **Outside review.** 12 of 12 helper tests. Right call on 6 of 6 threads in one cold run. [Evidence](evaluations/t3-code-conductor.md) | T3 Code with its thread and delegation tools; Python 3.9+ for the desk helper | 1.0.0 |
+| [Claude Conductor](claude-conductor/SKILL.md) | Runs the Claude Code threads you already have as you: counts every open one, ranks them against your goals, and moves each to a proven finish. | **Outside review.** Right call on 5 of 6 threads in one cold run, partly on the sixth. [Evidence](evaluations/claude-conductor.md) | Claude Code; a thread or browser tool that can read your sessions | 1.0.0 |
+| [Loop](loop/SKILL.md) | Writes a 100-point rubric for one draft, fixes and rescores it, and stops at 100/100 or tells you exactly which points are missing. | **Tested.** One cold run went 26 → 100. The agent scored its own drafts. [Evidence](evaluations/loop.md) | Nothing to install; the agent must be able to read and edit the draft | 1.0.0 |
+| [Strategy Prompt](strategy-prompt/SKILL.md) | Steelmans every option, scores them in a weighted matrix, then attacks its own pick before it gives a final recommendation. | **Tested.** One cold run. A script rechecked the math and it matched. [Evidence](evaluations/strategy-prompt.md) | Nothing to install; a notes or web search tool helps when the agent has one | 1.0.0 |
+| [Save 10%](save-10-percent/SKILL.md) | Audits recurring costs against actual use, finds 10% in safe net savings, and cancels nothing until you approve an exact batch. | **Tested.** 37 skill tests. No live vendor account was changed in testing. [Evidence](evaluations/save-10-percent.md) | Python 3.10+ | 2.0.1 |
+| [Goal](goal/SKILL.md) | Turns a plan into one bounded goal an agent can run for hours: a durable Codex goal packet or a compact Claude `/goal` prompt. | **Spec only.** A validator checks its files. Its 12 cases are expected results, with no run published. [Evidence](evaluations/goal.md) | Python 3.10+ for Codex packet creation; no helper runtime for Claude prompt mode | 1.1.0 |
+| [Email Triage Pro](email-triage-pro/SKILL.md) | Reviews Gmail, surfaces important mail, drafts a few replies, and learns your archive and writing preferences. | **Spec only.** Validators check its files. Its 10 cases are expected results, with no run published. [Evidence](evaluations/email-triage-pro.md) | ChatGPT Gmail app, Claude Gmail connector, or gog 0.35+ | 1.0.0 |
 
 How to read the proof:
 

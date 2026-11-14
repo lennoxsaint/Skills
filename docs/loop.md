@@ -8,11 +8,11 @@ You hand it a draft. It writes a 100-point rubric for that draft, scores it, fix
 
 It runs when you ask for it:
 
-- "Loop this"
-- "Make it 100/100"
-- "Iterate until it's perfect"
-- "Improve this draft"
-- "Give me the criteria and run them"
+- "loop this"
+- "make it 100/100"
+- "iterate until it's perfect"
+- "improve this draft"
+- "give me the criteria and run them"
 
 It works on local things: a post, an email, a script, a thumbnail, a carousel, a spec.
 

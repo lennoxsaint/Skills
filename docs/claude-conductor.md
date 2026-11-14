@@ -8,10 +8,10 @@ You give it one run contract: your goals in order, what counts as done, what it 
 
 It runs when you ask for it:
 
-- "Conduct my Claude sessions"
-- "Run my projects as me"
-- "Move every open thread forward"
-- "Check on all my agents and finish what's open"
+- "conduct my Claude sessions"
+- "run my projects as me"
+- "move every open thread forward"
+- "check on all my agents and finish what's open"
 
 It is for many threads at once. For one task in one session, just ask for the task. If you run your agents in T3 Code, use [T3 Code Conductor](t3-code-conductor.md).
 

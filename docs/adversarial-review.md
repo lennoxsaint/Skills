@@ -8,10 +8,10 @@ Your agent freezes the draft and a rubric, sends them to an independent reviewer
 
 It runs when you ask for it:
 
-- "Adversarial review this plan"
-- "Red-team this"
-- "Get another model to tear this apart"
-- "Iterate until you and the reviewer agree"
+- "adversarial review this plan"
+- "red-team this"
+- "get another model to tear this apart"
+- "iterate until you and the reviewer agree"
 
 It reviews the thing you asked about: an answer, a plan, a workflow, a skill, a piece of code. It does not quietly turn a review into building the thing.
 

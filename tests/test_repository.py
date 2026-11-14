@@ -165,6 +165,7 @@ class PublicRepositoryTests(unittest.TestCase):
                 self.assertTrue(proof[key].strip(), f"{entry['name']}: proof.{key}")
             self.assertTrue(entry["best_for"].strip(), entry["name"])
             self.assertIn(f"]({entry['evaluation']})", readme, entry["name"])
+            self.assertIn(f"| {entry['requires']} |", readme, f"{entry['name']}: README Needs cell must match catalog")
             self.assertIn(proof["headline"], evaluation_index, entry["name"])
 
     def test_llms_txt_carries_each_skill_with_its_proof(self):

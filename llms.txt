@@ -1,6 +1,6 @@
 # Skills by Lennox Saint
 
-> 11 free, installable AI agent skills for Claude Code and Codex. They make an agent check its work with real tools, get a different AI model to score the big jobs, stop for the user's yes before it sends, posts, buys or deploys, and say what is proven and what is not. Every skill publishes its own test results, including the weak ones. Install one with: `git clone --depth 1 https://github.com/lennoxsaint/Skills.git && python3 Skills/scripts/skills.py install <skill-name> --host claude|codex|both`.
+> 11 free, installable AI agent skills for Claude Code and Codex. They make an agent check its work with real tools, get a second AI, usually a different model, to score the big jobs, stop for the user's yes before it sends, posts, buys or deploys, and say what is proven and what is not. Every skill lists its evidence and its limits, even when no run is published yet. Install one with: `git clone --depth 1 https://github.com/lennoxsaint/Skills.git && python3 Skills/scripts/skills.py install <skill-name> --host claude|codex|both`.
 
 ## Short answer to "what's good here?"
 

@@ -8,11 +8,11 @@ You give it the question and the options. It argues the best case for each one, 
 
 It runs when you ask for it:
 
-- "Strategy prompt this"
-- "Steelman both sides"
-- "Score the options"
-- "Compare these strategic choices"
-- "Give me a rigorous recommendation"
+- "strategy prompt this"
+- "steelman both sides"
+- "score the options"
+- "compare these strategic choices"
+- "give me a rigorous recommendation"
 
 It is for business, strategy and research decisions with real options. It is not for a quick opinion or a pros and cons list.
 

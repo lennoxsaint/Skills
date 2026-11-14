@@ -16,11 +16,11 @@ Most of the work is building a good answer key. The climb itself is a script.
 
 It runs when you ask for it:
 
-- "Hill climb this"
-- "Build an eval and climb it"
-- "Make the agent hit 90%"
-- "Use the logs as a benchmark"
-- "Keep going until it passes"
+- "hill climb this"
+- "build an eval and climb it"
+- "make the agent hit 90%"
+- "use the logs as a benchmark"
+- "keep going until it passes"
 
 It is not for quick polish of one draft: use [Loop](loop.md) for that. If you can't say what the score measures, you are not ready for a hill yet.
 

@@ -14,16 +14,16 @@ This skill makes the model ask the bigger question for you. Then it has to show 
 
 It runs when you ask for it out loud:
 
-- "Go above and beyond"
-- "Blow me away"
-- "Pull out all the stops"
-- "Max effort"
-- "One-shot this"
-- "Be ambitious" or `/ambitious`
+- "go above and beyond"
+- "blow me away"
+- "pull out all the stops"
+- "max effort"
+- "one-shot this"
+- "be ambitious" or `/ambitious`
 
 It also runs when you say the stakes are high. For example, the deck goes in front of investors, the email goes to your whole list, or a launch rides on it.
 
-It does not run just because of what you asked for. "Write a sales page" is normal work. The model should do it well, without this method. It also skips quick fixes, lookups, rough drafts and "go deeper on these logs".
+It does not run just because of what you asked for. "write a sales page" is normal work. The model should do it well, without this method. It also skips quick fixes, lookups, rough drafts and "go deeper on these logs".
 
 ## How a run works
 
@@ -43,7 +43,7 @@ flowchart LR
 
 **3. Build from raw material, with real tools.** It works from the real files, rows, footage and live product - not from summaries. And it uses the tools a pro would use. It runs a real query, makes a real render and takes a real screenshot, so nothing is a guess about how the page looks.
 
-**4. Red-team it.** "Red-team" means attack your own work on purpose. It tries to break the work before anyone else sees it. A reader who wants it to fail. A doubter who lists every reason it won't work. A tester who clicks everything.
+**4. Red-team it.** "red-team" means attack your own work on purpose. It tries to break the work before anyone else sees it. A reader who wants it to fail. A doubter who lists every reason it won't work. A tester who clicks everything.
 
 **5. Get an outside judge.** It does not grade itself. First a tool that measures. Then a different model that sees only the brief and the work. It fixes the biggest fault the judge names, then asks again. If no judge was possible, it says so.
 

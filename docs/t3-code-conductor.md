@@ -8,10 +8,10 @@ It counts every thread on every machine T3 can reach, keeps a roster and an appe
 
 It runs when you ask for it:
 
-- "Be my T3 conductor"
-- "Conduct my T3 threads"
-- "Run my T3 agents as me"
-- "Set up a review desk for my agents"
+- "be my T3 conductor"
+- "conduct my T3 threads"
+- "run my T3 agents as me"
+- "set up a review desk for my agents"
 
 It is for many threads at once. For one task, just ask for the task. If you use Claude Code without T3, use [Claude Conductor](claude-conductor.md).
 
