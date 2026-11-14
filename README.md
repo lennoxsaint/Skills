@@ -35,7 +35,7 @@ A skill is a short instruction file your agent reads before it starts. These ski
 
 ### A long job to hit a score you can prove
 
-**Use [Hill Climb](docs/hill-climb.md).** 261 of 261 self-test checks pass on its runner. No real-work benchmark yet. **Needs:** Node 18+ and git, macOS for its `sandbox-exec` sandbox (the Linux `bwrap` path is untested), plus Claude Code or Codex.
+**Use [Hill Climb](docs/hill-climb.md).** 261 of 261 self-test checks pass on its runner. No real-work benchmark yet. **Needs:** Node 18+ and git, macOS for its `sandbox-exec` sandbox (the Linux `bwrap` path is untested), plus Claude Code or Codex. Its default judges use both Claude Code and Codex.
 
 **Not sure? Start with Finish Work.** It helps on any task, it needs only Python, and an outside model reviewed it three times.
 
@@ -51,7 +51,7 @@ A skill is a short instruction file your agent reads before it starts. These ski
 | [Finish Work](finish-work/SKILL.md) | Runs the right checks before your agent says "done", says what is proven and what is not, and writes a receipt you can read later. | **Outside review.** 22 of 22 helper tests. Review score 72 → 84 → 95. Two tiny test tasks. [Evidence](evaluations/finish-work.md) | Python 3.9+ for the receipt helper | 1.0.0 |
 | [Ambitious](ambitious/SKILL.md) | Goes deeper on a task you flag as important, then has a different AI model score the work instead of grading itself. | **Blind A/B.** 7.06 vs 6.00 without the skill, measured on the older 1.2.3 body. [Evidence](evaluations/ambitious.md) | Node 18+ for the flight log and judge scripts; Codex CLI or Claude CLI for the outside judge | 1.3.1 |
 | [Adversarial Review](adversarial-review/SKILL.md) | Sends your draft to an independent reviewer, checks every finding, fixes what holds up, and reports the score history and what is still open. | **Tested.** One cold run: 3 of 3 planted faults found in round 1. It scored 9, then 52 of 100, and stopped below its 90 bar. A pass was never seen. [Evidence](evaluations/adversarial-review.md) | A second reviewer the agent can reach: another model's CLI or connector, or a fresh session of the same model | 1.0.0 |
-| [Hill Climb](hill-climb/SKILL.md) | Turns your real data into a locked answer key, then climbs with fresh agent sessions until the score target is met and two outside judges say it is done. | **Outside review.** 261 of 261 runner checks with fake agents. Not a real-work benchmark. [Evidence](evaluations/hill-climb.md) | Node 18+ and git; macOS sandbox-exec (the Linux bwrap path is untested); Claude Code or Codex CLI for the climber and the judges | 1.0.1 |
+| [Hill Climb](hill-climb/SKILL.md) | Turns your real data into a locked answer key, then climbs with fresh agent sessions until the score target is met and two outside judges say it is done. | **Outside review.** 261 of 261 runner checks with fake agents. Not a real-work benchmark. [Evidence](evaluations/hill-climb.md) | Node 18+ and git; macOS sandbox-exec (the Linux bwrap path is untested); Claude Code or Codex CLI for the climber, and both for the default two-lab judges | 1.0.1 |
 | [T3 Code Conductor](t3-code-conductor/SKILL.md) | Turns one T3 Code thread into the conductor of all the others, with outside review on a different model and one phone page of only the decisions that need you. | **Outside review.** 12 of 12 helper tests. Right call on 6 of 6 threads in one cold run. [Evidence](evaluations/t3-code-conductor.md) | T3 Code with its thread and delegation tools; Python 3.9+ for the desk helper | 1.0.0 |
 | [Claude Conductor](claude-conductor/SKILL.md) | Runs the Claude Code threads you already have as you: counts every open one, ranks them against your goals, and moves each to a proven finish. | **Outside review.** Right call on 5 of 6 threads in one cold run, partly on the sixth. [Evidence](evaluations/claude-conductor.md) | Claude Code; a thread or browser tool that can read your sessions | 1.0.0 |
 | [Loop](loop/SKILL.md) | Writes a 100-point rubric for one draft, fixes and rescores it, and stops at 100/100 or tells you exactly which points are missing. | **Tested.** One cold run went 26 → 100. The agent scored its own drafts. [Evidence](evaluations/loop.md) | Nothing to install; the agent must be able to read and edit the draft | 1.0.0 |
@@ -90,6 +90,22 @@ git clone --depth 1 https://github.com/lennoxsaint/Skills.git && python3 Skills/
 **Both:** use `--host both`. **Several at once:** `python3 Skills/scripts/skills.py install finish-work ambitious --host both`.
 
 The installer prints what the skill needs and a line to try. Then start a new session and say that line. In Claude Code you can also type `/finish-work`. In Codex you can type `$finish-work`.
+
+Try saying:
+
+| Skill | Try saying |
+|---|---|
+| [Finish Work](docs/finish-work.md) | "Finish this properly." |
+| [Ambitious](docs/ambitious.md) | "Go above and beyond on this." |
+| [Adversarial Review](docs/adversarial-review.md) | "Red-team this plan." |
+| [Hill Climb](docs/hill-climb.md) | "Hill climb this until 90% of the cases pass." |
+| [T3 Code Conductor](docs/t3-code-conductor.md) | "Be my T3 conductor." |
+| [Claude Conductor](docs/claude-conductor.md) | "Conduct my Claude sessions." |
+| [Loop](docs/loop.md) | "Loop this until it's 100/100." |
+| [Strategy Prompt](docs/strategy-prompt.md) | "Steelman both sides and score them." |
+| [Save 10%](docs/save-10-percent.md) | "Find 10% in safe savings." |
+| [Goal](docs/goal.md) | "Turn this plan into a goal." |
+| [Email Triage Pro](docs/email-triage-pro.md) | "Triage my Gmail." |
 
 What the installer does:
 

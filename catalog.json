@@ -130,7 +130,7 @@
         "claude",
         "codex"
       ],
-      "requires": "Node 18+ and git; macOS sandbox-exec (the Linux bwrap path is untested); Claude Code or Codex CLI for the climber and the judges",
+      "requires": "Node 18+ and git; macOS sandbox-exec (the Linux bwrap path is untested); Claude Code or Codex CLI for the climber, and both for the default two-lab judges",
       "docs": "docs/hill-climb.md",
       "evaluation": "evaluations/hill-climb.md",
       "examples": "examples/hill-climb",

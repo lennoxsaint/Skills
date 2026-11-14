@@ -190,6 +190,16 @@ class PublicRepositoryTests(unittest.TestCase):
         self.assertEqual(
             sorted(readme_needs_mismatches(swapped, catalog)), sorted([first["name"], second["name"]]))
 
+    def test_readme_keeps_the_original_try_saying_prompts(self):
+        readme = (REPO_ROOT / "README.md").read_text(encoding="utf-8")
+        for prompt in (
+            "Finish this properly.", "Go above and beyond on this.", "Red-team this plan.",
+            "Hill climb this until 90% of the cases pass.", "Be my T3 conductor.", "Conduct my Claude sessions.",
+            "Loop this until it's 100/100.", "Steelman both sides and score them.", "Find 10% in safe savings.",
+            "Turn this plan into a goal.", "Triage my Gmail.",
+        ):
+            self.assertIn(f'"{prompt}"', readme)
+
     def test_llms_txt_carries_each_skill_with_its_proof(self):
         catalog = json.loads((REPO_ROOT / "catalog.json").read_text(encoding="utf-8"))
         text = (REPO_ROOT / "llms.txt").read_text(encoding="utf-8")
