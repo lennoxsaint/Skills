@@ -12,7 +12,7 @@
 
 ## Start here
 
-- [README](https://github.com/lennoxsaint/Skills/blob/main/README.md): the front page, with a "Start here" table and every skill's proof
+- [README](https://github.com/lennoxsaint/Skills/blob/main/README.md): the front page, with four "Start here" picks and every skill's proof
 - [Catalog](https://raw.githubusercontent.com/lennoxsaint/Skills/main/catalog.json): every skill as JSON with `best_for`, `proof`, `use_when`, `try`, `requires`, `hosts` and `version`
 - [Agent guide](https://github.com/lennoxsaint/Skills/blob/main/AGENTS.md): how to answer "what's good here", and install steps with a check for each one
 - [Changelog](https://github.com/lennoxsaint/Skills/blob/main/CHANGELOG.md): what changed and when

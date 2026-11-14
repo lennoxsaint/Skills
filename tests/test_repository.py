@@ -11,6 +11,18 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 CLI = REPO_ROOT / "scripts" / "skills.py"
 
 
+
+def readme_needs_mismatches(readme, catalog):
+    """Names of skills whose own README table row has a Needs cell that differs from catalog.json."""
+    bad = []
+    for entry in catalog["skills"]:
+        prefix = f"| [{entry['display_name']}]({entry['path']}/SKILL.md) |"
+        rows = [line for line in readme.splitlines() if line.startswith(prefix)]
+        cells = [cell.strip() for cell in rows[0].strip("|").split(" | ")] if len(rows) == 1 else []
+        if len(cells) < 2 or cells[-2] != entry["requires"]:
+            bad.append(entry["name"])
+    return bad
+
 class PublicRepositoryTests(unittest.TestCase):
     def run_cli(self, *args, check=True):
         return subprocess.run(
@@ -165,8 +177,18 @@ class PublicRepositoryTests(unittest.TestCase):
                 self.assertTrue(proof[key].strip(), f"{entry['name']}: proof.{key}")
             self.assertTrue(entry["best_for"].strip(), entry["name"])
             self.assertIn(f"]({entry['evaluation']})", readme, entry["name"])
-            self.assertIn(f"| {entry['requires']} |", readme, f"{entry['name']}: README Needs cell must match catalog")
             self.assertIn(proof["headline"], evaluation_index, entry["name"])
+
+    def test_readme_needs_cell_matches_each_skills_own_catalog_entry(self):
+        catalog = json.loads((REPO_ROOT / "catalog.json").read_text(encoding="utf-8"))
+        readme = (REPO_ROOT / "README.md").read_text(encoding="utf-8")
+        self.assertEqual(readme_needs_mismatches(readme, catalog), [])
+        # A README with two skills' needs swapped must fail.
+        first, second = catalog["skills"][0], catalog["skills"][1]
+        swapped = readme.replace(f"| {first['requires']} |", "| @@FIRST@@ |").replace(
+            f"| {second['requires']} |", f"| {first['requires']} |").replace("| @@FIRST@@ |", f"| {second['requires']} |")
+        self.assertEqual(
+            sorted(readme_needs_mismatches(swapped, catalog)), sorted([first["name"], second["name"]]))
 
     def test_llms_txt_carries_each_skill_with_its_proof(self):
         catalog = json.loads((REPO_ROOT / "catalog.json").read_text(encoding="utf-8"))

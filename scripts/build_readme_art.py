@@ -13,6 +13,7 @@ from __future__ import annotations
 import argparse
 import json
 import sys
+import textwrap
 from html import escape
 from pathlib import Path
 
@@ -49,14 +50,21 @@ STEPS = [
 ]
 
 RECEIPT = [
-    ("Asked", ["update the prices and publish them"]),
-    ("True now", ["prices saved locally. not published:", "the publish token is missing."]),
-    ("Checked", ["./publish.sh: exit 1, token not set"]),
-    ("Next", ["get the token, then run ./publish.sh"]),
+    ("Asked", "update the prices and publish them"),
+    ("True now", "prices saved locally. not published: the publish token is missing."),
+    ("Checked", "./publish.sh: exit 1, token not set"),
+    ("Next", "get the token, then run ./publish.sh"),
 ]
 
-# Both diagrams are tall and narrow so their text stays readable on a 390 px phone.
-WIDTH = 560
+# Both diagrams are drawn narrow (440 px) with large text. GitHub shows them about
+# 324 px wide on a 390 px phone, so 18 px text here still reads at about 13 px there.
+WIDTH = 440
+
+
+def wrap(body: str, size: float, room: float, mono: bool = False, bold: bool = False) -> list[str]:
+    """Split text into lines that fit `room` px, using a cautious average glyph width."""
+    per_char = size * (0.61 if mono else 0.53 if bold else 0.47)
+    return textwrap.wrap(body, max(8, int(room // per_char))) or [""]
 
 
 def text(x, y, body, size, fill, weight=400, anchor="start", family=SANS, spacing=None):
@@ -65,92 +73,104 @@ def text(x, y, body, size, fill, weight=400, anchor="start", family=SANS, spacin
             f'fill="{fill}" text-anchor="{anchor}"{extra}>{escape(body)}</text>')
 
 
+def lines(out, x, y, body, size, fill, room, gap, weight=400, family=SANS, mono=False):
+    """Write wrapped text and return the y below it."""
+    for line in wrap(body, size, room, mono, weight >= 600):
+        out.append(text(x, y, line, size, fill, weight, family=family))
+        y += gap
+    return y
+
+
 def frame(w, h, t, title, desc):
     return [f'<svg xmlns="http://www.w3.org/2000/svg" width="{w}" height="{h}" viewBox="0 0 {w} {h}" role="img" aria-labelledby="t d">',
             f'<title id="t">{escape(title)}</title>', f'<desc id="d">{escape(desc)}</desc>',
             f'<rect x="1" y="1" width="{w-2}" height="{h-2}" rx="20" fill="{t["bg"]}" stroke="{t["edge"]}" stroke-width="2"/>']
 
 
+HOW_DESC = ("The pattern these skills share, step by step. Not every skill does every step. "
+            + " ".join(f"Step {i + 1}, {title.lower()}: {line}. Used in {used}." for i, (title, line, used) in enumerate(STEPS))
+            + " Then the agent writes down what is proven. Sample receipt from the Finish Work guide, status blocked. "
+            + " ".join(f"{label}: {body}" for label, body in RECEIPT))
+
+
 def how_it_works(t: dict) -> str:
-    rail_x, top, gap = 60, 210, 110
-    ry, rh = top + gap * 3 + 130, 400
-    w, h = WIDTH, ry + rh + 36
-    out = frame(w, h, t, "What a skill changes",
-                "Four steps a skill adds to how your agent works: do the work, check it for real, get a second "
-                "opinion from a second AI, usually a different model, and wait for your yes before anything goes out. "
-                "It ends with a receipt. The sample receipt says the status is blocked: prices saved locally, "
-                "not published because the publish token is missing.")
-    out += [text(40, 58, "WHAT A SKILL CHANGES", 16, t["muted"], 600, spacing="1.5"),
-            text(40, 100, "From “done!” to a receipt", 30, t["ink"], 700),
-            text(40, 138, "you can check", 30, t["ink"], 700)]
-    out.append(f'<line x1="{rail_x}" y1="{top}" x2="{rail_x}" y2="{top + gap * 3}" stroke="{t["edge"]}" stroke-width="3"/>')
+    w, pad = WIDTH, 32
+    body = []
+    y = lines(body, pad, 54, "WHAT A SKILL CHANGES", 16, t["muted"], w - 2 * pad, 22, 600) + 18
+    y = lines(body, pad, y, "From “done!” to a receipt you can check", 28, t["ink"], w - 2 * pad, 36, 700) + 30
+    rail_x, tx = pad + 20, pad + 58
+    room = w - tx - 20
+    rail_top = y
     for i, (title, line, used_in) in enumerate(STEPS):
-        y = top + gap * i
         gate = i == len(STEPS) - 1
-        out.append(f'<circle cx="{rail_x}" cy="{y}" r="20" fill="{t["accent_bg"] if gate else t["bg"]}" '
-                   f'stroke="{t["accent"] if gate else t["ink"]}" stroke-width="2.5"/>')
-        out.append(text(rail_x, y + 7, str(i + 1), 19, t["accent"] if gate else t["ink"], 700, "middle"))
-        out.append(text(rail_x + 40, y + 8, title, 26, t["ink"], 700))
-        out.append(text(rail_x + 40, y + 36, line, 18, t["muted"]))
-        out.append(text(rail_x + 40, y + 60, f"in: {used_in}", 16, t["muted"]))
+        cy = y - 8
+        body.append(f'<circle cx="{rail_x}" cy="{cy}" r="19" fill="{t["accent_bg"] if gate else t["bg"]}" '
+                    f'stroke="{t["accent"] if gate else t["ink"]}" stroke-width="2.5"/>')
+        body.append(text(rail_x, cy + 7, str(i + 1), 19, t["accent"] if gate else t["ink"], 700, "middle"))
+        y = lines(body, tx, y, title, 24, t["ink"], room, 30, 700) + 2
+        y = lines(body, tx, y, line, 18, t["muted"], room, 24)
+        names = ", ".join(n.replace(" ", "\u00a0") for n in used_in.split(", "))  # keep each name on one line
+        y = lines(body, tx, y, f"in: {names}", 17, t["muted"], room, 22) + 26
+        if i == len(STEPS) - 2:
+            rail_end = y - 8
+    out_rail = f'<line x1="{rail_x}" y1="{rail_top}" x2="{rail_x}" y2="{rail_end}" stroke="{t["edge"]}" stroke-width="3"/>'
     # arrow from the last step down to the receipt
-    ay = top + gap * 3
-    out.append(f'<path d="M {rail_x} {ay + 20} L {rail_x} {ay + 112}" fill="none" stroke="{t["edge"]}" stroke-width="3"/>')
-    out.append(f'<path d="M {rail_x - 8} {ay + 104} L {rail_x} {ay + 118} L {rail_x + 8} {ay + 104} Z" fill="{t["edge"]}"/>')
-    out.append(text(rail_x + 40, ay + 96, "then it writes down what is proven", 17, t["muted"]))
+    body.append(f'<path d="M {rail_x} {y - 30} L {rail_x} {y + 44}" fill="none" stroke="{t["edge"]}" stroke-width="3"/>')
+    body.append(f'<path d="M {rail_x - 8} {y + 36} L {rail_x} {y + 50} L {rail_x + 8} {y + 36} Z" fill="{t["edge"]}"/>')
+    y = lines(body, tx, y + 12, "then it writes down what is proven", 18, t["muted"], room, 24) + 34
     # receipt card with a torn bottom edge
-    rx, rw = 40, w - 80
-    teeth = 22
+    rx, ry, rw = pad - 8, y, w - 2 * (pad - 8)
+    card = [text(rx + 20, ry + 40, "RECEIPT", 17, t["muted"], 700, family=MONO, spacing="2"),
+            f'<rect x="{rx + rw - 136}" y="{ry + 16}" width="116" height="34" rx="17" fill="{t["accent_bg"]}"/>',
+            text(rx + rw - 78, ry + 40, "blocked", 18, t["accent"], 700, "middle", MONO)]
+    cy = ry + 86
+    for label, value in RECEIPT:
+        card.append(text(rx + 20, cy, label, 16, t["muted"], 700, family=MONO, spacing="1"))
+        cy = lines(card, rx + 20, cy + 26, value, 16, t["ink"], rw - 40, 23, family=MONO, mono=True) + 12
+    card.append(text(rx + 20, cy + 14, "sample from the Finish Work guide", 15, t["muted"], family=MONO))
+    rh = cy + 40 - ry
+    teeth = 18
     step = rw / teeth
     zig = " ".join(f"L {round(rx + rw - k * step, 1)} {ry + rh + (8 if k % 2 else 0)}" for k in range(1, teeth + 1))
-    out.append(f'<path d="M {rx} {ry} L {rx + rw} {ry} L {rx + rw} {ry + rh} {zig} L {rx} {ry + rh} Z" '
-               f'fill="{t["paper"]}" stroke="{t["paper_edge"]}" stroke-width="2" stroke-linejoin="round"/>')
-    out.append(text(rx + 24, ry + 42, "RECEIPT", 17, t["muted"], 700, family=MONO, spacing="2"))
-    out.append(f'<rect x="{rx + rw - 152}" y="{ry + 18}" width="128" height="34" rx="17" fill="{t["accent_bg"]}"/>')
-    out.append(text(rx + rw - 88, ry + 42, "blocked", 18, t["accent"], 700, "middle", MONO))
-    y = ry + 90
-    for label, lines in RECEIPT:
-        out.append(text(rx + 24, y, label, 15, t["muted"], 700, family=MONO, spacing="1"))
-        y += 25
-        for line in lines:
-            out.append(text(rx + 24, y, line, 17, t["ink"], 400, family=MONO))
-            y += 24
-        y += 14
-    out.append(text(rx + 24, ry + rh - 16, "sample from the Finish Work guide", 14, t["muted"], 400, family=MONO))
-    out.append("</svg>")
+    paper = (f'<path d="M {rx} {ry} L {rx + rw} {ry} L {rx + rw} {ry + rh} {zig} L {rx} {ry + rh} Z" '
+             f'fill="{t["paper"]}" stroke="{t["paper_edge"]}" stroke-width="2" stroke-linejoin="round"/>')
+    h = ry + rh + 34
+    out = frame(w, h, t, "What a skill changes", HOW_DESC) + [out_rail] + body + [paper] + card + ["</svg>"]
     return "\n".join(out) + "\n"
 
 
 def proof_chart(t: dict, catalog: dict) -> str:
     skills = sorted(catalog["skills"], key=lambda e: LEVELS.index(e["proof"]["level"]))
-    w, row, top = WIDTH, 76, 280
-    h = top + row * len(skills) + 30
+    w, pad = WIDTH, 32
     desc = " ".join(f'{e["display_name"]}: {LEVEL_NAMES[e["proof"]["level"]]}, {e["proof"]["headline"]} '
                     f'({e["proof"]["caption"]}).' for e in skills)
-    out = frame(w, h, t, "Proof so far, by skill", desc)
-    out += [text(40, 58, "PROOF SO FAR", 16, t["muted"], 600, spacing="1.5"),
-            text(40, 98, "Every skill lists its evidence", 28, t["ink"], 700),
-            text(40, 134, "and its limits", 28, t["ink"], 700)]
+    body = []
+    y = lines(body, pad, 54, "PROOF SO FAR", 16, t["muted"], w - 2 * pad, 22, 600) + 18
+    y = lines(body, pad, y, "Every skill lists its evidence and its limits", 26, t["ink"], w - 2 * pad, 34, 700) + 14
     for n, level in enumerate(LEVELS):
-        lx, ly = 40 + (n % 2) * 250, 176 + (n // 2) * 32
+        lx, ly = pad + (n % 2) * 196, y + (n // 2) * 32
         color = t["levels"][level]
         for k in range(4):
-            out.append(f'<circle cx="{lx + 6 + k * 13}" cy="{ly - 5}" r="5" fill="{color if k < LEVEL_DOTS[level] else t["dot_off"]}"/>')
-        out.append(text(lx + 58, ly, LEVEL_NAMES[level], 17, t["ink"], 600))
-    out.append(f'<line x1="40" y1="{top - 52}" x2="{w - 40}" y2="{top - 52}" stroke="{t["edge"]}" stroke-width="1.5"/>')
+            body.append(f'<circle cx="{lx + 6 + k * 13}" cy="{ly - 6}" r="5" fill="{color if k < LEVEL_DOTS[level] else t["dot_off"]}"/>')
+        body.append(text(lx + 58, ly, LEVEL_NAMES[level], 17, t["ink"], 600))
+    y += 54
+    body.append(f'<line x1="{pad}" y1="{y}" x2="{w - pad}" y2="{y}" stroke="{t["edge"]}" stroke-width="1.5"/>')
+    y += 50
     for i, e in enumerate(skills):
-        y = top + row * i
         level = e["proof"]["level"]
         color = t["levels"][level]
-        if i % 2 == 0:
-            out.append(f'<rect x="24" y="{y - 32}" width="{w - 48}" height="{row - 4}" rx="10" fill="{t["card"]}"/>')
-        out.append(text(40, y, e["display_name"], 22, t["ink"], 700))
-        out.append(text(w - 40, y, e["proof"]["headline"], 24, color, 700, "end"))
-        out.append(text(40, y + 27, e["proof"]["caption"], 17, t["muted"]))
+        row = []
+        row.append(text(pad, y, e["display_name"], 21, t["ink"], 700))
+        row.append(text(w - pad, y, e["proof"]["headline"], 22, color, 700, "end"))
         for k in range(4):
-            out.append(f'<circle cx="{w - 98 + k * 17}" cy="{y + 21}" r="6" fill="{color if k < LEVEL_DOTS[level] else t["dot_off"]}"/>')
-    out.append(text(40, h - 22, "Numbers come from catalog.json and evaluations/.", 15, t["muted"]))
-    out.append("</svg>")
+            row.append(f'<circle cx="{w - pad - 57 + k * 17}" cy="{y + 20}" r="6" fill="{color if k < LEVEL_DOTS[level] else t["dot_off"]}"/>')
+        bottom = lines(row, pad, y + 27, e["proof"]["caption"], 17, t["muted"], w - 2 * pad - 84, 22)
+        if i % 2 == 0:
+            body.append(f'<rect x="{pad - 14}" y="{y - 30}" width="{w - 2 * pad + 28}" height="{bottom - y + 16}" rx="10" fill="{t["card"]}"/>')
+        body += row
+        y = bottom + 34
+    y = lines(body, pad, y + 4, "Numbers come from catalog.json and evaluations/.", 15, t["muted"], w - 2 * pad, 20)
+    out = frame(w, y + 14, t, "Proof so far, by skill", desc) + body + ["</svg>"]
     return "\n".join(out) + "\n"
 
 

@@ -1,46 +1,49 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="560" height="1106" viewBox="0 0 560 1106" role="img" aria-labelledby="t d">
+<svg xmlns="http://www.w3.org/2000/svg" width="440" height="1179" viewBox="0 0 440 1179" role="img" aria-labelledby="t d">
 <title id="t">What a skill changes</title>
-<desc id="d">Four steps a skill adds to how your agent works: do the work, check it for real, get a second opinion from a second AI, usually a different model, and wait for your yes before anything goes out. It ends with a receipt. The sample receipt says the status is blocked: prices saved locally, not published because the publish token is missing.</desc>
-<rect x="1" y="1" width="558" height="1104" rx="20" fill="#ffffff" stroke="#d1d9e0" stroke-width="2"/>
-<text x="40" y="58" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif" font-size="16" font-weight="600" fill="#59636e" text-anchor="start" letter-spacing="1.5">WHAT A SKILL CHANGES</text>
-<text x="40" y="100" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif" font-size="30" font-weight="700" fill="#1f2328" text-anchor="start">From “done!” to a receipt</text>
-<text x="40" y="138" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif" font-size="30" font-weight="700" fill="#1f2328" text-anchor="start">you can check</text>
-<line x1="60" y1="210" x2="60" y2="540" stroke="#d1d9e0" stroke-width="3"/>
-<circle cx="60" cy="210" r="20" fill="#ffffff" stroke="#1f2328" stroke-width="2.5"/>
-<text x="60" y="217" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif" font-size="19" font-weight="700" fill="#1f2328" text-anchor="middle">1</text>
-<text x="100" y="218" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif" font-size="26" font-weight="700" fill="#1f2328" text-anchor="start">Do the work</text>
-<text x="100" y="246" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif" font-size="18" font-weight="400" fill="#59636e" text-anchor="start">on your real files, data and pages</text>
-<text x="100" y="270" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif" font-size="16" font-weight="400" fill="#59636e" text-anchor="start">in: every skill</text>
-<circle cx="60" cy="320" r="20" fill="#ffffff" stroke="#1f2328" stroke-width="2.5"/>
-<text x="60" y="327" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif" font-size="19" font-weight="700" fill="#1f2328" text-anchor="middle">2</text>
-<text x="100" y="328" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif" font-size="26" font-weight="700" fill="#1f2328" text-anchor="start">Check it for real</text>
-<text x="100" y="356" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif" font-size="18" font-weight="400" fill="#59636e" text-anchor="start">tests, renders, a re-read of what went live</text>
-<text x="100" y="380" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif" font-size="16" font-weight="400" fill="#59636e" text-anchor="start">in: Finish Work, Ambitious, Hill Climb</text>
-<circle cx="60" cy="430" r="20" fill="#ffffff" stroke="#1f2328" stroke-width="2.5"/>
-<text x="60" y="437" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif" font-size="19" font-weight="700" fill="#1f2328" text-anchor="middle">3</text>
-<text x="100" y="438" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif" font-size="26" font-weight="700" fill="#1f2328" text-anchor="start">Get a second opinion</text>
-<text x="100" y="466" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif" font-size="18" font-weight="400" fill="#59636e" text-anchor="start">a second AI, usually another model, scores it</text>
-<text x="100" y="490" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif" font-size="16" font-weight="400" fill="#59636e" text-anchor="start">in: Ambitious, Hill Climb, Adversarial Review</text>
-<circle cx="60" cy="540" r="20" fill="#fff8c5" stroke="#9a6700" stroke-width="2.5"/>
-<text x="60" y="547" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif" font-size="19" font-weight="700" fill="#9a6700" text-anchor="middle">4</text>
-<text x="100" y="548" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif" font-size="26" font-weight="700" fill="#1f2328" text-anchor="start">Wait for your yes</text>
-<text x="100" y="576" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif" font-size="18" font-weight="400" fill="#59636e" text-anchor="start">before it sends, posts, buys or deploys</text>
-<text x="100" y="600" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif" font-size="16" font-weight="400" fill="#59636e" text-anchor="start">in: every skill</text>
-<path d="M 60 560 L 60 652" fill="none" stroke="#d1d9e0" stroke-width="3"/>
-<path d="M 52 644 L 60 658 L 68 644 Z" fill="#d1d9e0"/>
-<text x="100" y="636" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif" font-size="17" font-weight="400" fill="#59636e" text-anchor="start">then it writes down what is proven</text>
-<path d="M 40 670 L 520 670 L 520 1070 L 498.2 1078 L 476.4 1070 L 454.5 1078 L 432.7 1070 L 410.9 1078 L 389.1 1070 L 367.3 1078 L 345.5 1070 L 323.6 1078 L 301.8 1070 L 280.0 1078 L 258.2 1070 L 236.4 1078 L 214.5 1070 L 192.7 1078 L 170.9 1070 L 149.1 1078 L 127.3 1070 L 105.5 1078 L 83.6 1070 L 61.8 1078 L 40.0 1070 L 40 1070 Z" fill="#fffdf7" stroke="#e3dccb" stroke-width="2" stroke-linejoin="round"/>
-<text x="64" y="712" font-family="ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace" font-size="17" font-weight="700" fill="#59636e" text-anchor="start" letter-spacing="2">RECEIPT</text>
-<rect x="368" y="688" width="128" height="34" rx="17" fill="#fff8c5"/>
-<text x="432" y="712" font-family="ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace" font-size="18" font-weight="700" fill="#9a6700" text-anchor="middle">blocked</text>
-<text x="64" y="760" font-family="ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace" font-size="15" font-weight="700" fill="#59636e" text-anchor="start" letter-spacing="1">Asked</text>
-<text x="64" y="785" font-family="ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace" font-size="17" font-weight="400" fill="#1f2328" text-anchor="start">update the prices and publish them</text>
-<text x="64" y="823" font-family="ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace" font-size="15" font-weight="700" fill="#59636e" text-anchor="start" letter-spacing="1">True now</text>
-<text x="64" y="848" font-family="ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace" font-size="17" font-weight="400" fill="#1f2328" text-anchor="start">prices saved locally. not published:</text>
-<text x="64" y="872" font-family="ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace" font-size="17" font-weight="400" fill="#1f2328" text-anchor="start">the publish token is missing.</text>
-<text x="64" y="910" font-family="ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace" font-size="15" font-weight="700" fill="#59636e" text-anchor="start" letter-spacing="1">Checked</text>
-<text x="64" y="935" font-family="ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace" font-size="17" font-weight="400" fill="#1f2328" text-anchor="start">./publish.sh: exit 1, token not set</text>
-<text x="64" y="973" font-family="ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace" font-size="15" font-weight="700" fill="#59636e" text-anchor="start" letter-spacing="1">Next</text>
-<text x="64" y="998" font-family="ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace" font-size="17" font-weight="400" fill="#1f2328" text-anchor="start">get the token, then run ./publish.sh</text>
-<text x="64" y="1054" font-family="ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace" font-size="14" font-weight="400" fill="#59636e" text-anchor="start">sample from the Finish Work guide</text>
+<desc id="d">The pattern these skills share, step by step. Not every skill does every step. Step 1, do the work: on your real files, data and pages. Used in every skill. Step 2, check it for real: tests, renders, a re-read of what went live. Used in Finish Work, Ambitious, Hill Climb. Step 3, get a second opinion: a second AI, usually another model, scores it. Used in Ambitious, Hill Climb, Adversarial Review. Step 4, wait for your yes: before it sends, posts, buys or deploys. Used in every skill. Then the agent writes down what is proven. Sample receipt from the Finish Work guide, status blocked. Asked: update the prices and publish them True now: prices saved locally. not published: the publish token is missing. Checked: ./publish.sh: exit 1, token not set Next: get the token, then run ./publish.sh</desc>
+<rect x="1" y="1" width="438" height="1177" rx="20" fill="#ffffff" stroke="#d1d9e0" stroke-width="2"/>
+<line x1="52" y1="196" x2="52" y2="570" stroke="#d1d9e0" stroke-width="3"/>
+<text x="32" y="54" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif" font-size="16" font-weight="600" fill="#59636e" text-anchor="start">WHAT A SKILL CHANGES</text>
+<text x="32" y="94" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif" font-size="28" font-weight="700" fill="#1f2328" text-anchor="start">From “done!” to a receipt</text>
+<text x="32" y="130" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif" font-size="28" font-weight="700" fill="#1f2328" text-anchor="start">you can check</text>
+<circle cx="52" cy="188" r="19" fill="#ffffff" stroke="#1f2328" stroke-width="2.5"/>
+<text x="52" y="195" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif" font-size="19" font-weight="700" fill="#1f2328" text-anchor="middle">1</text>
+<text x="90" y="196" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif" font-size="24" font-weight="700" fill="#1f2328" text-anchor="start">Do the work</text>
+<text x="90" y="228" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif" font-size="18" font-weight="400" fill="#59636e" text-anchor="start">on your real files, data and pages</text>
+<text x="90" y="252" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif" font-size="17" font-weight="400" fill="#59636e" text-anchor="start">in: every skill</text>
+<circle cx="52" cy="292" r="19" fill="#ffffff" stroke="#1f2328" stroke-width="2.5"/>
+<text x="52" y="299" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif" font-size="19" font-weight="700" fill="#1f2328" text-anchor="middle">2</text>
+<text x="90" y="300" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif" font-size="24" font-weight="700" fill="#1f2328" text-anchor="start">Check it for real</text>
+<text x="90" y="332" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif" font-size="18" font-weight="400" fill="#59636e" text-anchor="start">tests, renders, a re-read of what went</text>
+<text x="90" y="356" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif" font-size="18" font-weight="400" fill="#59636e" text-anchor="start">live</text>
+<text x="90" y="380" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif" font-size="17" font-weight="400" fill="#59636e" text-anchor="start">in: Finish Work, Ambitious, Hill Climb</text>
+<circle cx="52" cy="420" r="19" fill="#ffffff" stroke="#1f2328" stroke-width="2.5"/>
+<text x="52" y="427" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif" font-size="19" font-weight="700" fill="#1f2328" text-anchor="middle">3</text>
+<text x="90" y="428" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif" font-size="24" font-weight="700" fill="#1f2328" text-anchor="start">Get a second opinion</text>
+<text x="90" y="460" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif" font-size="18" font-weight="400" fill="#59636e" text-anchor="start">a second AI, usually another model,</text>
+<text x="90" y="484" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif" font-size="18" font-weight="400" fill="#59636e" text-anchor="start">scores it</text>
+<text x="90" y="508" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif" font-size="17" font-weight="400" fill="#59636e" text-anchor="start">in: Ambitious, Hill Climb,</text>
+<text x="90" y="530" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif" font-size="17" font-weight="400" fill="#59636e" text-anchor="start">Adversarial Review</text>
+<circle cx="52" cy="570" r="19" fill="#fff8c5" stroke="#9a6700" stroke-width="2.5"/>
+<text x="52" y="577" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif" font-size="19" font-weight="700" fill="#9a6700" text-anchor="middle">4</text>
+<text x="90" y="578" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif" font-size="24" font-weight="700" fill="#1f2328" text-anchor="start">Wait for your yes</text>
+<text x="90" y="610" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif" font-size="18" font-weight="400" fill="#59636e" text-anchor="start">before it sends, posts, buys or deploys</text>
+<text x="90" y="634" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif" font-size="17" font-weight="400" fill="#59636e" text-anchor="start">in: every skill</text>
+<path d="M 52 652 L 52 726" fill="none" stroke="#d1d9e0" stroke-width="3"/>
+<path d="M 44 718 L 52 732 L 60 718 Z" fill="#d1d9e0"/>
+<text x="90" y="694" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif" font-size="18" font-weight="400" fill="#59636e" text-anchor="start">then it writes down what is proven</text>
+<path d="M 24 752 L 416 752 L 416 1145 L 394.2 1153 L 372.4 1145 L 350.7 1153 L 328.9 1145 L 307.1 1153 L 285.3 1145 L 263.6 1153 L 241.8 1145 L 220.0 1153 L 198.2 1145 L 176.4 1153 L 154.7 1145 L 132.9 1153 L 111.1 1145 L 89.3 1153 L 67.6 1145 L 45.8 1153 L 24.0 1145 L 24 1145 Z" fill="#fffdf7" stroke="#e3dccb" stroke-width="2" stroke-linejoin="round"/>
+<text x="44" y="792" font-family="ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace" font-size="17" font-weight="700" fill="#59636e" text-anchor="start" letter-spacing="2">RECEIPT</text>
+<rect x="280" y="768" width="116" height="34" rx="17" fill="#fff8c5"/>
+<text x="338" y="792" font-family="ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace" font-size="18" font-weight="700" fill="#9a6700" text-anchor="middle">blocked</text>
+<text x="44" y="838" font-family="ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace" font-size="16" font-weight="700" fill="#59636e" text-anchor="start" letter-spacing="1">Asked</text>
+<text x="44" y="864" font-family="ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace" font-size="16" font-weight="400" fill="#1f2328" text-anchor="start">update the prices and publish them</text>
+<text x="44" y="899" font-family="ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace" font-size="16" font-weight="700" fill="#59636e" text-anchor="start" letter-spacing="1">True now</text>
+<text x="44" y="925" font-family="ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace" font-size="16" font-weight="400" fill="#1f2328" text-anchor="start">prices saved locally. not published:</text>
+<text x="44" y="948" font-family="ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace" font-size="16" font-weight="400" fill="#1f2328" text-anchor="start">the publish token is missing.</text>
+<text x="44" y="983" font-family="ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace" font-size="16" font-weight="700" fill="#59636e" text-anchor="start" letter-spacing="1">Checked</text>
+<text x="44" y="1009" font-family="ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace" font-size="16" font-weight="400" fill="#1f2328" text-anchor="start">./publish.sh: exit 1, token not set</text>
+<text x="44" y="1044" font-family="ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace" font-size="16" font-weight="700" fill="#59636e" text-anchor="start" letter-spacing="1">Next</text>
+<text x="44" y="1070" font-family="ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace" font-size="16" font-weight="400" fill="#1f2328" text-anchor="start">get the token, then run ./publish.sh</text>
+<text x="44" y="1119" font-family="ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace" font-size="15" font-weight="400" fill="#59636e" text-anchor="start">sample from the Finish Work guide</text>
 </svg>

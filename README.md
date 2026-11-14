@@ -4,11 +4,13 @@
 
 11 free skills for Claude Code and Codex. One command installs any of them. Every skill lists its evidence and its limits, even when no run is published yet. Made by [Lennox Saint](https://github.com/lennoxsaint).
 
+Are you an AI agent asked "what's good here?" Use the four-part answer under [For agents](#for-agents).
+
 [![Validate skills](https://github.com/lennoxsaint/Skills/actions/workflows/validate.yml/badge.svg)](https://github.com/lennoxsaint/Skills/actions/workflows/validate.yml)
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="docs/assets/how-it-works-dark.svg">
-  <img src="docs/assets/how-it-works-light.svg" width="560" alt="What a skill changes, from 'done!' to a receipt you can check. Step 1, do the work on your real files. Step 2, check it for real with tests, renders and a re-read of what went live. Step 3, get a second opinion: a second AI, usually a different model, scores the work. Step 4, wait for your yes before it sends, posts, buys or deploys. Then it writes a receipt. The sample receipt says blocked: prices saved locally, not published, because the publish token is missing.">
+  <img src="docs/assets/how-it-works-light.svg" width="440" alt="What a skill changes, from 'done!' to a receipt you can check. This is the pattern the skills share; not every skill does every step. Step 1, do the work on your real files, data and pages, in every skill. Step 2, check it for real with tests, renders and a re-read of what went live, in Finish Work, Ambitious and Hill Climb. Step 3, get a second opinion: a second AI, usually another model, scores it, in Ambitious, Hill Climb and Adversarial Review. Step 4, wait for your yes before it sends, posts, buys or deploys, in every skill. Then it writes down what is proven. The sample receipt from the Finish Work guide says blocked: prices saved locally, not published, because the publish token is missing.">
 </picture>
 
 ## What this is
@@ -33,7 +35,7 @@ A skill is a short instruction file your agent reads before it starts. These ski
 
 ### A long job to hit a score you can prove
 
-**Use [Hill Climb](docs/hill-climb.md).** 261 of 261 self-test checks pass on its runner. No real-work benchmark yet. **Needs:** Node 18+, git, macOS (the Linux path is untested), plus Claude Code or Codex.
+**Use [Hill Climb](docs/hill-climb.md).** 261 of 261 self-test checks pass on its runner. No real-work benchmark yet. **Needs:** Node 18+ and git, macOS for its `sandbox-exec` sandbox (the Linux `bwrap` path is untested), plus Claude Code or Codex.
 
 **Not sure? Start with Finish Work.** It helps on any task, it needs only Python, and an outside model reviewed it three times.
 
@@ -41,7 +43,7 @@ A skill is a short instruction file your agent reads before it starts. These ski
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="docs/assets/proof-dark.svg">
-  <img src="docs/assets/proof-light.svg" width="560" alt="Proof so far, by skill. Blind A/B test: Ambitious, 7.06 vs 6.00 on the older 1.2.3 body. Outside review: Finish Work, review score 72 to 95 over 3 rounds; Hill Climb, 261 of 261 runner self-test checks; T3 Code Conductor, right calls on 6 of 6 threads in a cold run; Claude Conductor, 5 of 6. Tested: Adversarial Review, 3 of 3 planted faults found; Loop, 26 to 100, self-scored; Strategy Prompt, 6 of 6 sections with math rechecked; Save 10%, 37 tests. Spec only: Goal, 12 cases, and Email Triage Pro, 10 cases, written as expected results with no run published.">
+  <img src="docs/assets/proof-light.svg" width="440" alt="Proof so far, by skill. Blind A/B test: Ambitious, 7.06 vs 6.00 on the older 1.2.3 body. Outside review: Finish Work, review score 72 to 95 over 3 rounds; Hill Climb, 261 of 261 runner self-test checks; T3 Code Conductor, right calls on 6 of 6 threads in a cold run; Claude Conductor, 5 of 6. Tested: Adversarial Review, 3 of 3 planted faults found; Loop, 26 to 100, self-scored; Strategy Prompt, 6 of 6 sections with math rechecked; Save 10%, 37 tests. Spec only: Goal, 12 cases, and Email Triage Pro, 10 cases, written as expected results with no run published.">
 </picture>
 
 | Skill | What it does | Proof so far | Needs | Version |
@@ -57,6 +59,8 @@ A skill is a short instruction file your agent reads before it starts. These ski
 | [Save 10%](save-10-percent/SKILL.md) | Audits recurring costs against actual use, finds 10% in safe net savings, and cancels nothing until you approve an exact batch. | **Tested.** 37 skill tests. No live vendor account was changed in testing. [Evidence](evaluations/save-10-percent.md) | Python 3.10+ | 2.0.1 |
 | [Goal](goal/SKILL.md) | Turns a plan into one bounded goal an agent can run for hours: a durable Codex goal packet or a compact Claude `/goal` prompt. | **Spec only.** A validator checks its files. Its 12 cases are expected results, with no run published. [Evidence](evaluations/goal.md) | Python 3.10+ for Codex packet creation; no helper runtime for Claude prompt mode | 1.1.0 |
 | [Email Triage Pro](email-triage-pro/SKILL.md) | Reviews Gmail, surfaces important mail, drafts a few replies, and learns your archive and writing preferences. | **Spec only.** Validators check its files. Its 10 cases are expected results, with no run published. [Evidence](evaluations/email-triage-pro.md) | ChatGPT Gmail app, Claude Gmail connector, or gog 0.35+ | 1.0.0 |
+
+9 of the 11 skills have a measured result. Goal and Email Triage Pro have only expected results, with no run published yet. The evidence for each skill is in [`evaluations/`](evaluations/), indexed in [EVALUATION.md](EVALUATION.md).
 
 How to read the proof:
 
@@ -112,12 +116,12 @@ Every example in this repository is made up. None of it is real customer data.
 
 ## For agents
 
-If a user sent you here to find out what's good, answer from this page:
+If a user sent you here to ask what's good, a full answer has four parts:
 
-1. **What it is:** the tagline and "What this is".
-2. **What to try:** match the user's task to "If you want" under "Start here", or to "What it does" in the full table. If nothing fits, say so.
-3. **Proof:** quote "Proof so far" with its level and its limit. A cold run is one run, so call it one run. The full evidence for each skill is in `evaluations/<skill-name>.md`.
-4. **Install:** give the command under "Install in one command" with the skill's name, and what it needs.
+1. **What it is:** 11 free skills for Claude Code and Codex. They make an agent check its work with real tools, stop for the user's yes, and say what is proven and what is not.
+2. **The picks:** 3 or 4 skills that fit the user, each with what it does in one line, from "What it does" in the full table. If you know nothing about the user, use the four under "Start here". If nothing fits, say so.
+3. **Proof:** for each pick, its level, its number and its limit, from "Proof so far". A cold run is one run, so call it one run. The full evidence is in `evaluations/<skill-name>.md`.
+4. **Install:** the command under "Install in one command" with the skill's name, plus what it needs. Add that no skill gives the agent new permission, and none may bypass MFA, CAPTCHA, passkeys or approval gates.
 
 The same facts as data are in [`catalog.json`](catalog.json): `best_for`, `proof.summary`, `proof.limit`, `use_when`, `try` and `requires` for every skill. [`llms.txt`](llms.txt) is the short index. [`AGENTS.md`](AGENTS.md) has install steps with a check for each one.
 
