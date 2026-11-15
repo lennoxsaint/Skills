@@ -1,0 +1,43 @@
+name: Share a result
+description: Tell me how a skill worked, or broke, on your real work.
+title: "Result: "
+body:
+  - type: markdown
+    attributes:
+      value: Real results only. Please leave out private data, client names and keys.
+  - type: dropdown
+    id: skill
+    attributes:
+      label: Which skill?
+      options:
+        - Finish Work
+        - Ambitious
+        - Adversarial Review
+        - Hill Climb
+        - T3 Code Conductor
+        - Claude Conductor
+        - Loop
+        - Strategy Prompt
+        - Save 10%
+        - Goal
+        - Email Triage Pro
+        - Something else
+    validations:
+      required: true
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: What you asked for, what the skill did, and what changed. Give numbers only if you measured them.
+    validations:
+      required: true
+  - type: dropdown
+    id: quote
+    attributes:
+      label: May I quote you in the README?
+      options:
+        - Yes, with my GitHub name
+        - Yes, without my name
+        - No
+    validations:
+      required: true

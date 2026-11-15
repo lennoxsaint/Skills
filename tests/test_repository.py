@@ -208,6 +208,19 @@ class PublicRepositoryTests(unittest.TestCase):
             self.assertIn(entry["proof"]["limit"], text, entry["name"])
             self.assertIn(entry["best_for"], text, entry["name"])
 
+    def test_star_rule_and_result_form_tell_one_story(self):
+        catalog = json.loads((REPO_ROOT / "catalog.json").read_text(encoding="utf-8"))
+        command = catalog["star"]["command"]
+        for name in ("README.md", "AGENTS.md", "llms.txt"):
+            text = (REPO_ROOT / name).read_text(encoding="utf-8")
+            self.assertIn(command, text, name)
+            self.assertIn("Want me to star the repo?", text, name)
+            self.assertIn("ban automated starring", text, name)
+        self.assertIn(catalog["share_a_result"], (REPO_ROOT / "README.md").read_text(encoding="utf-8"))
+        form = (REPO_ROOT / ".github" / "ISSUE_TEMPLATE" / "share-a-result.yml").read_text(encoding="utf-8")
+        for entry in catalog["skills"]:
+            self.assertIn(f"        - {entry['display_name']}\n", form)
+
     def test_readme_diagrams_match_the_catalog(self):
         result = subprocess.run(
             [sys.executable, str(REPO_ROOT / "scripts" / "build_readme_art.py"), "--check"],

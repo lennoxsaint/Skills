@@ -11,6 +11,8 @@ What changed in this repository, newest first. Each skill also keeps its own not
 - **Diagrams drawn from the data.** `scripts/build_readme_art.py` draws the README diagrams in light and dark from `catalog.json`. CI fails if they are out of date.
 - **Answer path for visiting agents.** `AGENTS.md` and the README's "For agents" section say how to answer "what's good here?" from the repository, with the proof quoted at its real level.
 - **Hill Climb needs, corrected.** Its default judges use both Claude Code and Codex. `catalog.json` said either one was enough.
+- **Stars and results, asked for plainly.** A live star badge sits at the top of the README, and two short asks invite a star from people a skill helped. Visiting agents offer the star once and star only after their user says yes (`catalog.json` `star`). A new issue form, "Share a result", collects real results; the README shows no user quotes until there are real ones.
+- **Eddy Studio in "Who made this".** One short block on Lennox's Mac video app, beside the Threadify link.
 - **Guides in sentence case.** The guides in `docs/` now use normal sentence case, and a few phrases that read as filler were rewritten. Facts, numbers and commands are unchanged.
 
 ## 12 Nov 2026
