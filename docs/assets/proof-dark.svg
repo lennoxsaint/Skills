@@ -1,0 +1,113 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="440" height="1231" viewBox="0 0 440 1231" role="img" aria-labelledby="t d">
+<title id="t">Proof so far, by skill</title>
+<desc id="d">Ambitious: Blind A/B test, 7.06 vs 6.00 (blind A/B, older 1.2.3 body). Finish Work: Outside review, 72 → 95 (outside review score, 3 rounds). Hill Climb: Outside review, 261/261 (runner self-test checks). T3 Code Conductor: Outside review, 6/6 (right calls in a cold run). Claude Conductor: Outside review, 5/6 (right calls in a cold run). Adversarial Review: Tested, 3/3 (planted faults found). Loop: Tested, 26 → 100 (self-scored, one cold run). Strategy Prompt: Tested, 6/6 (sections present, math rechecked). Save 10%: Tested, 37 tests (plus 40/40 trigger check). Goal: Spec only, 12 cases (expected results, no run published). Email Triage Pro: Spec only, 10 cases (expected results, no run published).</desc>
+<rect x="1" y="1" width="438" height="1229" rx="20" fill="#0d1117" stroke="#3d444d" stroke-width="2"/>
+<text x="32" y="54" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif" font-size="16" font-weight="600" fill="#9198a1" text-anchor="start">PROOF SO FAR</text>
+<text x="32" y="94" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif" font-size="26" font-weight="700" fill="#f0f6fc" text-anchor="start">Every skill lists its</text>
+<text x="32" y="128" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif" font-size="26" font-weight="700" fill="#f0f6fc" text-anchor="start">evidence and its limits</text>
+<circle cx="38" cy="170" r="5" fill="#3fb950"/>
+<circle cx="51" cy="170" r="5" fill="#3fb950"/>
+<circle cx="64" cy="170" r="5" fill="#3fb950"/>
+<circle cx="77" cy="170" r="5" fill="#3fb950"/>
+<text x="90" y="176" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif" font-size="17" font-weight="600" fill="#f0f6fc" text-anchor="start">Blind A/B test</text>
+<circle cx="234" cy="170" r="5" fill="#4493f8"/>
+<circle cx="247" cy="170" r="5" fill="#4493f8"/>
+<circle cx="260" cy="170" r="5" fill="#4493f8"/>
+<circle cx="273" cy="170" r="5" fill="#3d444d"/>
+<text x="286" y="176" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif" font-size="17" font-weight="600" fill="#f0f6fc" text-anchor="start">Outside review</text>
+<circle cx="38" cy="202" r="5" fill="#d29922"/>
+<circle cx="51" cy="202" r="5" fill="#d29922"/>
+<circle cx="64" cy="202" r="5" fill="#3d444d"/>
+<circle cx="77" cy="202" r="5" fill="#3d444d"/>
+<text x="90" y="208" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif" font-size="17" font-weight="600" fill="#f0f6fc" text-anchor="start">Tested</text>
+<circle cx="234" cy="202" r="5" fill="#9198a1"/>
+<circle cx="247" cy="202" r="5" fill="#3d444d"/>
+<circle cx="260" cy="202" r="5" fill="#3d444d"/>
+<circle cx="273" cy="202" r="5" fill="#3d444d"/>
+<text x="286" y="208" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif" font-size="17" font-weight="600" fill="#f0f6fc" text-anchor="start">Spec only</text>
+<line x1="32" y1="230" x2="408" y2="230" stroke="#3d444d" stroke-width="1.5"/>
+<rect x="18" y="250" width="404" height="65" rx="10" fill="#151b23"/>
+<text x="32" y="280" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif" font-size="21" font-weight="700" fill="#f0f6fc" text-anchor="start">Ambitious</text>
+<text x="408" y="280" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif" font-size="22" font-weight="700" fill="#3fb950" text-anchor="end">7.06 vs 6.00</text>
+<circle cx="351" cy="300" r="6" fill="#3fb950"/>
+<circle cx="368" cy="300" r="6" fill="#3fb950"/>
+<circle cx="385" cy="300" r="6" fill="#3fb950"/>
+<circle cx="402" cy="300" r="6" fill="#3fb950"/>
+<text x="32" y="307" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif" font-size="17" font-weight="400" fill="#9198a1" text-anchor="start">blind A/B, older 1.2.3 body</text>
+<text x="32" y="363" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif" font-size="21" font-weight="700" fill="#f0f6fc" text-anchor="start">Finish Work</text>
+<text x="408" y="363" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif" font-size="22" font-weight="700" fill="#4493f8" text-anchor="end">72 → 95</text>
+<circle cx="351" cy="383" r="6" fill="#4493f8"/>
+<circle cx="368" cy="383" r="6" fill="#4493f8"/>
+<circle cx="385" cy="383" r="6" fill="#4493f8"/>
+<circle cx="402" cy="383" r="6" fill="#3d444d"/>
+<text x="32" y="390" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif" font-size="17" font-weight="400" fill="#9198a1" text-anchor="start">outside review score, 3 rounds</text>
+<rect x="18" y="416" width="404" height="65" rx="10" fill="#151b23"/>
+<text x="32" y="446" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif" font-size="21" font-weight="700" fill="#f0f6fc" text-anchor="start">Hill Climb</text>
+<text x="408" y="446" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif" font-size="22" font-weight="700" fill="#4493f8" text-anchor="end">261/261</text>
+<circle cx="351" cy="466" r="6" fill="#4493f8"/>
+<circle cx="368" cy="466" r="6" fill="#4493f8"/>
+<circle cx="385" cy="466" r="6" fill="#4493f8"/>
+<circle cx="402" cy="466" r="6" fill="#3d444d"/>
+<text x="32" y="473" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif" font-size="17" font-weight="400" fill="#9198a1" text-anchor="start">runner self-test checks</text>
+<text x="32" y="529" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif" font-size="21" font-weight="700" fill="#f0f6fc" text-anchor="start">T3 Code Conductor</text>
+<text x="408" y="529" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif" font-size="22" font-weight="700" fill="#4493f8" text-anchor="end">6/6</text>
+<circle cx="351" cy="549" r="6" fill="#4493f8"/>
+<circle cx="368" cy="549" r="6" fill="#4493f8"/>
+<circle cx="385" cy="549" r="6" fill="#4493f8"/>
+<circle cx="402" cy="549" r="6" fill="#3d444d"/>
+<text x="32" y="556" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif" font-size="17" font-weight="400" fill="#9198a1" text-anchor="start">right calls in a cold run</text>
+<rect x="18" y="582" width="404" height="65" rx="10" fill="#151b23"/>
+<text x="32" y="612" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif" font-size="21" font-weight="700" fill="#f0f6fc" text-anchor="start">Claude Conductor</text>
+<text x="408" y="612" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif" font-size="22" font-weight="700" fill="#4493f8" text-anchor="end">5/6</text>
+<circle cx="351" cy="632" r="6" fill="#4493f8"/>
+<circle cx="368" cy="632" r="6" fill="#4493f8"/>
+<circle cx="385" cy="632" r="6" fill="#4493f8"/>
+<circle cx="402" cy="632" r="6" fill="#3d444d"/>
+<text x="32" y="639" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif" font-size="17" font-weight="400" fill="#9198a1" text-anchor="start">right calls in a cold run</text>
+<text x="32" y="695" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif" font-size="21" font-weight="700" fill="#f0f6fc" text-anchor="start">Adversarial Review</text>
+<text x="408" y="695" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif" font-size="22" font-weight="700" fill="#d29922" text-anchor="end">3/3</text>
+<circle cx="351" cy="715" r="6" fill="#d29922"/>
+<circle cx="368" cy="715" r="6" fill="#d29922"/>
+<circle cx="385" cy="715" r="6" fill="#3d444d"/>
+<circle cx="402" cy="715" r="6" fill="#3d444d"/>
+<text x="32" y="722" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif" font-size="17" font-weight="400" fill="#9198a1" text-anchor="start">planted faults found</text>
+<rect x="18" y="748" width="404" height="65" rx="10" fill="#151b23"/>
+<text x="32" y="778" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif" font-size="21" font-weight="700" fill="#f0f6fc" text-anchor="start">Loop</text>
+<text x="408" y="778" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif" font-size="22" font-weight="700" fill="#d29922" text-anchor="end">26 → 100</text>
+<circle cx="351" cy="798" r="6" fill="#d29922"/>
+<circle cx="368" cy="798" r="6" fill="#d29922"/>
+<circle cx="385" cy="798" r="6" fill="#3d444d"/>
+<circle cx="402" cy="798" r="6" fill="#3d444d"/>
+<text x="32" y="805" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif" font-size="17" font-weight="400" fill="#9198a1" text-anchor="start">self-scored, one cold run</text>
+<text x="32" y="861" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif" font-size="21" font-weight="700" fill="#f0f6fc" text-anchor="start">Strategy Prompt</text>
+<text x="408" y="861" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif" font-size="22" font-weight="700" fill="#d29922" text-anchor="end">6/6</text>
+<circle cx="351" cy="881" r="6" fill="#d29922"/>
+<circle cx="368" cy="881" r="6" fill="#d29922"/>
+<circle cx="385" cy="881" r="6" fill="#3d444d"/>
+<circle cx="402" cy="881" r="6" fill="#3d444d"/>
+<text x="32" y="888" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif" font-size="17" font-weight="400" fill="#9198a1" text-anchor="start">sections present, math rechecked</text>
+<rect x="18" y="914" width="404" height="65" rx="10" fill="#151b23"/>
+<text x="32" y="944" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif" font-size="21" font-weight="700" fill="#f0f6fc" text-anchor="start">Save 10%</text>
+<text x="408" y="944" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif" font-size="22" font-weight="700" fill="#d29922" text-anchor="end">37 tests</text>
+<circle cx="351" cy="964" r="6" fill="#d29922"/>
+<circle cx="368" cy="964" r="6" fill="#d29922"/>
+<circle cx="385" cy="964" r="6" fill="#3d444d"/>
+<circle cx="402" cy="964" r="6" fill="#3d444d"/>
+<text x="32" y="971" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif" font-size="17" font-weight="400" fill="#9198a1" text-anchor="start">plus 40/40 trigger check</text>
+<text x="32" y="1027" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif" font-size="21" font-weight="700" fill="#f0f6fc" text-anchor="start">Goal</text>
+<text x="408" y="1027" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif" font-size="22" font-weight="700" fill="#9198a1" text-anchor="end">12 cases</text>
+<circle cx="351" cy="1047" r="6" fill="#9198a1"/>
+<circle cx="368" cy="1047" r="6" fill="#3d444d"/>
+<circle cx="385" cy="1047" r="6" fill="#3d444d"/>
+<circle cx="402" cy="1047" r="6" fill="#3d444d"/>
+<text x="32" y="1054" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif" font-size="17" font-weight="400" fill="#9198a1" text-anchor="start">expected results, no run published</text>
+<rect x="18" y="1080" width="404" height="65" rx="10" fill="#151b23"/>
+<text x="32" y="1110" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif" font-size="21" font-weight="700" fill="#f0f6fc" text-anchor="start">Email Triage Pro</text>
+<text x="408" y="1110" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif" font-size="22" font-weight="700" fill="#9198a1" text-anchor="end">10 cases</text>
+<circle cx="351" cy="1130" r="6" fill="#9198a1"/>
+<circle cx="368" cy="1130" r="6" fill="#3d444d"/>
+<circle cx="385" cy="1130" r="6" fill="#3d444d"/>
+<circle cx="402" cy="1130" r="6" fill="#3d444d"/>
+<text x="32" y="1137" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif" font-size="17" font-weight="400" fill="#9198a1" text-anchor="start">expected results, no run published</text>
+<text x="32" y="1197" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif" font-size="15" font-weight="400" fill="#9198a1" text-anchor="start">Numbers come from catalog.json and evaluations/.</text>
+</svg>

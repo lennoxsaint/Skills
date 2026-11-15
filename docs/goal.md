@@ -41,7 +41,7 @@ Ask for a Claude goal prompt and provide the plan. Goal returns one paste-ready 
 
 The goal contract should stay stable while the work runs. Progress changes often. Keeping them separate means the owner can steer the outcome without turning the contract into a running diary.
 
-The active thread remains the highest authority. Codex re-reads the goal before checkpoints and live actions, records the goal hash it used, and changes strategy after repeated failures instead of looping forever.
+The active thread remains the highest authority. Codex re-reads the goal before checkpoints and live actions, records the goal hash it used, and changes strategy after repeated failures.
 
 ## Safety
 

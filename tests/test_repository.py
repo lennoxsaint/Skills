@@ -11,6 +11,18 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 CLI = REPO_ROOT / "scripts" / "skills.py"
 
 
+
+def readme_needs_mismatches(readme, catalog):
+    """Names of skills whose own README table row has a Needs cell that differs from catalog.json."""
+    bad = []
+    for entry in catalog["skills"]:
+        prefix = f"| [{entry['display_name']}]({entry['path']}/SKILL.md) |"
+        rows = [line for line in readme.splitlines() if line.startswith(prefix)]
+        cells = [cell.strip() for cell in rows[0].strip("|").split(" | ")] if len(rows) == 1 else []
+        if len(cells) < 2 or cells[-2] != entry["requires"]:
+            bad.append(entry["name"])
+    return bad
+
 class PublicRepositoryTests(unittest.TestCase):
     def run_cli(self, *args, check=True):
         return subprocess.run(
@@ -149,6 +161,82 @@ class PublicRepositoryTests(unittest.TestCase):
             self.assertEqual(len(matches), 1, entry["name"])
             self.assertIn(f'Try: "{entry["try"]}"', matches[0], entry["name"])
             self.assertIn(f"Needs: {entry['requires']}.", matches[0], entry["name"])
+
+    def test_every_catalog_entry_carries_proof_an_agent_can_quote(self):
+        catalog = json.loads((REPO_ROOT / "catalog.json").read_text(encoding="utf-8"))
+        levels = set(catalog["proof_levels"])
+        self.assertEqual(levels, {"blind-ab", "outside-review", "tested", "spec"})
+        names = {entry["name"] for entry in catalog["skills"]}
+        self.assertTrue(set(catalog["start_here"]) <= names)
+        readme = (REPO_ROOT / "README.md").read_text(encoding="utf-8")
+        evaluation_index = (REPO_ROOT / "EVALUATION.md").read_text(encoding="utf-8")
+        for entry in catalog["skills"]:
+            proof = entry["proof"]
+            self.assertIn(proof["level"], levels, entry["name"])
+            for key in ("headline", "caption", "summary", "limit"):
+                self.assertTrue(proof[key].strip(), f"{entry['name']}: proof.{key}")
+            self.assertTrue(entry["best_for"].strip(), entry["name"])
+            self.assertIn(f"]({entry['evaluation']})", readme, entry["name"])
+            self.assertIn(proof["headline"], evaluation_index, entry["name"])
+
+    def test_readme_needs_cell_matches_each_skills_own_catalog_entry(self):
+        catalog = json.loads((REPO_ROOT / "catalog.json").read_text(encoding="utf-8"))
+        readme = (REPO_ROOT / "README.md").read_text(encoding="utf-8")
+        self.assertEqual(readme_needs_mismatches(readme, catalog), [])
+        # A README with two skills' needs swapped must fail.
+        first, second = catalog["skills"][0], catalog["skills"][1]
+        swapped = readme.replace(f"| {first['requires']} |", "| @@FIRST@@ |").replace(
+            f"| {second['requires']} |", f"| {first['requires']} |").replace("| @@FIRST@@ |", f"| {second['requires']} |")
+        self.assertEqual(
+            sorted(readme_needs_mismatches(swapped, catalog)), sorted([first["name"], second["name"]]))
+
+    def test_readme_keeps_the_original_try_saying_prompts(self):
+        readme = (REPO_ROOT / "README.md").read_text(encoding="utf-8")
+        for prompt in (
+            "Finish this properly.", "Go above and beyond on this.", "Red-team this plan.",
+            "Hill climb this until 90% of the cases pass.", "Be my T3 conductor.", "Conduct my Claude sessions.",
+            "Loop this until it's 100/100.", "Steelman both sides and score them.", "Find 10% in safe savings.",
+            "Turn this plan into a goal.", "Triage my Gmail.",
+        ):
+            self.assertIn(f'"{prompt}"', readme)
+
+    def test_llms_txt_carries_each_skill_with_its_proof(self):
+        catalog = json.loads((REPO_ROOT / "catalog.json").read_text(encoding="utf-8"))
+        text = (REPO_ROOT / "llms.txt").read_text(encoding="utf-8")
+        for entry in catalog["skills"]:
+            self.assertIn(entry["proof"]["summary"], text, entry["name"])
+            self.assertIn(entry["proof"]["limit"], text, entry["name"])
+            self.assertIn(entry["best_for"], text, entry["name"])
+
+    def test_star_rule_and_result_form_tell_one_story(self):
+        catalog = json.loads((REPO_ROOT / "catalog.json").read_text(encoding="utf-8"))
+        command = catalog["star"]["command"]
+        for name in ("README.md", "AGENTS.md", "llms.txt"):
+            text = (REPO_ROOT / name).read_text(encoding="utf-8")
+            self.assertIn(command, text, name)
+            self.assertIn("Want me to star the repo?", text, name)
+            self.assertIn("ban automated starring", text, name)
+        self.assertIn(catalog["share_a_result"], (REPO_ROOT / "README.md").read_text(encoding="utf-8"))
+        form = (REPO_ROOT / ".github" / "ISSUE_TEMPLATE" / "share-a-result.yml").read_text(encoding="utf-8")
+        for entry in catalog["skills"]:
+            self.assertIn(f"        - {entry['display_name']}\n", form)
+        # GitHub rejects issue forms whose options YAML reads as true/false, such as a bare No.
+        bare_bools = {"y", "n", "yes", "no", "true", "false", "on", "off"}
+        options = [line.strip()[2:] for line in form.splitlines() if line.startswith("        - ")]
+        self.assertTrue(options)
+        for option in options:
+            self.assertNotIn(option.lower(), bare_bools, f"quote the option {option!r}")
+
+    def test_readme_diagrams_match_the_catalog(self):
+        result = subprocess.run(
+            [sys.executable, str(REPO_ROOT / "scripts" / "build_readme_art.py"), "--check"],
+            cwd=REPO_ROOT, capture_output=True, text=True,
+        )
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        readme = (REPO_ROOT / "README.md").read_text(encoding="utf-8")
+        for name in ("how-it-works", "proof"):
+            for theme in ("light", "dark"):
+                self.assertIn(f"docs/assets/{name}-{theme}.svg", readme)
 
     def run_cli_with_homes(self, home, *args, check=True):
         environment = dict(os.environ)
