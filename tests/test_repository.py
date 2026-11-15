@@ -220,6 +220,12 @@ class PublicRepositoryTests(unittest.TestCase):
         form = (REPO_ROOT / ".github" / "ISSUE_TEMPLATE" / "share-a-result.yml").read_text(encoding="utf-8")
         for entry in catalog["skills"]:
             self.assertIn(f"        - {entry['display_name']}\n", form)
+        # GitHub rejects issue forms whose options YAML reads as true/false, such as a bare No.
+        bare_bools = {"y", "n", "yes", "no", "true", "false", "on", "off"}
+        options = [line.strip()[2:] for line in form.splitlines() if line.startswith("        - ")]
+        self.assertTrue(options)
+        for option in options:
+            self.assertNotIn(option.lower(), bare_bools, f"quote the option {option!r}")
 
     def test_readme_diagrams_match_the_catalog(self):
         result = subprocess.run(

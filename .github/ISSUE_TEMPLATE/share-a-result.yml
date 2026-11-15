@@ -36,8 +36,8 @@ body:
     attributes:
       label: May I quote you in the README?
       options:
-        - Yes, with my GitHub name
-        - Yes, without my name
-        - No
+        - "Yes, with my GitHub name"
+        - "Yes, without my name"
+        - "No"
     validations:
       required: true
