@@ -58,4 +58,4 @@ Each line gives what the skill is best for, what it does, when to use it, its pr
 ## Made by
 
 - [Lennox Saint](https://github.com/lennoxsaint). He builds [Threadify](https://www.threadify.app/home?utm_source=github&utm_medium=readme&utm_campaign=skills_repo&utm_content=who_made_this).
-- [Eddy Studio](https://eddystudio.ai/?utm_source=github&utm_medium=readme&utm_campaign=skills_repo&utm_content=who_made_this): his Mac app, in beta, that edits your videos for you. Drag in your raw takes, get back a finished YouTube video. It runs on your own ChatGPT or Claude, and it never uploads anything on its own.
+- [Eddy Studio](https://eddystudio.ai/?utm_source=github&utm_medium=readme&utm_campaign=skills_repo&utm_content=who_made_this): his Mac app, in beta, that edits your YouTube recordings for you. It's Claude Code for video editing, but the first edit starts without a prompt. It runs on your own ChatGPT or Claude, and it never uploads anything on its own.

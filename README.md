@@ -208,6 +208,6 @@ There are no user quotes on this page yet, because I only post real ones. If a s
 
 I'm Lennox. I build [Threadify](https://www.threadify.app/home?utm_source=github&utm_medium=readme&utm_campaign=skills_repo&utm_content=who_made_this), and I run these skills on my own work before I put them here.
 
-I also make [Eddy Studio](https://eddystudio.ai/?utm_source=github&utm_medium=readme&utm_campaign=skills_repo&utm_content=who_made_this), a Mac app in beta that edits your videos for you. Drag in your raw takes, get back a finished YouTube video. It runs on your own ChatGPT or Claude. Same rule as these skills: it never uploads anything on its own.
+I also make [Eddy Studio](https://eddystudio.ai/?utm_source=github&utm_medium=readme&utm_campaign=skills_repo&utm_content=who_made_this), a Mac app in beta that edits your YouTube recordings for you. It's Claude Code for video editing, but the first edit starts without a prompt. It runs on your own ChatGPT or Claude. Same rule as these skills: it never uploads anything on its own.
 
 Licensed under MIT.
