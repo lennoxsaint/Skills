@@ -52,7 +52,7 @@ Use one when a thread's run ended with its goal unmet and the next step is the o
 - `--link`: the proof, one `https://` link per outcome, in the same order.
 - `--yes`: the next step.
 
-Add only proven outcomes: merged, deployed, checked, published, delivered. A prompt sent is not an outcome. The whole summary fits in the 1,200 characters of `why`; a longer history goes behind a link.
+Add only proven outcomes: merged, deployed, checked, published, delivered. A prompt sent is not an outcome. The whole summary fits in the 1,200 characters of `why`; longer detail goes behind a link.
 
 ```bash
 python3 $D add c-pricing-lane --title "Put the pricing page live on Friday?" \

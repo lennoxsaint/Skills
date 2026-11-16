@@ -245,7 +245,7 @@
         "headline": "6/6",
         "caption": "right calls in a cold run",
         "summary": "12 of 12 helper tests pass. In one cold run it made the expected call on 6 of 6 threads. Outside review and a cold install from GitHub were done before merge.",
-        "limit": "One cold run on made-up threads."
+        "limit": "One cold run on made-up threads. The 1.1.0 settle-on-the-goal rule has not run in a forward test."
       }
     },
     {
@@ -272,7 +272,7 @@
         "headline": "5/6",
         "caption": "right calls in a cold run",
         "summary": "In one cold run it made the expected call on 5 of 6 threads and partly on the sixth. Outside review and a cold install from GitHub were done before merge.",
-        "limit": "One cold run on made-up threads; no unit tests of its own."
+        "limit": "One cold run on made-up threads; no unit tests of its own. The 1.1.0 settle-on-the-goal rule has not run in a forward test."
       }
     },
     {
