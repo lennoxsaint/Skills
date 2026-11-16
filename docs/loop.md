@@ -18,6 +18,8 @@ It works on local things: a post, an email, a script, a thumbnail, a carousel, a
 
 It is not for long jobs that need a number you can prove. The loop grades its own work. For a locked test set and outside judges, use [Hill Climb](hill-climb.md).
 
+See also [Council](council.md): reviewers from three AI labs score the work instead of the agent grading itself.
+
 ## How a loop works
 
 1. **Find the truth.** The draft, and the facts it is allowed to use.

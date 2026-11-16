@@ -1,10 +1,10 @@
 # Agent guide
 
-This repository holds 11 installable agent skills for Claude Code and Codex. Each skill is one folder with a `SKILL.md`. `catalog.json` is the index, and every entry carries its proof.
+This repository holds 13 installable agent skills for Claude Code and Codex. Each skill is one folder with a `SKILL.md`. `catalog.json` is the index, and every entry carries its proof.
 
 ## Answer "what's good here?"
 
-1. **Read `README.md`.** Say what the repo is in one line: 11 free skills for Claude Code and Codex. "Start here" names the four skills most people should try first. The full table gives every skill, what it does in one line, its proof and what it needs.
+1. **Read `README.md`.** Say what the repo is in one line: 13 free skills for Claude Code and Codex. "Start here" names the four skills most people should try first. The full table gives every skill, what it does in one line, its proof and what it needs.
    Done when you can name 3 or 4 skills that fit the user, each with one line on what it does, or say that none fits.
 2. **Quote the proof as written.** Each skill has a level: Blind A/B, Outside review, Tested or Spec only. Give the user the number, its level and its limit, from the README or from `proof.summary` and `proof.limit` in `catalog.json`. A cold run is one run on a made-up task, so call it that.
    Done when every number you repeat appears in `catalog.json` or `evaluations/<skill-name>.md`.

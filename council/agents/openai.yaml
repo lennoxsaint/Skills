@@ -1,0 +1,8 @@
+interface:
+  display_name: "Council"
+  short_description: "Three AI labs review and loop until every one would ship it"
+  brand_color: "#0F766E"
+  default_prompt: "Use $council 9 on this: "
+
+policy:
+  allow_implicit_invocation: true
