@@ -1,0 +1,8 @@
+interface:
+  display_name: "Ship-ready"
+  short_description: "Finish, prove, pass council, stage the go, then stop"
+  brand_color: "#4F46E5"
+  default_prompt: "Use $ship-ready on this task, council 9: "
+
+policy:
+  allow_implicit_invocation: true

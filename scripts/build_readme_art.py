@@ -45,7 +45,7 @@ LEVEL_DOTS = {"blind-ab": 4, "outside-review": 3, "tested": 2, "spec": 1}
 STEPS = [
     ("Do the work", "on your real files, data and pages", "every skill"),
     ("Check it for real", "tests, renders, a re-read of what went live", "Finish Work, Ambitious, Hill Climb"),
-    ("Get a second opinion", "a second AI, usually another model, scores it", "Ambitious, Hill Climb, Adversarial Review"),
+    ("Get a second opinion", "a second AI, usually another model, scores it", "Ambitious, Hill Climb, Adversarial Review, Council"),
     ("Wait for your yes", "before it sends, posts, buys or deploys", "every skill"),
 ]
 

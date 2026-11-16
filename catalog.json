@@ -141,6 +141,60 @@
       }
     },
     {
+      "name": "council",
+      "display_name": "Council",
+      "path": "council",
+      "status": "stable",
+      "version": "1.0.0",
+      "summary": "Have reviewers from three AI labs score the exact same version, fix what they prove, and loop until every one would ship it, the loop stalls, or it is blocked.",
+      "use_when": "The user wants work reviewed by models from several AI labs before it goes out (\"council\", \"council 9.5\", \"model council\", \"get the models to agree\"), or a hard decision put to several labs. Not for one reviewer against a 100-point rubric: use adversarial-review.",
+      "try": "Council 9 on this PR: have three labs review it and loop until they would all ship it.",
+      "hosts": [
+        "claude",
+        "codex"
+      ],
+      "requires": "Reviewers from three AI labs the agent can reach: T3 Code's delegate_task, or lab CLIs such as Codex, Claude Code and Gemini CLI",
+      "docs": "docs/council.md",
+      "evaluation": "evaluations/council.md",
+      "examples": "examples/council",
+      "trigger_cases": "tests/council/trigger-cases.json",
+      "best_for": "Getting three AI labs to sign off before work goes out.",
+      "proof": {
+        "level": "outside-review",
+        "headline": "5 → 7.5",
+        "caption": "lowest seat score, 5-round self-review",
+        "summary": "Three seats from three labs reviewed the skill's own text for 5 rounds at bar 9. The lowest score rose from 5 to 7.5, and distinct findings fell from 24 in round 1 to 3 in round 5. It tapped out: two seats said SHIP at 9/9 and one stayed at 7.5/8. The final two-line fix went to a single-seat confirm by the 7.5 seat, which then scored 9/9 SHIP with no new findings.",
+        "limit": "A self-review of its own text, not a real task; one run; the scores are model judgments."
+      }
+    },
+    {
+      "name": "ship-ready",
+      "display_name": "Ship-ready",
+      "path": "ship-ready",
+      "status": "stable",
+      "version": "1.0.0",
+      "summary": "Take a task to ready-to-go: do the work, prove it as its audience will meet it, pass council, stage the send, publish or merge, then stop one tap before it goes out.",
+      "use_when": "The user hands off work with a public consequence and wants it back ready for one go (\"ship-ready\", \"full stop\", \"don't come back until it's ready to send\"). Not for a quick draft, or for the send or merge itself.",
+      "try": "Ship-ready: fix this bug, prove it, pass council 9, and stop before the merge.",
+      "hosts": [
+        "claude",
+        "codex"
+      ],
+      "requires": "The council skill and its three-lab reviewers; git and a GitHub CLI or connector for code",
+      "docs": "docs/ship-ready.md",
+      "evaluation": "evaluations/ship-ready.md",
+      "examples": "examples/ship-ready",
+      "trigger_cases": "tests/ship-ready/trigger-cases.json",
+      "best_for": "Handing off a task and getting it back ready for one tap.",
+      "proof": {
+        "level": "spec",
+        "headline": "10 cases",
+        "caption": "expected results, no run published",
+        "summary": "Its 10 cases are expected results, with no run published. Its text went through the same five-round, three-lab council as Council.",
+        "limit": "Never yet run end to end on a real task."
+      }
+    },
+    {
       "name": "hill-climb",
       "display_name": "Hill Climb",
       "path": "hill-climb",

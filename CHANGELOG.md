@@ -2,6 +2,17 @@
 
 What changed in this repository, newest first. Each skill also keeps its own notes in `docs/<skill-name>.md`.
 
+## 16 Nov 2026
+
+**Added**
+
+- **Council 1.0.0.** New skill. Reviewers from three AI labs score the exact same version, the agent fixes what they prove, and the loop repeats until every reviewer would ship it, the loop stalls, or it is blocked. It keeps a fingerprint of each version, a scope guard on growth, and a round budget, and it stops one step before anything goes out. Its text went through five rounds of its own council before release. See the [guide](docs/council.md) and the [evaluation](evaluations/council.md).
+- **Ship-ready 1.0.0.** New skill. It takes a task to ready-to-go: does the work, proves it, passes Council, stages the send, publish or merge, and hands back one message. It has not yet run end to end on a real task. See the [guide](docs/ship-ready.md) and the [evaluation](evaluations/ship-ready.md).
+
+**Changed**
+
+- **Skill count to 13** in the README, `AGENTS.md` and `llms.txt`. The guides for Loop and Adversarial Review now point to Council. Neither skill's own text changed, so their versions stay at 1.0.0.
+
 ## 15 Nov 2026
 
 **Changed**

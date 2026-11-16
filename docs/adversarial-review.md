@@ -15,6 +15,8 @@ It runs when you ask for it:
 
 It reviews the thing you asked about: an answer, a plan, a workflow, a skill, a piece of code. It does not quietly turn a review into building the thing.
 
+See also [Council](council.md): the same idea with reviewers from three AI labs at once, each scoring out of 10.
+
 ## How a review works
 
 1. **Freeze the contract.** A short brief, the exact draft, the source facts, a rubric that adds up to 100, and when to stop. The default bar is 90 out of 100 and the default budget is three rounds.
