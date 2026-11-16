@@ -2,6 +2,12 @@
 
 What changed in this repository, newest first. Each skill also keeps its own notes in `docs/<skill-name>.md`.
 
+## 17 Nov 2026
+
+**Changed**
+
+- **T3 Code Conductor 1.1.0 and Claude Conductor 1.1.0: settle on the goal, not the run.** A thread whose run ended is judged against the goal it was first given. A finished one is settled, one with work left gets its next step at once, and one that needs the owner goes to the review page with the goal, a dated summary of what was achieved with proof, and what is left. In T3 Code Conductor that is an outcomes card: an ordinary desk card whose `why` holds the goal, the outcomes and what is left, whose links hold the proof, and whose `yes` is the next step. An unfinished thread the owner started gets one too, and nothing is sent into it. Wording only: no code changed, and `desk.py` and its 12 tests are as they were. See the [T3 guide](docs/t3-code-conductor.md) and the [Claude guide](docs/claude-conductor.md).
+
 ## 16 Nov 2026
 
 **Added**

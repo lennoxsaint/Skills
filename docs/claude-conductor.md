@@ -63,4 +63,6 @@ A synthetic example lives in [`examples/claude-conductor/`](../examples/claude-c
 
 ## Changelog
 
+**1.1.0** (17 Nov 2026) - settle on the goal, not the run. When a thread's run ends, the conductor judges it against the goal it was first given: it marks a finished thread resolved, sends the next step at once when it may, or puts it on the review page with the goal, a dated list of what was achieved and what is left.
+
 **1.0.0** (12 Nov 2026) - first public release. This is the conductor I run on my own Claude Code threads, with my machines, accounts, thread names and private rules taken out. After a test with an agent that had never seen the skill, seven lines were made clearer: what to do with an action the contract neither allows nor forbids, how to rank threads, who arranges the independent review, what to tell a thread that waits on a protected action, how to judge a stale "running" badge, the full list of thread states, and where the cycle cursor lives.
