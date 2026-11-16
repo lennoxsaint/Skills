@@ -8,7 +8,7 @@ The author ran this method by hand in T3 Code before it was a skill. This is the
 
 ### The review page helper
 
-`scripts/test_desk.py` has 15 unit tests. All 15 pass locally, and CI runs them on every push. They cover:
+`scripts/test_desk.py` has 17 unit tests. All 17 pass locally, and CI runs them on every push. They cover:
 
 - `init` writes each file once and never overwrites one that exists
 - the ledger only appends, and one call cannot forge a second line
@@ -23,6 +23,8 @@ The author ran this method by hand in T3 Code before it was a skill. This is the
 - 1.1.0: an outcomes card keeps its goal and dated outcomes in order, and the page draws them as an escaped timeline with proof links
 - 1.1.0: `add` refuses an outcome with a bad date, no text, text over 140 characters, or more than 12 entries
 - 1.1.0: `lint` refuses local paths and `http://` proof links in the goal and outcomes
+- 1.1.0: `add` and `lint` share one outcome check, so a hand-edited `history` with an impossible date, a local path as its date, no text, the wrong shape or `null` fails `lint` without a crash, and `render` refuses
+- 1.1.0: `add` refuses a `|` inside outcome text, since `|` separates date, text and link
 
 ### Forward test
 

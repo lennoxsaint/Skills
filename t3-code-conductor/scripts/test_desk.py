@@ -131,12 +131,51 @@ class DeskTests(unittest.TestCase):
 
     def test_lint_catches_local_paths_and_plain_links_in_history(self):
         self.run_desk("add", "c-hpath", "--title", "T", "--yes", "Y", "--outcome", "2026-11-14|Saved to /Users/someone/out")
-        self.run_desk("add", "c-hlink", "--title", "T", "--yes", "Y", "--outcome", "2026-11-14|Built|http://example.com/run")
+        refused = self.run_desk("add", "c-hlink", "--title", "T", "--yes", "Y",
+                                "--outcome", "2026-11-14|Built|http://example.com/run", check=False)
+        self.assertEqual(refused.returncode, 1)
+        self.hand_edit("c-hlink", history=[{"at": "2026-11-14", "text": "Built", "link": "http://example.com/run"}])
         self.run_desk("add", "c-goal", "--title", "T", "--yes", "Y", "--goal", "Fix ~/notes.md")
         result = self.run_desk("lint", check=False)
         self.assertEqual(result.returncode, 1)
         for card_id in ("c-hpath", "c-hlink", "c-goal"):
             self.assertIn(card_id, result.stdout)
+
+    def hand_edit(self, card_id, **fields):
+        self.run_desk("add", card_id, "--title", "T", "--yes", "Y")
+        data = self.desk()
+        data["cards"][card_id].update(fields)
+        (self.folder / "desk.json").write_text(json.dumps(data), encoding="utf-8")
+
+    def test_hand_edited_history_is_held_to_the_same_rules(self):
+        bad = {
+            "c-path-at": [{"at": "/Users/example/private.txt", "text": "Built"}],
+            "c-feb30": [{"at": "2026-02-30", "text": "Built"}],
+            "c-hour25": [{"at": "2026-11-14 25:00", "text": "Built"}],
+            "c-long-at": [{"at": "2" * 4000, "text": "Built"}],
+            "c-no-text": [{"at": "2026-11-14"}],
+            "c-not-list": "broken",
+            "c-null": None,
+            "c-not-object": ["2026-11-14|Built"],
+        }
+        for card_id, history in bad.items():
+            self.hand_edit(card_id, history=history)
+        result = self.run_desk("lint", check=False)
+        self.assertEqual(result.returncode, 1)
+        self.assertNotIn("Traceback", result.stderr)
+        for card_id in bad:
+            self.assertIn(card_id, result.stdout)
+        render = self.run_desk("render", check=False)
+        self.assertEqual(render.returncode, 1)
+        self.assertNotIn("Traceback", render.stderr)
+        self.assertFalse((self.folder / "review.html").exists() and "private.txt" in (self.folder / "review.html").read_text(encoding="utf-8"))
+
+    def test_a_bar_inside_outcome_text_is_refused_at_add(self):
+        result = self.run_desk("add", "c-bar", "--title", "T", "--yes", "Y",
+                               "--outcome", "2026-11-14|Merged A | B|https://example.test/p", check=False)
+        self.assertEqual(result.returncode, 1)
+        self.assertIn("|", result.stderr)
+        self.assertEqual(self.desk()["cards"], {})
 
     def test_show_ranks_due_first_then_priority(self):
         self.run_desk("add", "c-later", "--title", "Later", "--yes", "y", "--priority", "1")

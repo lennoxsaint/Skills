@@ -51,7 +51,7 @@ A lane whose run ended has finished one turn, not its job. Its job is the goal i
 - **Goal not met, next step inside your authority:** send the next whole outcome now. A finished run with work left never waits for the next pass.
 - **Goal not met, next step is the owner's:** add an outcomes card to the desk: the goal, a dated list of what the thread achieved with proof links, what is left, and the one decision ([desk](references/desk.md#outcomes-cards)).
 
-A settled thread whose goal is unmet is reopened as a lane in the census. The owner's own threads are read, never steered: settle one only when its goal is met.
+A settled thread whose goal is unmet is reopened as a lane in the census. The owner's own threads are read, never steered, and judged the same way: when one's run ends with its goal unmet, its next step is the owner's, so it gets an outcomes card now and nothing is sent into it. Settle one only when its goal is met.
 
 ## Outside review before anything counts
 

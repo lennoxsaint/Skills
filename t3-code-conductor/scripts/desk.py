@@ -177,25 +177,59 @@ def cmd_ledger(args):
     return {"ledger": path, "line": text}
 
 
+def outcome_problems(entry):
+    """Every rule an outcome entry must meet, shared by `add` and `lint`."""
+    if not isinstance(entry, dict):
+        return ["an outcome must be an object with \"at\" and \"text\""]
+    at, text, link = entry.get("at"), entry.get("text"), entry.get("link") or ""
+    problems = []
+    if not isinstance(at, str) or not OUTCOME_AT.match(at):
+        problems.append(f"outcome date must be YYYY-MM-DD or YYYY-MM-DD HH:MM: {str(at)[:20]!r}")
+    else:
+        try:
+            dt.datetime.strptime(at, "%Y-%m-%d %H:%M" if " " in at else "%Y-%m-%d")
+        except ValueError:
+            problems.append(f"outcome date is not a real date: {at!r}")
+    if not isinstance(text, str) or not text.strip():
+        problems.append("an outcome needs its text")
+    elif len(text) > OUTCOME_TEXT:
+        problems.append(f"outcome text is {len(text)} characters; the limit is {OUTCOME_TEXT}")
+    if not isinstance(link, str):
+        problems.append("an outcome link must be text")
+    elif link and not link.startswith("https://"):
+        problems.append(f"outcome link must start with https://: {link[:60]!r}")
+    return problems
+
+
+def history_problems(history):
+    """Problems with a card's whole history; never raises on a hand-edited shape."""
+    if history in (None, []):
+        return [] if history == [] else ["history must be a list of outcomes"]
+    if not isinstance(history, list):
+        return ["history must be a list of outcomes"]
+    problems = []
+    if len(history) > OUTCOMES_MAX:
+        problems.append(f"has {len(history)} outcomes; the limit is {OUTCOMES_MAX}")
+    for entry in history:
+        problems += outcome_problems(entry)
+    return problems
+
+
 def parse_outcomes(entries):
-    """Each --outcome is "WHEN|WHAT" or "WHEN|WHAT|LINK", oldest first."""
+    """Each --outcome is "WHEN|WHAT" or "WHEN|WHAT|LINK", oldest first. "|" only separates."""
     if len(entries) > OUTCOMES_MAX:
         raise DeskError(f"{len(entries)} outcomes; the limit is {OUTCOMES_MAX}. Keep the ones that matter most")
     history = []
     for entry in entries:
+        if entry.count("|") > 2:
+            raise DeskError(f"an outcome may hold at most two '|' (WHEN|WHAT|LINK); reword the text without '|': {entry[:60]!r}")
         parts = [part.strip() for part in entry.split("|", 2)]
         at, text, link = (parts + ["", ""])[:3]
-        try:
-            if not OUTCOME_AT.match(at):
-                raise ValueError
-            dt.datetime.strptime(at, "%Y-%m-%d %H:%M" if " " in at else "%Y-%m-%d")
-        except ValueError as error:
-            raise DeskError(f"outcome date must be YYYY-MM-DD or YYYY-MM-DD HH:MM: {at[:20]!r}") from error
-        if not text:
-            raise DeskError("an outcome needs its text: \"WHEN|WHAT|LINK\"")
-        if len(text) > OUTCOME_TEXT:
-            raise DeskError(f"outcome text is {len(text)} characters; the limit is {OUTCOME_TEXT}")
-        history.append({"at": at, "text": text, "link": link})
+        outcome = {"at": at, "text": text, "link": link}
+        problems = outcome_problems(outcome)
+        if problems:
+            raise DeskError(problems[0])
+        history.append(outcome)
     return history
 
 
@@ -286,20 +320,18 @@ def lint_cards(data):
         if card.get("state") != "open":
             continue
         history = card.get("history", [])
-        history_links = [entry.get("link", "") for entry in history if entry.get("link")]
+        for problem in history_problems(history):
+            problems.append(f"{card_id}: {problem}")
+        entries = [entry for entry in history if isinstance(entry, dict)] if isinstance(history, list) else []
+        history_links = [entry.get("link") for entry in entries if isinstance(entry.get("link"), str) and entry.get("link")]
         visible = [card.get(field, "") for field in ("title", "why", "yes", "no", "goal")] + list(card.get("links", []))
-        visible += [entry.get("text", "") for entry in history] + history_links
+        visible += [str(entry.get(key) or "") for entry in entries for key in ("at", "text")] + history_links
         for value in visible:
             if LOCAL_PATH.search(value or ""):
                 problems.append(f"{card_id}: names a local path a phone cannot open: {value[:60]!r}")
-        for link in list(card.get("links", [])) + history_links:
+        for link in list(card.get("links", [])):
             if not link.startswith("https://"):
                 problems.append(f"{card_id}: link must start with https://: {link[:60]!r}")
-        if len(history) > OUTCOMES_MAX:
-            problems.append(f"{card_id}: has {len(history)} outcomes; the limit is {OUTCOMES_MAX}")
-        for entry in history:
-            if len(entry.get("text", "")) > OUTCOME_TEXT:
-                problems.append(f"{card_id}: an outcome is over {OUTCOME_TEXT} characters")
         for field, limit in LIMITS.items():
             if len(card.get(field, "") or "") > limit:
                 problems.append(f"{card_id}: {field} is over {limit} characters")

@@ -26,7 +26,7 @@ Before you add a card, make it a one-tap decision: the work done, the evidence r
 
 Use one when a thread's run ended with its goal unmet and the next step is the owner's. The page draws the goal, then a timeline of what was achieved with a proof link per step, then what is left, then the choice. The owner sees the whole story before one tap.
 
-Add only proven outcomes: merged, deployed, checked, published, delivered. A prompt sent is not an outcome. Put what is left and what each answer does in `why`.
+`|` separates the date, text and link, so outcome text cannot hold one. Add only proven outcomes: merged, deployed, checked, published, delivered. A prompt sent is not an outcome. Put what is left and what each answer does in `why`.
 
 ```bash
 python3 $D add c-pricing-lane --title "Put the pricing page live on Friday?" \
