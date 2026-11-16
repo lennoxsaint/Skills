@@ -170,6 +170,37 @@ class DeskTests(unittest.TestCase):
         self.assertNotIn("Traceback", render.stderr)
         self.assertFalse((self.folder / "review.html").exists() and "private.txt" in (self.folder / "review.html").read_text(encoding="utf-8"))
 
+    def test_hand_edited_fields_of_the_wrong_type_fail_lint_cleanly(self):
+        bad = {"c-goal-num": {"goal": 42}, "c-goal-list": {"goal": ["Ship"]}, "c-goal-dict": {"goal": {"text": "Ship"}},
+               "c-title-num": {"title": 7}, "c-links-str": {"links": "https://example.com"}, "c-links-null": {"links": None},
+               "c-due-num": {"due": 5}, "c-priority-str": {"priority": "high"}}
+        for card_id, fields in bad.items():
+            self.hand_edit(card_id, **fields)
+        result = self.run_desk("lint", check=False)
+        self.assertEqual(result.returncode, 1)
+        self.assertNotIn("Traceback", result.stderr)
+        for card_id in bad:
+            self.assertIn(card_id, result.stdout)
+        render = self.run_desk("render", check=False)
+        self.assertEqual(render.returncode, 1)
+        self.assertNotIn("Traceback", render.stderr)
+
+    def test_local_paths_after_any_punctuation_are_caught(self):
+        self.run_desk("add", "c-colon", "--title", "T", "--yes", "Y", "--goal", "Fix:/Users/example/private.txt")
+        self.run_desk("add", "c-bracket", "--title", "T", "--yes", "Y", "--outcome", "2026-11-14|Built [/Users/example/private.txt]")
+        self.run_desk("add", "c-tmp", "--title", "T", "--yes", "Y", "--why", "Saved at /tmp/run/out.txt")
+        self.run_desk("add", "c-volume", "--title", "Copy,/Volumes/Drive/x ok?", "--yes", "Y")
+        result = self.run_desk("lint", check=False)
+        self.assertEqual(result.returncode, 1)
+        for card_id in ("c-colon", "c-bracket", "c-tmp", "c-volume"):
+            self.assertIn(card_id, result.stdout)
+        self.assertEqual(self.run_desk("render", check=False).returncode, 1)
+
+    def test_https_links_that_mention_users_or_home_still_pass(self):
+        self.run_desk("add", "c-ok", "--title", "Ship the home page?", "--yes", "Y",
+                      "--link", "https://example.com/Users/guide", "--outcome", "2026-11-14|Merged|https://example.com/home/run/7")
+        self.run_desk("lint")
+
     def test_a_bar_inside_outcome_text_is_refused_at_add(self):
         result = self.run_desk("add", "c-bar", "--title", "T", "--yes", "Y",
                                "--outcome", "2026-11-14|Merged A | B|https://example.test/p", check=False)

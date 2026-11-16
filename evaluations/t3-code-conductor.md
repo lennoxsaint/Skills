@@ -8,7 +8,7 @@ The author ran this method by hand in T3 Code before it was a skill. This is the
 
 ### The review page helper
 
-`scripts/test_desk.py` has 17 unit tests. All 17 pass locally, and CI runs them on every push. They cover:
+`scripts/test_desk.py` has 20 unit tests. All 20 pass locally, and CI runs them on every push. They cover:
 
 - `init` writes each file once and never overwrites one that exists
 - the ledger only appends, and one call cannot forge a second line
@@ -25,6 +25,8 @@ The author ran this method by hand in T3 Code before it was a skill. This is the
 - 1.1.0: `lint` refuses local paths and `http://` proof links in the goal and outcomes
 - 1.1.0: `add` and `lint` share one outcome check, so a hand-edited `history` with an impossible date, a local path as its date, no text, the wrong shape or `null` fails `lint` without a crash, and `render` refuses
 - 1.1.0: `add` refuses a `|` inside outcome text, since `|` separates date, text and link
+- 1.1.0: a hand-edited field of the wrong type (a number or list as the goal or title, `links` as text or `null`, a text priority) fails `lint` without a crash, and `render` refuses
+- 1.1.0: a local path is caught after any punctuation (`Fix:/Users/...`, `[/Users/...]`) and under `/Volumes/`, `/private/` and `/tmp/`, while an `https://` link whose path holds `/Users/` or `/home/` still passes
 
 ### Forward test
 

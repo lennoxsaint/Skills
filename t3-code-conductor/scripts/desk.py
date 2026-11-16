@@ -32,7 +32,14 @@ LIMITS = {"title": 120, "why": 1200, "yes": 80, "no": 80, "note": 600, "lane": 6
 OUTCOME_TEXT = 140
 OUTCOMES_MAX = 12
 OUTCOME_AT = re.compile(r"^\d{4}-\d{2}-\d{2}( \d{2}:\d{2})?$")
-LOCAL_PATH = re.compile(r"(^|[\s\"'(=])(/Users/|/home/|~/|[A-Za-z]:\\|file://)", re.IGNORECASE)
+LOCAL_PATH = re.compile(r"(/Users/|/home/|/Volumes/|/private/|/tmp/|~/|[A-Za-z]:\\|file://)", re.IGNORECASE)
+HTTPS_URL = re.compile(r"https://\S+", re.IGNORECASE)
+TEXT_FIELDS = ("title", "why", "yes", "no", "note", "lane", "result", "goal", "due")
+
+
+def names_local_path(value):
+    """True when text outside its https:// links names a path only this computer can open."""
+    return bool(LOCAL_PATH.search(HTTPS_URL.sub(" ", value)))
 CARD_ID = re.compile(r"^[a-z0-9][a-z0-9-]{0,47}$")
 STATES = ("open", "answered", "done", "closed")
 
@@ -299,7 +306,11 @@ def cmd_close(args):
 
 def ranked(cards, state="open"):
     rows = [(card_id, card) for card_id, card in cards.items() if card.get("state") == state]
-    return sorted(rows, key=lambda row: (row[1].get("due") or "9999-12-31", row[1].get("priority", 3), row[1].get("created", ""), row[0]))
+    def key(row):
+        card = row[1]
+        priority = card.get("priority", 3)
+        return (str(card.get("due") or "9999-12-31"), priority if isinstance(priority, int) else 3, str(card.get("created", "")), row[0])
+    return sorted(rows, key=key)
 
 
 def cmd_show(args):
@@ -319,21 +330,30 @@ def lint_cards(data):
     for card_id, card in data["cards"].items():
         if card.get("state") != "open":
             continue
+        shape = [f"{field} must be text" for field in TEXT_FIELDS if not isinstance(card.get(field, ""), str)]
+        links = card.get("links", [])
+        if not isinstance(links, list) or not all(isinstance(link, str) for link in links):
+            shape.append("links must be a list of https:// links")
+            links = []
+        if not isinstance(card.get("priority", 3), int) or isinstance(card.get("priority", 3), bool):
+            shape.append("priority must be a whole number")
+        problems += [f"{card_id}: {problem}" for problem in shape]
         history = card.get("history", [])
         for problem in history_problems(history):
             problems.append(f"{card_id}: {problem}")
         entries = [entry for entry in history if isinstance(entry, dict)] if isinstance(history, list) else []
         history_links = [entry.get("link") for entry in entries if isinstance(entry.get("link"), str) and entry.get("link")]
-        visible = [card.get(field, "") for field in ("title", "why", "yes", "no", "goal")] + list(card.get("links", []))
-        visible += [str(entry.get(key) or "") for entry in entries for key in ("at", "text")] + history_links
+        visible = [card.get(field, "") for field in TEXT_FIELDS] + links
+        visible += [entry.get(key) for entry in entries for key in ("at", "text")] + history_links
         for value in visible:
-            if LOCAL_PATH.search(value or ""):
+            if isinstance(value, str) and names_local_path(value):
                 problems.append(f"{card_id}: names a local path a phone cannot open: {value[:60]!r}")
-        for link in list(card.get("links", [])):
+        for link in links:
             if not link.startswith("https://"):
                 problems.append(f"{card_id}: link must start with https://: {link[:60]!r}")
         for field, limit in LIMITS.items():
-            if len(card.get(field, "") or "") > limit:
+            value = card.get(field, "")
+            if isinstance(value, str) and len(value) > limit:
                 problems.append(f"{card_id}: {field} is over {limit} characters")
         if not card.get("yes"):
             problems.append(f"{card_id}: has no recommended answer")

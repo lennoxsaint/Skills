@@ -63,7 +63,7 @@ Every command prints one line of JSON (`show` without `--json` prints a list). A
 ## What the helper guarantees
 
 - **One writer at a time.** Every write takes a lock in the run folder, writes a temp file, renames it into place and reads it back.
-- **Nothing local reaches the phone.** `lint` refuses open cards that name a local path (`/Users/`, `/home/`, `~/`, `C:\`, `file://`), a link that is not `https://`, text over its limit, or no recommended answer. `render` refuses to run while `lint` fails.
+- **Nothing local reaches the phone.** `lint` refuses open cards that name a local path anywhere outside an `https://` link (`/Users/`, `/home/`, `/Volumes/`, `/private/`, `/tmp/`, `~/`, `C:\`, `file://`), a link that is not `https://`, a field of the wrong type, text over its limit, or no recommended answer. `render` refuses to run while `lint` fails.
 - **Nothing remote loads.** `review.html` has inline styles, no scripts, no remote fonts or images, and every value is HTML-escaped.
 - **Outcome entries are checked.** `add` refuses an outcome without a valid date or text, text over 140 characters, or more than 12 entries. `lint` holds the goal, outcome text and proof links to the same rules as the rest of the card.
 - **Answers follow an order.** A card must be answered before it can be marked routed.
