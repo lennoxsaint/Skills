@@ -39,7 +39,7 @@ python3 $DESK --dir ~/conductor lint && python3 $DESK --dir ~/conductor render
 
 The page lands at `~/conductor/review.html`. Set `CONDUCTOR_HOME=~/conductor` once and you can drop `--dir`.
 
-The page has no scripts and loads nothing from the internet. `lint` refuses local file paths, non-https links and cards with no recommended answer, so nothing on the page only works on your computer. It is plain Python 3.9+ with no packages.
+The page has no scripts and loads nothing from the internet. `lint` refuses the local paths it knows (`/Users/`, `/home/`, `~/`, `C:\` and a few more), links that are not `https` to a named host, and cards with no recommended answer. The [desk reference](../t3-code-conductor/references/desk.md) lists each check. It is plain Python 3.9+ with no packages.
 
 The page is a file. Getting it to your phone is up to you: a private file sync, or a private page on a host you already use. Never put it on the open internet. [`references/setup.md`](../t3-code-conductor/references/setup.md) has the options.
 

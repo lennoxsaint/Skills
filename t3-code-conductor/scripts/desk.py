@@ -21,38 +21,91 @@ The run folder is --dir, else $CONDUCTOR_HOME, else ./conductor.
 import argparse
 import datetime as dt
 import html
+import ipaddress
 import json
 import os
 import re
 import sys
 import tempfile
 import time
+import unicodedata
+import urllib.parse
 
 LIMITS = {"title": 120, "why": 1200, "yes": 80, "no": 80, "note": 600, "lane": 60, "result": 300, "goal": 200}
 OUTCOME_TEXT = 140
 OUTCOMES_MAX = 12
 OUTCOME_AT = re.compile(r"^\d{4}-\d{2}-\d{2}( \d{2}:\d{2})?$")
-# A rooted path starts a word and goes on into a folder: "see:/Users/x" is a path;
-# "users/home/views" and "the key /private/ is reserved" are not.
-LOCAL_PATH = re.compile(r"(?:(?<![A-Za-z0-9])(?:/Users/|/home/|/Volumes/|/private/|/tmp/|~/|file://)|[A-Za-z]:\\)(?=[^\s\"'`<>])",
-                        re.IGNORECASE)
-# Inside text, an https:// link ends at the first character that cannot continue it: a space, a quote or a bracket.
-TEXT_LINK = re.compile(r"https://(?:[A-Za-z0-9-]+\.)+[A-Za-z0-9-]+(?::\d{1,5})?(?:[/?#][A-Za-z0-9._~%/?#:@!$&*+,;=-]*)?", re.IGNORECASE)
-# A link field must name a dotted host the phone can reach.
-PHONE_LINK = re.compile(r"https://(?:[A-Za-z0-9-]+\.)+[A-Za-z0-9-]+(?::\d{1,5})?(?:[/?#]\S*)?", re.IGNORECASE)
-LOOPBACK = re.compile(r"https://(?:127\.|0\.0\.0\.0)", re.IGNORECASE)
+# A local path starts a word (no letter or digit, in any script, right before it) and goes on into a folder.
+# The folder name may follow a quote, backtick or angle bracket: /Users/"name"/file is a path.
+# "users/home/views", "é/Users/x" and "the key /private/ is reserved" are not.
+LOCAL_PATH = re.compile(
+    r"(?<![^\W_])(?:/Users/|/home/|/Volumes/|/private/|/tmp/|~/|file://|[A-Za-z]:\\)"
+    r"(?=[^\s\"'`<>]|[\"'`<>]+[\w.~-])",
+    re.IGNORECASE)
+# A link inside text. Its path ends at a space, quote, backtick, angle bracket, square bracket, parenthesis
+# or a character a URL cannot hold ({ } | \ ^). After ? or # it ends only at a space, quote, backtick or angle bracket.
+TEXT_LINK = re.compile(
+    r"https://[^\s\"'`<>\[\](){}|\\^/?#]*"
+    r"(?:/[^\s\"'`<>\[\](){}|\\^?#]*)?"
+    r"(?:[?#][^\s\"'`<>]*)?",
+    re.IGNORECASE)
+HOST_LABEL = re.compile(r"[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?")
+# A last label a browser reads as a number makes the whole host an IP address (0x7f.0.0.1, 1.2.3.0x4).
+NUMERIC_LABEL = re.compile(r"[0-9]+|0x[0-9a-f]*")
 TEXT_FIELDS = ("title", "why", "yes", "no", "note", "lane", "result", "goal", "due")
 
 
 def names_local_path(value):
-    """True when a path only this computer can open appears anywhere not wholly inside an https:// link."""
-    links = [match.span() for match in TEXT_LINK.finditer(value)]
-    return any(not any(start <= path.start() and path.end() <= end for start, end in links)
+    """True when a local path starts anywhere outside a valid https link's span (see TEXT_LINK and is_phone_link)."""
+    links = [match.span() for match in TEXT_LINK.finditer(value) if is_phone_link(match.group())]
+    # The path's root and the first character after it must both sit inside one link.
+    return any(not any(start <= path.start() and path.end() < end for start, end in links)
                for path in LOCAL_PATH.finditer(value))
 
 
+def phone_host(hostname):
+    """The host in ASCII when it is a dotted name a phone can reach, else None."""
+    try:
+        host = (hostname or "").encode("idna").decode("ascii").lower()
+    except UnicodeError:
+        return None
+    if host.endswith("."):
+        host = host[:-1]
+    labels = host.split(".")
+    if len(labels) < 2 or not all(HOST_LABEL.fullmatch(label) for label in labels):
+        return None
+    if not re.search("[a-z]", labels[-1]) or NUMERIC_LABEL.fullmatch(labels[-1]):
+        return None
+    if host == "localhost" or host.endswith(".localhost"):
+        return None
+    try:
+        ipaddress.ip_address(host)
+        return None
+    except ValueError:
+        return host
+
+
 def is_phone_link(link):
-    return bool(PHONE_LINK.fullmatch(link)) and not LOOPBACK.match(link)
+    """True for an https link, parsed (not pattern-matched), whose host is a dotted name and whose port is 1 to 65535."""
+    if not isinstance(link, str) or not link[:8].lower() == "https://":
+        return False
+    if any(char.isspace() or unicodedata.category(char) == "Cc" for char in link):
+        return False
+    try:
+        parts = urllib.parse.urlsplit(link)
+        port = parts.port
+    except ValueError:
+        return False
+    if parts.scheme != "https" or any(mark in parts.netloc for mark in "[]\\"):
+        return False
+    raw_port = parts.netloc.rpartition("@")[2].partition(":")[2]
+    if raw_port and not (raw_port.isascii() and raw_port.isdigit()):
+        return False
+    if port is not None and not 1 <= port <= 65535:
+        return False
+    return phone_host(parts.hostname) is not None
+
+
 CARD_ID = re.compile(r"^[a-z0-9][a-z0-9-]{0,47}$")
 STATES = ("open", "answered", "done", "closed")
 

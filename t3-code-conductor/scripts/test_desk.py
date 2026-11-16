@@ -254,6 +254,62 @@ class DeskTests(unittest.TestCase):
             self.assertIn(f"c-host-{n}", result.stdout)
         self.assertNotIn("c-query", result.stdout)
 
+    def test_a_quoted_folder_name_is_still_a_path(self):
+        for card_id, goal in (("c-quoted", 'Saved to /Users/"example"/private.txt'),
+                              ("c-angled", "Saved to /home/<example>/private.txt")):
+            self.run_desk("add", card_id, "--title", "T", "--yes", "Y", "--goal", goal)
+        result = self.run_desk("lint", check=False)
+        self.assertEqual(result.returncode, 1)
+        for card_id in ("c-quoted", "c-angled"):
+            self.assertIn(card_id, result.stdout)
+        self.assertEqual(self.run_desk("render", check=False).returncode, 1)
+        self.assertFalse((self.folder / "review.html").exists())
+        self.assertFalse(desk_module().names_local_path('Is the JSON key "/private/" reserved?'))
+
+    def test_brackets_inside_a_query_stay_part_of_the_link(self):
+        for card_id, goal in (("c-query", "https://example.test/?q=(all)&next=/Users/x"),
+                              ("c-open", "https://example.test/search?next=(/Users/example/private.txt")):
+            self.run_desk("add", card_id, "--title", "T", "--yes", "Y", "--goal", goal)
+        self.run_desk("lint")
+        self.run_desk("render")
+        desk = desk_module()
+        self.assertTrue(desk.names_local_path("https://example.test/proof(/Users/example/private.txt)"))
+        self.assertTrue(desk.names_local_path('https://example.test/?q="/Users/example/private.txt"'))
+
+    def test_valid_https_links_pass_after_parsing(self):
+        links = ["https://bücher.example/x", "https://a@b.test/x", "https://example.test./x",
+                 "https://example.test:000443/x", "https://user@例え.example.:00443/x"]
+        for n, link in enumerate(links):
+            self.run_desk("add", f"c-ok-{n}", "--title", "T", "--yes", "Y", "--link", link,
+                          "--outcome", f"2026-11-14|Built|{link}")
+        self.run_desk("lint")
+        self.run_desk("render")
+
+    def test_ip_literals_and_bad_ports_are_refused(self):
+        bad = ["https://0x7f.0.0.1/x", "https://example.test:99999/x", "https://0177.0.0.1/x", "https://example.test:65536/x"]
+        for n, link in enumerate(bad):
+            refused = self.run_desk("add", f"c-bad-{n}", "--title", "T", "--yes", "Y",
+                                    "--outcome", f"2026-11-14|Built|{link}", check=False)
+            self.assertEqual(refused.returncode, 1, link)
+            self.hand_edit(f"c-bad-{n}", links=[link], history=[{"at": "2026-11-14", "text": "Built", "link": link}])
+        result = self.run_desk("lint", check=False)
+        self.assertEqual(result.returncode, 1)
+        for n in range(len(bad)):
+            self.assertIn(f"c-bad-{n}", result.stdout)
+        self.assertEqual(self.run_desk("render", check=False).returncode, 1)
+        self.assertFalse((self.folder / "review.html").exists())
+        desk = desk_module()
+        for link in ("https://[::1]/x", "https://example.test:0/x", "https://1.2.3.0x4/x", "https://app.localhost/x",
+                     "https://127.0.0.1\\@example.test/x", "https://example.test/a b"):
+            self.assertFalse(desk.is_phone_link(link), link)
+
+    def test_a_path_word_after_a_non_ascii_letter_is_not_a_path(self):
+        for card_id, goal in (("c-accent", "é/Users/x"), ("c-cafe", "café/home/notes")):
+            self.run_desk("add", card_id, "--title", "T", "--yes", "Y", "--goal", goal)
+        self.run_desk("lint")
+        self.run_desk("render")
+        self.assertTrue(desk_module().names_local_path("Fix_/Users/example/private.txt"))
+
     def test_a_bar_inside_outcome_text_is_refused_at_add(self):
         result = self.run_desk("add", "c-bar", "--title", "T", "--yes", "Y",
                                "--outcome", "2026-11-14|Merged A | B|https://example.test/p", check=False)

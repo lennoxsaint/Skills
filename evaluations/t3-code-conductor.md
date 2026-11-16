@@ -8,7 +8,7 @@ The author ran this method by hand in T3 Code before it was a skill. This is the
 
 ### The review page helper
 
-`scripts/test_desk.py` has 24 unit tests. All 24 pass locally, and CI runs them on every push. They cover:
+`scripts/test_desk.py` has 29 unit tests. All 29 pass locally, and CI runs them on every push. They cover:
 
 - `init` writes each file once and never overwrites one that exists
 - the ledger only appends, and one call cannot forge a second line
@@ -30,7 +30,10 @@ The author ran this method by hand in T3 Code before it was a skill. This is the
 - 1.1.0: a local path right after a link (`"https://example.test/proof"(/Users/...)`) is caught in the goal, outcome text and title, across every quote, bracket and mark tried against eight path forms
 - 1.1.0: a word that only looks like a path (`users/home/views`, `docs/home/guide`, the key `/private/`) is not refused
 - 1.1.0: an outcome link of the wrong type (`null`, `0`, `false`, a list or an object) fails `lint` without a crash
-- 1.1.0: a link must name a host a phone can reach, so `https://`, `https:///Users/...`, `https://localhost/...` and `https://127.0.0.1/...` are refused
+- 1.1.0: links are parsed, not pattern-matched. `https://`, `https:///Users/...`, `localhost`, IP hosts (`127.0.0.1`, `0x7f.0.0.1`, `0177.0.0.1`, `1.2.3.0x4`, `[::1]`) and ports `0`, `65536` and `99999` are refused. An IDN host (`bücher.example`), userinfo, one trailing dot and a zero-padded port (`:000443`) pass
+- 1.1.0: a folder name in quotes or angle brackets (`/Users/"example"/...`, `/home/<example>/...`) is still a path
+- 1.1.0: brackets inside a link's query (`?q=(all)&next=/Users/x`) stay part of the link, while a parenthesis in the link's path still ends it
+- 1.1.0: a letter in any script right before the path (`é/Users/x`, `café/home/notes`) makes it part of a word, not a path; an underscore does not
 
 ### Forward test
 
