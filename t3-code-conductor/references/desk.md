@@ -43,6 +43,25 @@ Without `CONDUCTOR_HOME`, pass the same `--dir <run-folder>` to every command; o
 
 Every command prints one line of JSON (`show` without `--json` prints a list). A failure prints `desk.py: <reason>` and exits 1.
 
+## Outcomes cards
+
+Use one when a thread's run ended with its goal unmet and the next step is the owner's. It is an ordinary card in a set shape, so the owner sees the whole story before one tap:
+
+- `--title`: the one decision, as a question.
+- `--why`: the goal in one line, then one dated line per outcome achieved so far, oldest first, then what is left and what each answer does. The page keeps the line breaks in `why`, so each outcome sits on its own line.
+- `--link`: the proof, one `https://` link per outcome, in the same order.
+- `--yes`: the next step.
+
+Add only proven outcomes: merged, deployed, checked, published, delivered. A prompt sent is not an outcome. The whole summary fits in the 1,200 characters of `why`; longer detail goes behind a link.
+
+```bash
+python3 $D add c-pricing-lane --title "Put the pricing page live on Friday?" \
+  --why $'Goal: a pricing page that passes review and is live on the shop.\n2026-11-14: copy and layout passed outside review at 3f2a1c9.\n2026-11-15: staging build green.\nLeft: the live deploy. Yes deploys Friday 9am; no keeps it on staging.' \
+  --link https://github.com/example/shop/pull/12 \
+  --link https://ci.example.com/run/7 \
+  --yes "Put it live Friday" --no "Keep it on staging" --lane web
+```
+
 ## What the helper guarantees
 
 - **One writer at a time.** Every write takes a lock in the run folder, writes a temp file, renames it into place and reads it back.

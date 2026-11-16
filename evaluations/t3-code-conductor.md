@@ -1,6 +1,6 @@
 # T3 Code Conductor evaluation
 
-Version: 1.0.0
+Version: 1.1.0
 
 ## What was tested
 
@@ -68,6 +68,7 @@ Before merge, on 12 Nov 2026:
 
 ## Limits
 
+- **1.1.0's settle-on-the-goal rule has not run in a forward test.** It is wording only; `desk.py` and its 12 tests did not change. Whether a conductor settles, progresses or carries a finished lane to the desk at the right moment was not measured.
 - **The public skill has not run a live T3 fleet.** The forward test used a written snapshot. T3 thread tools, `delegate_task` reviews, the scheduled refresh and phone delivery were not exercised.
 - **One run, one model.** Codex was not run as the conductor.
 - **T3 tool names can change.** The skill tells the agent to find them with tool search and read each schema. Names it gives are examples.
