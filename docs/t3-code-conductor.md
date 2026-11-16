@@ -39,7 +39,7 @@ python3 $DESK --dir ~/conductor lint && python3 $DESK --dir ~/conductor render
 
 The page lands at `~/conductor/review.html`. Set `CONDUCTOR_HOME=~/conductor` once and you can drop `--dir`.
 
-The page has no scripts and loads nothing from the internet. `lint` refuses local file paths, non-https links and cards with no recommended answer, so nothing on the page only works on your computer. It is plain Python 3.9+ with no packages.
+The page has no scripts and loads nothing from the internet. `lint` refuses the local paths it knows (`/Users/`, `/home/`, `~/`, `C:\` and a few more), links that are not `https` to a named host, and cards with no recommended answer. The [desk reference](../t3-code-conductor/references/desk.md) lists each check. It is plain Python 3.9+ with no packages.
 
 The page is a file. Getting it to your phone is up to you: a private file sync, or a private page on a host you already use. Never put it on the open internet. [`references/setup.md`](../t3-code-conductor/references/setup.md) has the options.
 
@@ -81,5 +81,7 @@ Use t3-code-conductor: be my conductor. Take a census of every T3 thread, give e
 A synthetic example lives in [`examples/t3-code-conductor/`](../examples/t3-code-conductor/sample-factory.md). The test evidence is in the [evaluation](../evaluations/t3-code-conductor.md).
 
 ## Changelog
+
+**1.1.0** (16 Nov 2026) - settle on the goal, not the run. When a lane's run ends, the conductor judges it against the goal it was first given: it settles a finished lane, sends the next step at once when it may, or puts an outcomes card on the desk. The card shows the goal, a timeline of what was achieved with proof links, and what is left. `desk.py add` takes `--goal` and `--outcome`.
 
 **1.0.0** (12 Nov 2026) - first public release. This is the method I run my T3 Code threads with, written up as a skill for the first time, with my machines, accounts, thread ids and private rules taken out. The review page helper is new and tested. After a test with an agent that had never seen the skill, the text now says what to do with a "completed" thread that has no proof, an existing thread with no lane, an unreadable thread, earlier ledger lines, an unknown conductor id and non-code briefs, and that a decision still waiting on review stays off the page.

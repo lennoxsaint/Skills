@@ -6,7 +6,7 @@ A cycle is one supervisory pass. Start one when a lane finished or replied, when
 
 1. **Read the state.** The end of `LEDGER.md`, `ROSTER.md`, open cards (`desk.py show`).
 2. **Read only what changed.** Lanes whose last run finished or that replied since the last ledger line. Skip quiet lanes that are not due.
-3. **For each changed lane, judge the proof, not the claim.** Open the diff, the check output, the file, the readback. Decide: done, needs another step, needs review, blocked, or needs the owner.
+3. **For each changed lane, judge the proof, not the claim.** Open the diff, the check output, the file, the readback. Decide: done, needs another step, needs review, blocked, or needs the owner. Judge it against the lane's first goal, not its last run, and make the matching move from [Settle on the goal, not the run](../SKILL.md#settle-on-the-goal-not-the-run) in this pass.
 4. **Answer what you can.** Check `STANDING.md` and the ledger. Answer the lane, log the decision you used.
 5. **Send the next whole outcome** to each lane that needs one (template below).
 6. **Order outside reviews** for anything that claims done (review stack below).

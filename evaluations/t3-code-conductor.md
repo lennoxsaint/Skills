@@ -1,6 +1,6 @@
 # T3 Code Conductor evaluation
 
-Version: 1.0.0
+Version: 1.1.0
 
 ## What was tested
 
@@ -8,7 +8,7 @@ The author ran this method by hand in T3 Code before it was a skill. This is the
 
 ### The review page helper
 
-`scripts/test_desk.py` has 12 unit tests. All 12 pass locally, and CI runs them on every push. They cover:
+`scripts/test_desk.py` has 29 unit tests. All 29 pass locally, and CI runs them on every push. They cover:
 
 - `init` writes each file once and never overwrites one that exists
 - the ledger only appends, and one call cannot forge a second line
@@ -20,6 +20,20 @@ The author ran this method by hand in T3 Code before it was a skill. This is the
 - cards rank by due date, then priority, then age
 - six writers at once lose no card
 - the run folder can come from `CONDUCTOR_HOME`, or from `--dir` before or after the command
+- 1.1.0: an outcomes card keeps its goal and dated outcomes in order, and the page draws them as an escaped timeline with proof links
+- 1.1.0: `add` refuses an outcome with a bad date, no text, text over 140 characters, or more than 12 entries
+- 1.1.0: `lint` refuses local paths and `http://` proof links in the goal and outcomes
+- 1.1.0: `add` and `lint` share one outcome check, so a hand-edited `history` with an impossible date, a local path as its date, no text, the wrong shape or `null` fails `lint` without a crash, and `render` refuses
+- 1.1.0: `add` refuses a `|` inside outcome text, since `|` separates date, text and link
+- 1.1.0: a hand-edited field of the wrong type (a number or list as the goal or title, `links` as text or `null`, a text priority) fails `lint` without a crash, and `render` refuses
+- 1.1.0: a local path is caught after any punctuation (`Fix:/Users/...`, `[/Users/...]`) and under `/Volumes/`, `/private/` and `/tmp/`, while an `https://` link whose path holds `/Users/` or `/home/` still passes
+- 1.1.0: a local path right after a link (`"https://example.test/proof"(/Users/...)`) is caught in the goal, outcome text and title, across every quote, bracket and mark tried against eight path forms
+- 1.1.0: a word that only looks like a path (`users/home/views`, `docs/home/guide`, the key `/private/`) is not refused
+- 1.1.0: an outcome link of the wrong type (`null`, `0`, `false`, a list or an object) fails `lint` without a crash
+- 1.1.0: links are parsed, not pattern-matched. `https://`, `https:///Users/...`, `localhost`, IP hosts (`127.0.0.1`, `0x7f.0.0.1`, `0177.0.0.1`, `1.2.3.0x4`, `[::1]`) and ports `0`, `65536` and `99999` are refused. An IDN host (`bücher.example`), userinfo, one trailing dot and a zero-padded port (`:000443`) pass
+- 1.1.0: a folder name in quotes or angle brackets (`/Users/"example"/...`, `/home/<example>/...`) is still a path
+- 1.1.0: brackets inside a link's query (`?q=(all)&next=/Users/x`) stay part of the link, while a parenthesis in the link's path still ends it
+- 1.1.0: a letter in any script right before the path (`é/Users/x`, `café/home/notes`) makes it part of a word, not a path; an underscore does not
 
 ### Forward test
 
@@ -68,6 +82,7 @@ Before merge, on 12 Nov 2026:
 
 ## Limits
 
+- **1.1.0's settle-on-the-goal rule has not run in a forward test.** The three outcomes-card tests cover the helper only. Whether a conductor settles, progresses or carries a finished lane to the desk at the right moment was not measured.
 - **The public skill has not run a live T3 fleet.** The forward test used a written snapshot. T3 thread tools, `delegate_task` reviews, the scheduled refresh and phone delivery were not exercised.
 - **One run, one model.** Codex was not run as the conductor.
 - **T3 tool names can change.** The skill tells the agent to find them with tool search and read each schema. Names it gives are examples.

@@ -15,10 +15,27 @@ The desk is the owner's one review page. It holds only decisions that are truly 
 | `due` | `YYYY-MM-DD` when a deadline is real. Cards with a due date sort first. |
 | `priority` | 1 (most urgent) to 5. Default 3. |
 | `links` | `https://` only. Everything the owner must see has to open on a phone. |
+| `goal` | Outcomes cards only: the thread's first goal in one line, up to 200 characters. |
+| `history` | Outcomes cards only: what the thread achieved, oldest first, at most 12 entries. Each has a date (`YYYY-MM-DD`, optionally ` HH:MM`), up to 140 characters of text, and an optional `https://` proof link. |
 
 A card approves only what it names. Name the exact action, target and version in the title or `why`: "Post these 3 clips to the shop account on Friday?", not "Approve the clips?".
 
 Before you add a card, make it a one-tap decision: the work done, the evidence ready, the recommendation chosen.
+
+## Outcomes cards
+
+Use one when a thread's run ended with its goal unmet and the next step is the owner's. The page draws the goal, then a timeline of what was achieved with a proof link per step, then what is left, then the choice. The owner sees the whole story before one tap.
+
+`|` separates the date, text and link, so outcome text cannot hold one. Add only proven outcomes: merged, deployed, checked, published, delivered. A prompt sent is not an outcome. Put what is left and what each answer does in `why`.
+
+```bash
+python3 $D add c-pricing-lane --title "Put the pricing page live on Friday?" \
+  --goal "A pricing page that passes review and is live on the shop" \
+  --outcome "2026-11-14 09:10|Copy and layout passed outside review at 3f2a1c9|https://github.com/example/shop/pull/12" \
+  --outcome "2026-11-15|Staging build green|https://ci.example.com/run/7" \
+  --why "Left: the live deploy. Yes deploys Friday 9am; no keeps it on staging." \
+  --yes "Put it live Friday" --no "Keep it on staging" --lane web
+```
 
 ## Commands
 
@@ -46,8 +63,14 @@ Every command prints one line of JSON (`show` without `--json` prints a list). A
 ## What the helper guarantees
 
 - **One writer at a time.** Every write takes a lock in the run folder, writes a temp file, renames it into place and reads it back.
-- **Nothing local reaches the phone.** `lint` refuses open cards that name a local path (`/Users/`, `/home/`, `~/`, `C:\`, `file://`), a link that is not `https://`, text over its limit, or no recommended answer. `render` refuses to run while `lint` fails.
+- **`lint` fails an open card for exactly these, and `render` refuses to run while it fails:**
+  - **A listed local path.** `/Users/`, `/home/`, `/Volumes/`, `/private/`, `/tmp/`, `~/`, `file://` or a drive such as `C:\`, in any text field, link or outcome. It counts when no letter or digit, in any script, sits right before it and a folder name follows, even inside quotes, backticks or angle brackets. So `/Users/"name"/file` counts; `users/home/views`, `é/Users/x` and `the key /private/ is reserved` do not.
+  - **Not inside a valid link.** In text, a link's path ends at a space, quote, backtick, angle bracket, square bracket, parenthesis or `{ } | \ ^`. After `?` or `#` it ends only at a space, quote, backtick or angle bracket. A path that sits inside a link passing the next check is part of the link.
+  - **A link or proof link that fails parsing.** `urllib.parse` reads it. The scheme must be `https`, with no spaces or control characters. The host is read without its userinfo, with one trailing dot dropped and IDNA-encoded. It needs two or more labels of letters, digits and hyphens, each 1 to 63 characters, none starting or ending with a hyphen. The last label needs a letter and may not be a number such as `0x7f`. The host may not be `localhost` or an IP address. A port must be digits from 1 to 65535.
+  - **A field of the wrong type, text over its limit, or no recommended answer.**
+- **What `lint` does not check.** It does not look up a host or open a link, and it does not know local paths outside the list above.
 - **Nothing remote loads.** `review.html` has inline styles, no scripts, no remote fonts or images, and every value is HTML-escaped.
+- **Outcome entries are checked.** `add` refuses an outcome without a valid date or text, text over 140 characters, or more than 12 entries. `lint` holds the goal, outcome text and proof links to the same rules as the rest of the card.
 - **Answers follow an order.** A card must be answered before it can be marked routed.
 - **The ledger only grows.** `ledger` appends one line and turns line breaks into spaces, so one call cannot forge a second line.
 

@@ -8,6 +8,7 @@ refresh never write at the same moment.
   desk.py init                       create the run folder files (never overwrites)
   desk.py ledger TEXT                append one dated line to LEDGER.md
   desk.py add ID --title T --yes Y [--why W] [--no N] [--lane L] [--due YYYY-MM-DD] [--priority P] [--link URL ...]
+             [--goal G] [--outcome "YYYY-MM-DD[ HH:MM]|what was achieved[|https://proof]" ...]
   desk.py answer ID --choice C [--note N]   record the owner's answer
   desk.py routed ID --lane L         the answer was delivered to its lane; the card moves to done
   desk.py close ID --result TEXT     close a card without an answer (no longer needed)
@@ -20,15 +21,91 @@ The run folder is --dir, else $CONDUCTOR_HOME, else ./conductor.
 import argparse
 import datetime as dt
 import html
+import ipaddress
 import json
 import os
 import re
 import sys
 import tempfile
 import time
+import unicodedata
+import urllib.parse
 
-LIMITS = {"title": 120, "why": 1200, "yes": 80, "no": 80, "note": 600, "lane": 60, "result": 300}
-LOCAL_PATH = re.compile(r"(^|[\s\"'(=])(/Users/|/home/|~/|[A-Za-z]:\\|file://)", re.IGNORECASE)
+LIMITS = {"title": 120, "why": 1200, "yes": 80, "no": 80, "note": 600, "lane": 60, "result": 300, "goal": 200}
+OUTCOME_TEXT = 140
+OUTCOMES_MAX = 12
+OUTCOME_AT = re.compile(r"^\d{4}-\d{2}-\d{2}( \d{2}:\d{2})?$")
+# A local path starts a word (no letter or digit, in any script, right before it) and goes on into a folder.
+# The folder name may follow a quote, backtick or angle bracket: /Users/"name"/file is a path.
+# "users/home/views", "é/Users/x" and "the key /private/ is reserved" are not.
+LOCAL_PATH = re.compile(
+    r"(?<![^\W_])(?:/Users/|/home/|/Volumes/|/private/|/tmp/|~/|file://|[A-Za-z]:\\)"
+    r"(?=[^\s\"'`<>]|[\"'`<>]+[\w.~-])",
+    re.IGNORECASE)
+# A link inside text. Its path ends at a space, quote, backtick, angle bracket, square bracket, parenthesis
+# or a character a URL cannot hold ({ } | \ ^). After ? or # it ends only at a space, quote, backtick or angle bracket.
+TEXT_LINK = re.compile(
+    r"https://[^\s\"'`<>\[\](){}|\\^/?#]*"
+    r"(?:/[^\s\"'`<>\[\](){}|\\^?#]*)?"
+    r"(?:[?#][^\s\"'`<>]*)?",
+    re.IGNORECASE)
+HOST_LABEL = re.compile(r"[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?")
+# A last label a browser reads as a number makes the whole host an IP address (0x7f.0.0.1, 1.2.3.0x4).
+NUMERIC_LABEL = re.compile(r"[0-9]+|0x[0-9a-f]*")
+TEXT_FIELDS = ("title", "why", "yes", "no", "note", "lane", "result", "goal", "due")
+
+
+def names_local_path(value):
+    """True when a local path starts anywhere outside a valid https link's span (see TEXT_LINK and is_phone_link)."""
+    links = [match.span() for match in TEXT_LINK.finditer(value) if is_phone_link(match.group())]
+    # The path's root and the first character after it must both sit inside one link.
+    return any(not any(start <= path.start() and path.end() < end for start, end in links)
+               for path in LOCAL_PATH.finditer(value))
+
+
+def phone_host(hostname):
+    """The host in ASCII when it is a dotted name a phone can reach, else None."""
+    try:
+        host = (hostname or "").encode("idna").decode("ascii").lower()
+    except UnicodeError:
+        return None
+    if host.endswith("."):
+        host = host[:-1]
+    labels = host.split(".")
+    if len(labels) < 2 or not all(HOST_LABEL.fullmatch(label) for label in labels):
+        return None
+    if not re.search("[a-z]", labels[-1]) or NUMERIC_LABEL.fullmatch(labels[-1]):
+        return None
+    if host == "localhost" or host.endswith(".localhost"):
+        return None
+    try:
+        ipaddress.ip_address(host)
+        return None
+    except ValueError:
+        return host
+
+
+def is_phone_link(link):
+    """True for an https link, parsed (not pattern-matched), whose host is a dotted name and whose port is 1 to 65535."""
+    if not isinstance(link, str) or not link[:8].lower() == "https://":
+        return False
+    if any(char.isspace() or unicodedata.category(char) == "Cc" for char in link):
+        return False
+    try:
+        parts = urllib.parse.urlsplit(link)
+        port = parts.port
+    except ValueError:
+        return False
+    if parts.scheme != "https" or any(mark in parts.netloc for mark in "[]\\"):
+        return False
+    raw_port = parts.netloc.rpartition("@")[2].partition(":")[2]
+    if raw_port and not (raw_port.isascii() and raw_port.isdigit()):
+        return False
+    if port is not None and not 1 <= port <= 65535:
+        return False
+    return phone_host(parts.hostname) is not None
+
+
 CARD_ID = re.compile(r"^[a-z0-9][a-z0-9-]{0,47}$")
 STATES = ("open", "answered", "done", "closed")
 
@@ -173,11 +250,68 @@ def cmd_ledger(args):
     return {"ledger": path, "line": text}
 
 
+def outcome_problems(entry):
+    """Every rule an outcome entry must meet, shared by `add` and `lint`."""
+    if not isinstance(entry, dict):
+        return ["an outcome must be an object with \"at\" and \"text\""]
+    at, text, link = entry.get("at"), entry.get("text"), entry.get("link", "")
+    problems = []
+    if not isinstance(at, str) or not OUTCOME_AT.match(at):
+        problems.append(f"outcome date must be YYYY-MM-DD or YYYY-MM-DD HH:MM: {str(at)[:20]!r}")
+    else:
+        try:
+            dt.datetime.strptime(at, "%Y-%m-%d %H:%M" if " " in at else "%Y-%m-%d")
+        except ValueError:
+            problems.append(f"outcome date is not a real date: {at!r}")
+    if not isinstance(text, str) or not text.strip():
+        problems.append("an outcome needs its text")
+    elif len(text) > OUTCOME_TEXT:
+        problems.append(f"outcome text is {len(text)} characters; the limit is {OUTCOME_TEXT}")
+    if not isinstance(link, str):
+        problems.append("an outcome link must be text")
+    elif link and not is_phone_link(link):
+        problems.append(f"outcome link must be an https:// link to a named host: {link[:60]!r}")
+    return problems
+
+
+def history_problems(history):
+    """Problems with a card's whole history; never raises on a hand-edited shape."""
+    if history in (None, []):
+        return [] if history == [] else ["history must be a list of outcomes"]
+    if not isinstance(history, list):
+        return ["history must be a list of outcomes"]
+    problems = []
+    if len(history) > OUTCOMES_MAX:
+        problems.append(f"has {len(history)} outcomes; the limit is {OUTCOMES_MAX}")
+    for entry in history:
+        problems += outcome_problems(entry)
+    return problems
+
+
+def parse_outcomes(entries):
+    """Each --outcome is "WHEN|WHAT" or "WHEN|WHAT|LINK", oldest first. "|" only separates."""
+    if len(entries) > OUTCOMES_MAX:
+        raise DeskError(f"{len(entries)} outcomes; the limit is {OUTCOMES_MAX}. Keep the ones that matter most")
+    history = []
+    for entry in entries:
+        if entry.count("|") > 2:
+            raise DeskError(f"an outcome may hold at most two '|' (WHEN|WHAT|LINK); reword the text without '|': {entry[:60]!r}")
+        parts = [part.strip() for part in entry.split("|", 2)]
+        at, text, link = (parts + ["", ""])[:3]
+        outcome = {"at": at, "text": text, "link": link}
+        problems = outcome_problems(outcome)
+        if problems:
+            raise DeskError(problems[0])
+        history.append(outcome)
+    return history
+
+
 def cmd_add(args):
     if not CARD_ID.match(args.id):
         raise DeskError("card id: lowercase letters, digits and dashes, up to 48 characters")
-    for field in ("title", "why", "yes", "no", "lane"):
+    for field in ("title", "why", "yes", "no", "lane", "goal"):
         check_length(field, getattr(args, field))
+    history = parse_outcomes(args.outcome or [])
     if args.due:
         try:
             dt.date.fromisoformat(args.due)
@@ -190,7 +324,8 @@ def cmd_add(args):
         data["cards"][args.id] = {
             "title": args.title, "why": args.why or "", "yes": args.yes, "no": args.no or "",
             "lane": args.lane or "", "due": args.due or "", "priority": args.priority,
-            "links": args.link or [], "state": "open", "created": now().isoformat(timespec="seconds"),
+            "links": args.link or [], "goal": args.goal or "", "history": history,
+            "state": "open", "created": now().isoformat(timespec="seconds"),
         }
         return {"added": args.id}
 
@@ -237,7 +372,11 @@ def cmd_close(args):
 
 def ranked(cards, state="open"):
     rows = [(card_id, card) for card_id, card in cards.items() if card.get("state") == state]
-    return sorted(rows, key=lambda row: (row[1].get("due") or "9999-12-31", row[1].get("priority", 3), row[1].get("created", ""), row[0]))
+    def key(row):
+        card = row[1]
+        priority = card.get("priority", 3)
+        return (str(card.get("due") or "9999-12-31"), priority if isinstance(priority, int) else 3, str(card.get("created", "")), row[0])
+    return sorted(rows, key=key)
 
 
 def cmd_show(args):
@@ -257,15 +396,30 @@ def lint_cards(data):
     for card_id, card in data["cards"].items():
         if card.get("state") != "open":
             continue
-        visible = [card.get(field, "") for field in ("title", "why", "yes", "no")] + list(card.get("links", []))
+        shape = [f"{field} must be text" for field in TEXT_FIELDS if not isinstance(card.get(field, ""), str)]
+        links = card.get("links", [])
+        if not isinstance(links, list) or not all(isinstance(link, str) for link in links):
+            shape.append("links must be a list of https:// links")
+            links = []
+        if not isinstance(card.get("priority", 3), int) or isinstance(card.get("priority", 3), bool):
+            shape.append("priority must be a whole number")
+        problems += [f"{card_id}: {problem}" for problem in shape]
+        history = card.get("history", [])
+        for problem in history_problems(history):
+            problems.append(f"{card_id}: {problem}")
+        entries = [entry for entry in history if isinstance(entry, dict)] if isinstance(history, list) else []
+        history_links = [entry.get("link") for entry in entries if isinstance(entry.get("link"), str) and entry.get("link")]
+        visible = [card.get(field, "") for field in TEXT_FIELDS] + links
+        visible += [entry.get(key) for entry in entries for key in ("at", "text")] + history_links
         for value in visible:
-            if LOCAL_PATH.search(value or ""):
+            if isinstance(value, str) and names_local_path(value):
                 problems.append(f"{card_id}: names a local path a phone cannot open: {value[:60]!r}")
-        for link in card.get("links", []):
-            if not link.startswith("https://"):
-                problems.append(f"{card_id}: link must start with https://: {link[:60]!r}")
+        for link in links:
+            if not is_phone_link(link):
+                problems.append(f"{card_id}: link must be an https:// link to a named host: {link[:60]!r}")
         for field, limit in LIMITS.items():
-            if len(card.get(field, "") or "") > limit:
+            value = card.get(field, "")
+            if isinstance(value, str) and len(value) > limit:
                 problems.append(f"{card_id}: {field} is over {limit} characters")
         if not card.get("yes"):
             problems.append(f"{card_id}: has no recommended answer")
@@ -297,6 +451,11 @@ h1 {{ font-size:22px; margin:4px 0 2px; }} h2 {{ font-size:15px; text-transform:
 .card h3 {{ font-size:17px; margin:0 0 6px; }}
 .due {{ color:var(--due); font-weight:600; font-size:13px; }}
 .why {{ white-space:pre-wrap; margin:6px 0 10px; }}
+.goal {{ font-size:14px; margin:0 0 8px; }} .goal b, .left {{ color:var(--muted); font-size:12px; text-transform:uppercase; letter-spacing:.06em; }}
+.timeline {{ list-style:none; margin:4px 0 12px; padding:0 0 0 18px; border-left:2px solid var(--line); }}
+.timeline li {{ position:relative; margin:0 0 10px; }}
+.timeline li::before {{ content:""; position:absolute; left:-25px; top:5px; width:10px; height:10px; border-radius:50%; background:var(--go); border:2px solid var(--card); }}
+.timeline .when {{ display:block; color:var(--muted); font-size:12px; }}
 .yes {{ display:block; background:var(--go); color:#fff; border-radius:10px; padding:12px; font-weight:600; text-align:center; }}
 .no {{ display:block; text-align:center; padding:8px; color:var(--muted); }}
 code {{ display:block; overflow-wrap:anywhere; background:var(--bg); border:1px solid var(--line); border-radius:8px; padding:8px; margin-top:8px; font-size:14px; }}
@@ -320,11 +479,21 @@ def esc(value):
 
 def render_open(card_id, card):
     due = f'<div class="due">Due {esc(card["due"])}</div>' if card.get("due") else ""
-    why = f'<div class="why">{esc(card["why"])}</div>' if card.get("why") else ""
+    goal = f'<p class="goal"><b>Goal</b><br>{esc(card["goal"])}</p>' if card.get("goal") else ""
+    history = card.get("history", [])
+    timeline = ""
+    if history:
+        rows = "".join(
+            f'<li><span class="when">{esc(entry.get("at"))}</span>{esc(entry.get("text"))}'
+            + (f' &middot; <a href="{esc(entry["link"])}" rel="noopener noreferrer">proof</a>' if entry.get("link") else "")
+            + "</li>" for entry in history)
+        timeline = f'<ol class="timeline">{rows}</ol>'
+    left = '<div class="left">What is left</div>' if history and card.get("why") else ""
+    why = f'{left}<div class="why">{esc(card["why"])}</div>' if card.get("why") else ""
     links = "".join(f'<div class="small"><a href="{esc(link)}" rel="noopener noreferrer">{esc(link)}</a></div>' for link in card.get("links", []))
     no = f'<div class="no">or: {esc(card["no"])} <code>answer {esc(card_id)} no</code></div>' if card.get("no") else ""
     lane = f' &middot; goes to {esc(card["lane"])}' if card.get("lane") else ""
-    return (f'<section class="card" id="{esc(card_id)}"><h3>{esc(card["title"])}</h3>{due}{why}{links}'
+    return (f'<section class="card" id="{esc(card_id)}"><h3>{esc(card["title"])}</h3>{due}{goal}{timeline}{why}{links}'
             f'<div class="yes">{esc(card["yes"])}</div><code>answer {esc(card_id)} yes</code>{no}'
             f'<div class="small">{esc(card_id)}{lane}</div></section>')
 
@@ -390,6 +559,9 @@ def parser():
     add.add_argument("--due")
     add.add_argument("--priority", type=int, default=3, choices=range(1, 6))
     add.add_argument("--link", action="append")
+    add.add_argument("--goal", help="the thread's initial task, in one line")
+    add.add_argument("--outcome", action="append",
+                     help='one achieved outcome, oldest first: "YYYY-MM-DD[ HH:MM]|what|https://proof"')
     answer = sub.add_parser("answer", parents=[where])
     answer.add_argument("id")
     answer.add_argument("--choice", required=True)
