@@ -9,6 +9,15 @@ from pathlib import Path
 DESK = Path(__file__).resolve().parent / "desk.py"
 
 
+def desk_module():
+    """desk.py imported in-process, for checks too many to run one command at a time."""
+    import importlib.util
+    spec = importlib.util.spec_from_file_location("desk", DESK)
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
 class DeskTests(unittest.TestCase):
     def setUp(self):
         self.temp = tempfile.TemporaryDirectory()
@@ -200,6 +209,50 @@ class DeskTests(unittest.TestCase):
         self.run_desk("add", "c-ok", "--title", "Ship the home page?", "--yes", "Y",
                       "--link", "https://example.com/Users/guide", "--outcome", "2026-11-14|Merged|https://example.com/home/run/7")
         self.run_desk("lint")
+
+    def test_a_local_path_right_after_an_https_link_is_caught(self):
+        quoted = 'See "https://example.test/proof"(/Users/example/private.txt)'
+        self.run_desk("add", "c-goal", "--title", "T", "--yes", "Y", "--goal", quoted)
+        self.run_desk("add", "c-text", "--title", "T", "--yes", "Y", "--outcome", f"2026-11-14|{quoted}")
+        self.hand_edit("c-title", title=quoted)
+        result = self.run_desk("lint", check=False)
+        self.assertEqual(result.returncode, 1)
+        for card_id in ("c-goal", "c-text", "c-title"):
+            self.assertIn(card_id, result.stdout)
+        self.assertEqual(self.run_desk("render", check=False).returncode, 1)
+        paths = ["/Users/example/private.txt", "/home/example/private.txt", "/Volumes/Drive/private.txt",
+                 "/private/run/private.txt", "/tmp/run/private.txt", "~/private.txt", "C:\\private.txt", "file:///secret.txt"]
+        missed = [(mark, path) for mark in "\"'<>`[]{}\\()|^ " for path in paths
+                  if not desk_module().names_local_path(f"https://example.test/proof{mark}{path}")]
+        self.assertEqual(missed, [])
+
+    def test_a_path_word_inside_a_longer_word_is_not_a_path(self):
+        self.run_desk("add", "c-metric", "--title", "Track the metric users/home/views?", "--yes", "Track it")
+        self.run_desk("add", "c-docs", "--title", "Our docs/home/guide changed?", "--yes", "Y")
+        self.run_desk("add", "c-key", "--title", "Is the JSON key /private/ reserved?", "--yes", "Y")
+        self.run_desk("lint")
+        self.run_desk("render")
+
+    def test_an_outcome_link_of_the_wrong_type_fails_lint_cleanly(self):
+        for n, link in enumerate([None, 0, False, [], {}]):
+            self.hand_edit(f"c-link-{n}", history=[{"at": "2026-11-14", "text": "Built", "link": link}])
+        result = self.run_desk("lint", check=False)
+        self.assertEqual(result.returncode, 1)
+        self.assertNotIn("Traceback", result.stderr)
+        for n in range(5):
+            self.assertIn(f"c-link-{n}", result.stdout)
+        self.assertEqual(self.run_desk("render", check=False).returncode, 1)
+
+    def test_links_must_name_a_host_a_phone_can_reach(self):
+        bad = ["https://", "https:///Users/example/private.txt", "https://localhost/x", "https://127.0.0.1/x"]
+        for n, link in enumerate(bad):
+            self.hand_edit(f"c-host-{n}", links=[link])
+        self.run_desk("add", "c-query", "--title", "T", "--yes", "Y", "--link", "https://example.test/search?q=desk&page=2")
+        result = self.run_desk("lint", check=False)
+        self.assertEqual(result.returncode, 1)
+        for n in range(len(bad)):
+            self.assertIn(f"c-host-{n}", result.stdout)
+        self.assertNotIn("c-query", result.stdout)
 
     def test_a_bar_inside_outcome_text_is_refused_at_add(self):
         result = self.run_desk("add", "c-bar", "--title", "T", "--yes", "Y",

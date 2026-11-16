@@ -32,14 +32,27 @@ LIMITS = {"title": 120, "why": 1200, "yes": 80, "no": 80, "note": 600, "lane": 6
 OUTCOME_TEXT = 140
 OUTCOMES_MAX = 12
 OUTCOME_AT = re.compile(r"^\d{4}-\d{2}-\d{2}( \d{2}:\d{2})?$")
-LOCAL_PATH = re.compile(r"(/Users/|/home/|/Volumes/|/private/|/tmp/|~/|[A-Za-z]:\\|file://)", re.IGNORECASE)
-HTTPS_URL = re.compile(r"https://\S+", re.IGNORECASE)
+# A rooted path starts a word and goes on into a folder: "see:/Users/x" is a path;
+# "users/home/views" and "the key /private/ is reserved" are not.
+LOCAL_PATH = re.compile(r"(?:(?<![A-Za-z0-9])(?:/Users/|/home/|/Volumes/|/private/|/tmp/|~/|file://)|[A-Za-z]:\\)(?=[^\s\"'`<>])",
+                        re.IGNORECASE)
+# Inside text, an https:// link ends at the first character that cannot continue it: a space, a quote or a bracket.
+TEXT_LINK = re.compile(r"https://(?:[A-Za-z0-9-]+\.)+[A-Za-z0-9-]+(?::\d{1,5})?(?:[/?#][A-Za-z0-9._~%/?#:@!$&*+,;=-]*)?", re.IGNORECASE)
+# A link field must name a dotted host the phone can reach.
+PHONE_LINK = re.compile(r"https://(?:[A-Za-z0-9-]+\.)+[A-Za-z0-9-]+(?::\d{1,5})?(?:[/?#]\S*)?", re.IGNORECASE)
+LOOPBACK = re.compile(r"https://(?:127\.|0\.0\.0\.0)", re.IGNORECASE)
 TEXT_FIELDS = ("title", "why", "yes", "no", "note", "lane", "result", "goal", "due")
 
 
 def names_local_path(value):
-    """True when text outside its https:// links names a path only this computer can open."""
-    return bool(LOCAL_PATH.search(HTTPS_URL.sub(" ", value)))
+    """True when a path only this computer can open appears anywhere not wholly inside an https:// link."""
+    links = [match.span() for match in TEXT_LINK.finditer(value)]
+    return any(not any(start <= path.start() and path.end() <= end for start, end in links)
+               for path in LOCAL_PATH.finditer(value))
+
+
+def is_phone_link(link):
+    return bool(PHONE_LINK.fullmatch(link)) and not LOOPBACK.match(link)
 CARD_ID = re.compile(r"^[a-z0-9][a-z0-9-]{0,47}$")
 STATES = ("open", "answered", "done", "closed")
 
@@ -188,7 +201,7 @@ def outcome_problems(entry):
     """Every rule an outcome entry must meet, shared by `add` and `lint`."""
     if not isinstance(entry, dict):
         return ["an outcome must be an object with \"at\" and \"text\""]
-    at, text, link = entry.get("at"), entry.get("text"), entry.get("link") or ""
+    at, text, link = entry.get("at"), entry.get("text"), entry.get("link", "")
     problems = []
     if not isinstance(at, str) or not OUTCOME_AT.match(at):
         problems.append(f"outcome date must be YYYY-MM-DD or YYYY-MM-DD HH:MM: {str(at)[:20]!r}")
@@ -203,8 +216,8 @@ def outcome_problems(entry):
         problems.append(f"outcome text is {len(text)} characters; the limit is {OUTCOME_TEXT}")
     if not isinstance(link, str):
         problems.append("an outcome link must be text")
-    elif link and not link.startswith("https://"):
-        problems.append(f"outcome link must start with https://: {link[:60]!r}")
+    elif link and not is_phone_link(link):
+        problems.append(f"outcome link must be an https:// link to a named host: {link[:60]!r}")
     return problems
 
 
@@ -349,8 +362,8 @@ def lint_cards(data):
             if isinstance(value, str) and names_local_path(value):
                 problems.append(f"{card_id}: names a local path a phone cannot open: {value[:60]!r}")
         for link in links:
-            if not link.startswith("https://"):
-                problems.append(f"{card_id}: link must start with https://: {link[:60]!r}")
+            if not is_phone_link(link):
+                problems.append(f"{card_id}: link must be an https:// link to a named host: {link[:60]!r}")
         for field, limit in LIMITS.items():
             value = card.get(field, "")
             if isinstance(value, str) and len(value) > limit:

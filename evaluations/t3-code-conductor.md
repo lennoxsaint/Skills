@@ -8,7 +8,7 @@ The author ran this method by hand in T3 Code before it was a skill. This is the
 
 ### The review page helper
 
-`scripts/test_desk.py` has 20 unit tests. All 20 pass locally, and CI runs them on every push. They cover:
+`scripts/test_desk.py` has 24 unit tests. All 24 pass locally, and CI runs them on every push. They cover:
 
 - `init` writes each file once and never overwrites one that exists
 - the ledger only appends, and one call cannot forge a second line
@@ -27,6 +27,10 @@ The author ran this method by hand in T3 Code before it was a skill. This is the
 - 1.1.0: `add` refuses a `|` inside outcome text, since `|` separates date, text and link
 - 1.1.0: a hand-edited field of the wrong type (a number or list as the goal or title, `links` as text or `null`, a text priority) fails `lint` without a crash, and `render` refuses
 - 1.1.0: a local path is caught after any punctuation (`Fix:/Users/...`, `[/Users/...]`) and under `/Volumes/`, `/private/` and `/tmp/`, while an `https://` link whose path holds `/Users/` or `/home/` still passes
+- 1.1.0: a local path right after a link (`"https://example.test/proof"(/Users/...)`) is caught in the goal, outcome text and title, across every quote, bracket and mark tried against eight path forms
+- 1.1.0: a word that only looks like a path (`users/home/views`, `docs/home/guide`, the key `/private/`) is not refused
+- 1.1.0: an outcome link of the wrong type (`null`, `0`, `false`, a list or an object) fails `lint` without a crash
+- 1.1.0: a link must name a host a phone can reach, so `https://`, `https:///Users/...`, `https://localhost/...` and `https://127.0.0.1/...` are refused
 
 ### Forward test
 
