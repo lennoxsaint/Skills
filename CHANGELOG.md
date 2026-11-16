@@ -11,6 +11,7 @@ What changed in this repository, newest first. Each skill also keeps its own not
 
 **Changed**
 
+- **T3 Code Conductor 1.1.0 and Claude Conductor 1.1.0: settle on the goal, not the run.** A thread whose run ended is judged against the goal it was first given. A finished one is settled, one with work left gets its next step at once, and one that needs the owner goes to the review page with the goal, a timeline of what was achieved with proof, and what is left. T3 Code Conductor's `desk.py` gains outcomes cards (`--goal`, `--outcome`), with 3 new tests (15 of 15 pass). See the [T3 guide](docs/t3-code-conductor.md) and the [Claude guide](docs/claude-conductor.md).
 - **Skill count to 13** in the README, `AGENTS.md` and `llms.txt`. The guides for Loop and Adversarial Review now point to Council. Neither skill's own text changed, so their versions stay at 1.0.0.
 
 ## 15 Nov 2026

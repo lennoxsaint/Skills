@@ -1,6 +1,6 @@
 # T3 Code Conductor evaluation
 
-Version: 1.0.0
+Version: 1.1.0
 
 ## What was tested
 
@@ -8,7 +8,7 @@ The author ran this method by hand in T3 Code before it was a skill. This is the
 
 ### The review page helper
 
-`scripts/test_desk.py` has 12 unit tests. All 12 pass locally, and CI runs them on every push. They cover:
+`scripts/test_desk.py` has 15 unit tests. All 15 pass locally, and CI runs them on every push. They cover:
 
 - `init` writes each file once and never overwrites one that exists
 - the ledger only appends, and one call cannot forge a second line
@@ -20,6 +20,9 @@ The author ran this method by hand in T3 Code before it was a skill. This is the
 - cards rank by due date, then priority, then age
 - six writers at once lose no card
 - the run folder can come from `CONDUCTOR_HOME`, or from `--dir` before or after the command
+- 1.1.0: an outcomes card keeps its goal and dated outcomes in order, and the page draws them as an escaped timeline with proof links
+- 1.1.0: `add` refuses an outcome with a bad date, no text, text over 140 characters, or more than 12 entries
+- 1.1.0: `lint` refuses local paths and `http://` proof links in the goal and outcomes
 
 ### Forward test
 
@@ -68,6 +71,7 @@ Before merge, on 12 Nov 2026:
 
 ## Limits
 
+- **1.1.0's settle-on-the-goal rule has not run in a forward test.** The three outcomes-card tests cover the helper only. Whether a conductor settles, progresses or carries a finished lane to the desk at the right moment was not measured.
 - **The public skill has not run a live T3 fleet.** The forward test used a written snapshot. T3 thread tools, `delegate_task` reviews, the scheduled refresh and phone delivery were not exercised.
 - **One run, one model.** Codex was not run as the conductor.
 - **T3 tool names can change.** The skill tells the agent to find them with tool search and read each schema. Names it gives are examples.

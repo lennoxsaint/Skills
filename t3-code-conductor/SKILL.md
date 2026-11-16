@@ -43,6 +43,16 @@ At most 2 helper tasks per lane at once. Read-only or mechanical helpers go to a
 
 After two nudges with no real progress, stop nudging. Read the failing job, process or tool yourself and change the approach. A third try needs new evidence.
 
+## Settle on the goal, not the run
+
+A lane whose run ended has finished one turn, not its job. Its job is the goal it was first given: the owner's request or the brief's finish line. Each time a run ends, and on every pass, judge the thread against that goal and make one move in the same pass:
+
+- **Goal met, proof read:** settle the thread with T3's organize tool and write one ledger line with the proof. Settling can be undone, so it needs no question. Settle a helper or review child once its report is delivered.
+- **Goal not met, next step inside your authority:** send the next whole outcome now. A finished run with work left never waits for the next pass.
+- **Goal not met, next step is the owner's:** add an outcomes card to the desk: the goal, a dated list of what the thread achieved with proof links, what is left, and the one decision ([desk](references/desk.md#outcomes-cards)).
+
+A settled thread whose goal is unmet is reopened as a lane in the census. The owner's own threads are read, never steered: settle one only when its goal is met.
+
 ## Outside review before anything counts
 
 The thread that built something never grades it.

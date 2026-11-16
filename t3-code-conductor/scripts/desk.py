@@ -8,6 +8,7 @@ refresh never write at the same moment.
   desk.py init                       create the run folder files (never overwrites)
   desk.py ledger TEXT                append one dated line to LEDGER.md
   desk.py add ID --title T --yes Y [--why W] [--no N] [--lane L] [--due YYYY-MM-DD] [--priority P] [--link URL ...]
+             [--goal G] [--outcome "YYYY-MM-DD[ HH:MM]|what was achieved[|https://proof]" ...]
   desk.py answer ID --choice C [--note N]   record the owner's answer
   desk.py routed ID --lane L         the answer was delivered to its lane; the card moves to done
   desk.py close ID --result TEXT     close a card without an answer (no longer needed)
@@ -27,7 +28,10 @@ import sys
 import tempfile
 import time
 
-LIMITS = {"title": 120, "why": 1200, "yes": 80, "no": 80, "note": 600, "lane": 60, "result": 300}
+LIMITS = {"title": 120, "why": 1200, "yes": 80, "no": 80, "note": 600, "lane": 60, "result": 300, "goal": 200}
+OUTCOME_TEXT = 140
+OUTCOMES_MAX = 12
+OUTCOME_AT = re.compile(r"^\d{4}-\d{2}-\d{2}( \d{2}:\d{2})?$")
 LOCAL_PATH = re.compile(r"(^|[\s\"'(=])(/Users/|/home/|~/|[A-Za-z]:\\|file://)", re.IGNORECASE)
 CARD_ID = re.compile(r"^[a-z0-9][a-z0-9-]{0,47}$")
 STATES = ("open", "answered", "done", "closed")
@@ -173,11 +177,34 @@ def cmd_ledger(args):
     return {"ledger": path, "line": text}
 
 
+def parse_outcomes(entries):
+    """Each --outcome is "WHEN|WHAT" or "WHEN|WHAT|LINK", oldest first."""
+    if len(entries) > OUTCOMES_MAX:
+        raise DeskError(f"{len(entries)} outcomes; the limit is {OUTCOMES_MAX}. Keep the ones that matter most")
+    history = []
+    for entry in entries:
+        parts = [part.strip() for part in entry.split("|", 2)]
+        at, text, link = (parts + ["", ""])[:3]
+        try:
+            if not OUTCOME_AT.match(at):
+                raise ValueError
+            dt.datetime.strptime(at, "%Y-%m-%d %H:%M" if " " in at else "%Y-%m-%d")
+        except ValueError as error:
+            raise DeskError(f"outcome date must be YYYY-MM-DD or YYYY-MM-DD HH:MM: {at[:20]!r}") from error
+        if not text:
+            raise DeskError("an outcome needs its text: \"WHEN|WHAT|LINK\"")
+        if len(text) > OUTCOME_TEXT:
+            raise DeskError(f"outcome text is {len(text)} characters; the limit is {OUTCOME_TEXT}")
+        history.append({"at": at, "text": text, "link": link})
+    return history
+
+
 def cmd_add(args):
     if not CARD_ID.match(args.id):
         raise DeskError("card id: lowercase letters, digits and dashes, up to 48 characters")
-    for field in ("title", "why", "yes", "no", "lane"):
+    for field in ("title", "why", "yes", "no", "lane", "goal"):
         check_length(field, getattr(args, field))
+    history = parse_outcomes(args.outcome or [])
     if args.due:
         try:
             dt.date.fromisoformat(args.due)
@@ -190,7 +217,8 @@ def cmd_add(args):
         data["cards"][args.id] = {
             "title": args.title, "why": args.why or "", "yes": args.yes, "no": args.no or "",
             "lane": args.lane or "", "due": args.due or "", "priority": args.priority,
-            "links": args.link or [], "state": "open", "created": now().isoformat(timespec="seconds"),
+            "links": args.link or [], "goal": args.goal or "", "history": history,
+            "state": "open", "created": now().isoformat(timespec="seconds"),
         }
         return {"added": args.id}
 
@@ -257,13 +285,21 @@ def lint_cards(data):
     for card_id, card in data["cards"].items():
         if card.get("state") != "open":
             continue
-        visible = [card.get(field, "") for field in ("title", "why", "yes", "no")] + list(card.get("links", []))
+        history = card.get("history", [])
+        history_links = [entry.get("link", "") for entry in history if entry.get("link")]
+        visible = [card.get(field, "") for field in ("title", "why", "yes", "no", "goal")] + list(card.get("links", []))
+        visible += [entry.get("text", "") for entry in history] + history_links
         for value in visible:
             if LOCAL_PATH.search(value or ""):
                 problems.append(f"{card_id}: names a local path a phone cannot open: {value[:60]!r}")
-        for link in card.get("links", []):
+        for link in list(card.get("links", [])) + history_links:
             if not link.startswith("https://"):
                 problems.append(f"{card_id}: link must start with https://: {link[:60]!r}")
+        if len(history) > OUTCOMES_MAX:
+            problems.append(f"{card_id}: has {len(history)} outcomes; the limit is {OUTCOMES_MAX}")
+        for entry in history:
+            if len(entry.get("text", "")) > OUTCOME_TEXT:
+                problems.append(f"{card_id}: an outcome is over {OUTCOME_TEXT} characters")
         for field, limit in LIMITS.items():
             if len(card.get(field, "") or "") > limit:
                 problems.append(f"{card_id}: {field} is over {limit} characters")
@@ -297,6 +333,11 @@ h1 {{ font-size:22px; margin:4px 0 2px; }} h2 {{ font-size:15px; text-transform:
 .card h3 {{ font-size:17px; margin:0 0 6px; }}
 .due {{ color:var(--due); font-weight:600; font-size:13px; }}
 .why {{ white-space:pre-wrap; margin:6px 0 10px; }}
+.goal {{ font-size:14px; margin:0 0 8px; }} .goal b, .left {{ color:var(--muted); font-size:12px; text-transform:uppercase; letter-spacing:.06em; }}
+.timeline {{ list-style:none; margin:4px 0 12px; padding:0 0 0 18px; border-left:2px solid var(--line); }}
+.timeline li {{ position:relative; margin:0 0 10px; }}
+.timeline li::before {{ content:""; position:absolute; left:-25px; top:5px; width:10px; height:10px; border-radius:50%; background:var(--go); border:2px solid var(--card); }}
+.timeline .when {{ display:block; color:var(--muted); font-size:12px; }}
 .yes {{ display:block; background:var(--go); color:#fff; border-radius:10px; padding:12px; font-weight:600; text-align:center; }}
 .no {{ display:block; text-align:center; padding:8px; color:var(--muted); }}
 code {{ display:block; overflow-wrap:anywhere; background:var(--bg); border:1px solid var(--line); border-radius:8px; padding:8px; margin-top:8px; font-size:14px; }}
@@ -320,11 +361,21 @@ def esc(value):
 
 def render_open(card_id, card):
     due = f'<div class="due">Due {esc(card["due"])}</div>' if card.get("due") else ""
-    why = f'<div class="why">{esc(card["why"])}</div>' if card.get("why") else ""
+    goal = f'<p class="goal"><b>Goal</b><br>{esc(card["goal"])}</p>' if card.get("goal") else ""
+    history = card.get("history", [])
+    timeline = ""
+    if history:
+        rows = "".join(
+            f'<li><span class="when">{esc(entry.get("at"))}</span>{esc(entry.get("text"))}'
+            + (f' &middot; <a href="{esc(entry["link"])}" rel="noopener noreferrer">proof</a>' if entry.get("link") else "")
+            + "</li>" for entry in history)
+        timeline = f'<ol class="timeline">{rows}</ol>'
+    left = '<div class="left">What is left</div>' if history and card.get("why") else ""
+    why = f'{left}<div class="why">{esc(card["why"])}</div>' if card.get("why") else ""
     links = "".join(f'<div class="small"><a href="{esc(link)}" rel="noopener noreferrer">{esc(link)}</a></div>' for link in card.get("links", []))
     no = f'<div class="no">or: {esc(card["no"])} <code>answer {esc(card_id)} no</code></div>' if card.get("no") else ""
     lane = f' &middot; goes to {esc(card["lane"])}' if card.get("lane") else ""
-    return (f'<section class="card" id="{esc(card_id)}"><h3>{esc(card["title"])}</h3>{due}{why}{links}'
+    return (f'<section class="card" id="{esc(card_id)}"><h3>{esc(card["title"])}</h3>{due}{goal}{timeline}{why}{links}'
             f'<div class="yes">{esc(card["yes"])}</div><code>answer {esc(card_id)} yes</code>{no}'
             f'<div class="small">{esc(card_id)}{lane}</div></section>')
 
@@ -390,6 +441,9 @@ def parser():
     add.add_argument("--due")
     add.add_argument("--priority", type=int, default=3, choices=range(1, 6))
     add.add_argument("--link", action="append")
+    add.add_argument("--goal", help="the thread's initial task, in one line")
+    add.add_argument("--outcome", action="append",
+                     help='one achieved outcome, oldest first: "YYYY-MM-DD[ HH:MM]|what|https://proof"')
     answer = sub.add_parser("answer", parents=[where])
     answer.add_argument("id")
     answer.add_argument("--choice", required=True)

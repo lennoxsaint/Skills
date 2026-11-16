@@ -55,6 +55,8 @@ Create a new thread only when the owner allowed it and a real gap has no owner. 
 
 Read each reply when it lands. Supply what it needs: a terminal command, a sign-in through a saved login, a scoped approval you already hold. Read the exact command or permission before you approve it. A timeout is not permission to resend.
 
+**Settle on the goal, not the run.** A thread whose run ended has finished one turn, not its job. Each time one ends, judge it against the goal it was first given and act in the same pass. Goal met and proof read: mark it resolved where the host lets you, with one ledger line. Goal unmet and the next step inside your authority: send that step now. Goal unmet and the next step is the owner's: put it on the review page with the goal, a dated list of what the thread achieved with proof, what is left, and the one decision. A thread marked resolved whose goal is unmet goes back into the census as actionable.
+
 A thread waiting on a protected action gets one short message: hold, the decision is with the owner, carry on with anything else in scope. Then put the exact decision in the ledger.
 
 After two nudges with no real progress, stop nudging. Inspect the failing job, process or tool and change the approach. A third try needs new evidence. A "running" badge needs a real process and recent progress behind it. Check the process and its output once; with no recent progress, mark it stuck and change the approach. Never start a second copy of the job.

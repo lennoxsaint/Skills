@@ -82,4 +82,6 @@ A synthetic example lives in [`examples/t3-code-conductor/`](../examples/t3-code
 
 ## Changelog
 
+**1.1.0** (16 Nov 2026) - settle on the goal, not the run. When a lane's run ends, the conductor judges it against the goal it was first given: it settles a finished lane, sends the next step at once when it may, or puts an outcomes card on the desk. The card shows the goal, a timeline of what was achieved with proof links, and what is left. `desk.py add` takes `--goal` and `--outcome`.
+
 **1.0.0** (12 Nov 2026) - first public release. This is the method I run my T3 Code threads with, written up as a skill for the first time, with my machines, accounts, thread ids and private rules taken out. The review page helper is new and tested. After a test with an agent that had never seen the skill, the text now says what to do with a "completed" thread that has no proof, an existing thread with no lane, an unreadable thread, earlier ledger lines, an unknown conductor id and non-code briefs, and that a decision still waiting on review stays off the page.

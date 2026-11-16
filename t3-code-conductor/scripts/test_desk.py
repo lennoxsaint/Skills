@@ -95,6 +95,49 @@ class DeskTests(unittest.TestCase):
         self.assertNotIn("<link", page)
         self.assertIn("answer c-xss yes", page)
 
+    def test_outcomes_card_keeps_goal_and_history_in_order(self):
+        self.run_desk("add", "c-lane", "--title", "Ship the pricing page now?", "--yes", "Ship it",
+                      "--goal", "A pricing page that converts <better>",
+                      "--outcome", "2026-11-14 09:10|Draft passed outside review",
+                      "--outcome", "2026-11-15|Staging build green|https://ci.example.com/run/7")
+        card = self.desk()["cards"]["c-lane"]
+        self.assertEqual(card["goal"], "A pricing page that converts <better>")
+        self.assertEqual([entry["text"] for entry in card["history"]],
+                         ["Draft passed outside review", "Staging build green"])
+        self.assertEqual(card["history"][1]["link"], "https://ci.example.com/run/7")
+        self.assertEqual(card["history"][0]["link"], "")
+        self.run_desk("render")
+        page = (self.folder / "review.html").read_text(encoding="utf-8")
+        self.assertIn('class="timeline"', page)
+        self.assertIn("&lt;better&gt;", page)
+        self.assertLess(page.index("Draft passed outside review"), page.index("Staging build green"))
+        self.assertIn('href="https://ci.example.com/run/7"', page)
+
+    def test_outcome_entries_are_checked(self):
+        bad = [
+            ("c-date", "yesterday|Did a thing"),
+            ("c-empty", "2026-11-14|"),
+            ("c-long", "2026-11-14|" + "x" * 141),
+        ]
+        for card_id, entry in bad:
+            result = self.run_desk("add", card_id, "--title", "T", "--yes", "Y", "--outcome", entry, check=False)
+            self.assertEqual(result.returncode, 1, card_id)
+        many = []
+        for day in range(1, 14):
+            many += ["--outcome", f"2026-11-{day:02d}|step {day}"]
+        result = self.run_desk("add", "c-many", "--title", "T", "--yes", "Y", *many, check=False)
+        self.assertEqual(result.returncode, 1)
+        self.assertEqual(self.desk()["cards"], {})
+
+    def test_lint_catches_local_paths_and_plain_links_in_history(self):
+        self.run_desk("add", "c-hpath", "--title", "T", "--yes", "Y", "--outcome", "2026-11-14|Saved to /Users/someone/out")
+        self.run_desk("add", "c-hlink", "--title", "T", "--yes", "Y", "--outcome", "2026-11-14|Built|http://example.com/run")
+        self.run_desk("add", "c-goal", "--title", "T", "--yes", "Y", "--goal", "Fix ~/notes.md")
+        result = self.run_desk("lint", check=False)
+        self.assertEqual(result.returncode, 1)
+        for card_id in ("c-hpath", "c-hlink", "c-goal"):
+            self.assertIn(card_id, result.stdout)
+
     def test_show_ranks_due_first_then_priority(self):
         self.run_desk("add", "c-later", "--title", "Later", "--yes", "y", "--priority", "1")
         self.run_desk("add", "c-due", "--title", "Due", "--yes", "y", "--due", "2026-01-02", "--priority", "5")
