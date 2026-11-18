@@ -2,6 +2,12 @@
 
 What changed in this repository, newest first. Each skill also keeps its own notes in `docs/<skill-name>.md`.
 
+## 18 Nov 2026
+
+**Changed**
+
+- **T3 Code Conductor 1.2.0 and Claude Conductor 1.2.0: sweep on the clock.** The sweep of ended threads now runs at the start of any turn when the last `SWEEP` ledger line is more than 45 minutes old, before the conductor handles the message. In a live fleet the 1.1.0 trigger ("sweep whenever no reply needs you") never fired: replies reached the conductor every 1.5 minutes (median over 27 hours), context compaction dropped the duty from its summary within a few hours, and sweeps ran only when the owner asked. Each ended thread gets one of four moves: settle, progress, desk or snooze. Helpers and children are settled in the turn their result is read, and an idle thread is woken only with work. A host hook that checks the age of the last sweep is recommended so the rule survives compaction. Wording only: `desk.py` and its 12 tests are unchanged. See the [T3 guide](docs/t3-code-conductor.md) and the [Claude guide](docs/claude-conductor.md).
+
 ## 17 Nov 2026
 
 **Changed**
