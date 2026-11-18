@@ -1,17 +1,18 @@
 # One cycle
 
-A cycle is one supervisory pass. Start one when a lane finished or replied, when an owner answer arrived, when a check is due, or when the scheduled refresh fires. Not on a fixed short timer.
+A cycle is one supervisory pass. Start one when a lane finished or replied, when an owner answer arrived, when a check is due, or when the scheduled refresh fires. Not on a fixed short timer: the sweep check in step 1 rides on every pass.
 
 ## The pass
 
-1. **Read the state.** The end of `LEDGER.md`, `ROSTER.md`, open cards (`desk.py show`).
-2. **Read only what changed.** Lanes whose last run finished or that replied since the last ledger line. Skip quiet lanes that are not due.
-3. **For each changed lane, judge the proof, not the claim.** Open the diff, the check output, the file, the readback. Decide: done, needs another step, needs review, blocked, or needs the owner. Judge it against the lane's first goal, not its last run, and make the matching move from [Settle on the goal, not the run](../SKILL.md#settle-on-the-goal-not-the-run) in this pass.
-4. **Answer what you can.** Check `STANDING.md` and the ledger. Answer the lane, log the decision you used.
-5. **Send the next whole outcome** to each lane that needs one (template below).
-6. **Order outside reviews** for anything that claims done (review stack below).
-7. **Update the desk.** Add a card only for a decision that is truly the owner's. Close cards whose answer was delivered. `desk.py lint`, then `desk.py render`.
-8. **One ledger line** with what changed, then wait for notifications.
+1. **Sweep if due.** When the last `SWEEP` line in `LEDGER.md` is more than 45 minutes old, sweep first ([Sweep on the clock](../SKILL.md#sweep-on-the-clock)).
+2. **Read the state.** The end of `LEDGER.md`, `ROSTER.md`, open cards (`desk.py show`).
+3. **Read only what changed.** Lanes whose last run finished or that replied since the last ledger line. Skip quiet lanes that are not due.
+4. **For each changed lane, judge the proof, not the claim.** Open the diff, the check output, the file, the readback. Decide: done, needs another step, needs review, blocked, or needs the owner. Judge it against the lane's first goal, not its last run, and make the matching move from [Settle on the goal, not the run](../SKILL.md#settle-on-the-goal-not-the-run) in this pass.
+5. **Answer what you can.** Check `STANDING.md` and the ledger. Answer the lane, log the decision you used.
+6. **Send the next whole outcome** to each lane that needs one (template below).
+7. **Order outside reviews** for anything that claims done (review stack below).
+8. **Update the desk.** Add a card only for a decision that is truly the owner's. Close cards whose answer was delivered. `desk.py lint`, then `desk.py render`.
+9. **One ledger line** with what changed, then wait for notifications.
 
 Walk the roster in order and keep your place in `cursor.txt` in the run folder, so a low-priority lane still gets its turn after the top ones.
 

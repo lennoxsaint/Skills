@@ -45,13 +45,24 @@ After two nudges with no real progress, stop nudging. Read the failing job, proc
 
 ## Settle on the goal, not the run
 
-A lane whose run ended has finished one turn, not its job. Its job is the goal it was first given: the owner's request or the brief's finish line. Each time a run ends, and on every pass, judge the thread against that goal and make one move in the same pass:
+A lane whose run ended has finished one turn, not its job. Its job is the goal it was first given: the owner's request or the brief's finish line. Each time a run ends, and on every pass, judge the thread against that goal and make one of four moves in the same pass: settle, progress, desk or snooze.
 
-- **Goal met, proof read:** settle the thread with T3's organize tool and write one ledger line with the proof. Settling can be undone, so it needs no question. Settle a helper or review child once its report is delivered.
-- **Goal not met, next step inside your authority:** send the next whole outcome now. A finished run with work left never waits for the next pass.
-- **Goal not met, next step is the owner's:** add an outcomes card to the desk. Its title is the one decision, its `why` holds the goal, one dated line per outcome achieved so far and what is left, its links are the proof, and its `yes` is the next step ([desk](references/desk.md#outcomes-cards)).
+- **Settle. Goal met, proof read:** settle the thread with T3's organize tool and write one ledger line with the proof. Settling can be undone, so it needs no question. Settle a helper or review child in the turn you read its report.
+- **Progress. Goal not met, next step inside your authority:** send the next whole outcome now. A finished run with work left never waits for the next pass.
+- **Desk. Goal not met, next step is the owner's:** add an outcomes card to the desk, then snooze the thread until the owner's likely answer. Its title is the one decision, its `why` holds the goal, one dated line per outcome achieved so far and what is left, its links are the proof, and its `yes` is the next step ([desk](references/desk.md#outcomes-cards)).
+- **Snooze. Waiting on a known time or event** (a review, CI, a hold date, a usage reset): snooze the thread until then plus a small margin. When a snooze ends and nothing changed, make a fresh move.
 
 A settled thread whose goal is unmet is reopened as a lane in the census. The owner's own threads are read, never steered, and judged the same way: when one's run ends with its goal unmet, its next step is the owner's, so it gets an outcomes card now and nothing is sent into it. Settle one only when its goal is met.
+
+### Sweep on the clock
+
+Lane replies start most of the conductor's turns, so a sweep that waits for idle time never runs. At the start of any turn, when the last `SWEEP` line in `LEDGER.md` is more than 45 minutes old, sweep before you handle the message:
+
+1. List every thread whose run ended and that is neither settled nor snoozed, with T3's thread list (all projects, children included).
+2. Make one of the four moves on each. Wake an idle thread only with work: the owner's answer or its next whole outcome.
+3. The sweep is done when a fresh list shows nothing that ended more than 45 minutes ago. Write one ledger line with `desk.py ledger`: `SWEEP hh:mm: N settled, N progressed, N desk, N snoozed`.
+
+Context compaction drops standing duties from the conductor's summary, so where the host runs hooks, add one that checks the age of the last `SWEEP` line on every prompt and tells the conductor when a sweep is due.
 
 ## Outside review before anything counts
 

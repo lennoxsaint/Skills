@@ -1,6 +1,6 @@
 # Claude Conductor evaluation
 
-Version: 1.1.0
+Version: 1.2.0
 
 ## What was tested
 
@@ -51,6 +51,7 @@ Before merge, on 12 Nov 2026:
 ## Limits
 
 - **1.1.0's settle-on-the-goal rule has not run in a forward test.** It is one paragraph of instruction; no run measured whether a conductor resolves, progresses or carries a finished thread to the review page at the right moment.
+- **1.2.0's clock-driven sweep has not run in a forward test either.** It replaces the 1.1.0 trigger ("sweep whenever no reply needs you"), which never fired in a live fleet: replies reached the conductor every 1.5 minutes (median over 27 hours), context compaction dropped the duty from its summary within a few hours, and sweeps ran only when the owner asked. Whether the new trigger keeps every ended thread handled within the hour was not measured.
 - **Never run on a live fleet in this public form.** The forward test used a written snapshot. Reading real threads, sending messages, sign-ins and merges were not exercised.
 - **One run, one model.** Codex was not run.
 - **Thread tools differ between runtimes.** The skill tells the agent to find and prove its own route. Which routes work in your setup was not tested.
