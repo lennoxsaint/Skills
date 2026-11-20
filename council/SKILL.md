@@ -69,6 +69,7 @@ Resolve the seats from what is live on this machine. In T3 Code, call `orchestra
 Start one review per seat. Run seats in parallel unless your setup caps concurrent helpers; then start the next seat when one returns. In T3 Code, use one `delegate_task` per seat:
 
 - mode `async` and role `review`
+- `runtimeMode: "full-access"` unless the user asks for supervised seats: a seat on another machine does not inherit your mode and otherwise stalls on approval prompts
 - a new `clientRequestId` each round
 - `isolation: "worktree"` when the artifact is in git, so seats can build and test without touching each other's files
 

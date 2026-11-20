@@ -1,6 +1,6 @@
 # Council evaluation
 
-Version: 1.0.0
+Version: 1.0.1
 
 ## What was tested
 
@@ -68,3 +68,4 @@ The two skills, with their reference files, grew from 3,399 to about 4,248 words
 - **The scores are model judgments.** Each one is a single sample from one model.
 - **A pass was not reached.** The run tapped out at bar 9, and the final fix was confirmed by one seat only.
 - **The public text was not re-reviewed.** The generic rewrite of paths, tools and roster was checked by the repository's validators, not by another council round.
+- **1.0.1's full-access seat setting is wording only.** It comes from one live fleet, where seats launched on a linked machine landed supervised; no council round has run with it yet.

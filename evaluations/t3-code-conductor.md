@@ -1,6 +1,6 @@
 # T3 Code Conductor evaluation
 
-Version: 1.2.0
+Version: 1.2.1
 
 ## What was tested
 
@@ -69,6 +69,7 @@ Before merge, on 12 Nov 2026:
 ## Limits
 
 - **1.1.0's settle-on-the-goal rule has not run in a forward test.** It is wording only; `desk.py` and its 12 tests did not change. Whether a conductor settles, progresses or carries a finished lane to the desk at the right moment was not measured.
+- **1.2.1's full-access launch rule is measured from one live fleet, not a test.** Over 14 days, 208 of the 226 supervised threads on one machine came from launches on a linked machine, while same-machine launches inherited full access. No forward test has run the new wording.
 - **1.2.0's clock-driven sweep has not run in a forward test either.** It replaces the 1.1.0 trigger ("sweep whenever no reply needs you"), which never fired in a live fleet: replies reached the conductor every 1.5 minutes (median over 27 hours), context compaction dropped the duty from its summary within a few hours, and sweeps ran only when the owner asked. Whether the new trigger keeps every ended thread handled within the hour was not measured.
 - **The public skill has not run a live T3 fleet.** The forward test used a written snapshot. T3 thread tools, `delegate_task` reviews, the scheduled refresh and phone delivery were not exercised.
 - **One run, one model.** Codex was not run as the conductor.

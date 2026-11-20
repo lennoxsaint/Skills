@@ -82,6 +82,8 @@ A synthetic example lives in [`examples/t3-code-conductor/`](../examples/t3-code
 
 ## Changelog
 
+**1.2.1** (21 Nov 2026) - every thread and delegate starts with `runtimeMode: "full-access"` unless the owner asks for a supervised one. In a live fleet, threads launched from a linked machine did not inherit the caller's mode and sat waiting on approval prompts.
+
 **1.2.0** (18 Nov 2026) - sweep on the clock. At the start of any turn, when the last `SWEEP` line in `LEDGER.md` is more than 45 minutes old, the conductor sweeps before it handles the message: every thread whose run ended and that is neither settled nor snoozed gets one of four moves (settle, progress, desk or snooze). In a live fleet the 1.1.0 trigger ("sweep whenever no reply needs you") never fired: replies reached the conductor every 1.5 minutes (median over 27 hours), context compaction dropped the duty from its summary within a few hours, and sweeps ran only when the owner asked. Snooze is now a named move, a desk card snoozes its thread until the owner's likely answer, and the cycle starts with the sweep check. Wording only; `desk.py` did not change.
 
 **1.1.0** (17 Nov 2026) - settle on the goal, not the run. When a lane's run ends, the conductor judges it against the goal it was first given: it settles a finished lane, sends the next step at once when it may, or puts an outcomes card on the desk. An outcomes card is an ordinary desk card: its `why` holds the goal, one dated line per outcome achieved and what is left, its links hold the proof, and its `yes` is the next step. Wording only; `desk.py` did not change.
