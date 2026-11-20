@@ -2,6 +2,12 @@
 
 What changed in this repository, newest first. Each skill also keeps its own notes in `docs/<skill-name>.md`.
 
+## 21 Nov 2026
+
+**Changed**
+
+- **T3 Code Conductor 1.2.1 and Council 1.0.1: launch in full access.** Every thread, delegate and council seat starts with `runtimeMode: "full-access"` unless the owner asks for a supervised one. In a live fleet over 14 days, 208 of 226 supervised threads on one machine came from launches on a linked machine: a cross-machine launch does not inherit the caller's mode, so it lands supervised and waits on approval prompts no one is watching. Same-machine launches already inherited full access. Wording only: no code changed.
+
 ## 18 Nov 2026
 
 **Changed**

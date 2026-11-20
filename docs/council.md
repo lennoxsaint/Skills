@@ -95,4 +95,6 @@ Theo Browne's council video (16 Nov 2026) and his [tstack](https://github.com/t3
 
 ## Changelog
 
+**1.0.1** (21 Nov 2026) - seats start with `runtimeMode: "full-access"` unless the user asks for supervised seats. A seat launched on a linked machine did not inherit the caller's mode and stalled on approval prompts.
+
 **1.0.0** (16 Nov 2026) - first public release. This is the council I run, with my private paths, tools and taste files replaced by general ones. Its text went through five rounds of its own council before release.
