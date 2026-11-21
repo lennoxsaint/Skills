@@ -4,8 +4,13 @@ What changed in this repository, newest first. Each skill also keeps its own not
 
 ## 21 Nov 2026
 
+**Added**
+
+- **T3 Code Conductor 1.3.0: the settle gate.** `scripts/settle_check.py` reads a top-level thread's last message, last run and linked pull requests before it is settled, and prints `ALLOW` or `BLOCK` with the reason. Run as a hook on T3's organize tool, it refuses to settle a thread that still looks open until a proof line is recorded, and logs every top-level settle. An audit of one live fleet found 45 of 165 top-level threads settled over three days were still open (27%), most settled in bulk without their last message being read. Replayed on the 151 of those threads that had not changed, the public script blocks 28 of 34 open ones and asks for a proof line on 30 of 117 closed ones. That replay uses the threads the gate was tuned on, so real results will be lower. 17 new unit tests.
+
 **Changed**
 
+- **Claude Conductor 1.2.1: read before you resolve.** The same audit, as a rule: resolve a top-level thread one at a time after reading its last message, let helpers bulk-resolve children only, and never ask for a "resolve all". Wording only; not measured.
 - **T3 Code Conductor 1.2.1 and Council 1.0.1: launch in full access.** Every thread, delegate and council seat starts with `runtimeMode: "full-access"` unless the owner asks for a supervised one. In a live fleet over 14 days, 208 of 226 supervised threads on one machine came from launches on a linked machine: a cross-machine launch does not inherit the caller's mode, so it lands supervised and waits on approval prompts no one is watching. Same-machine launches already inherited full access. Wording only: no code changed.
 
 ## 18 Nov 2026

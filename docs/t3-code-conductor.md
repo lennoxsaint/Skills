@@ -82,6 +82,8 @@ A synthetic example lives in [`examples/t3-code-conductor/`](../examples/t3-code
 
 ## Changelog
 
+**1.3.0** (21 Nov 2026) - the settle gate. `scripts/settle_check.py` reads a top-level thread's last message, last run and linked pull requests before it is settled and prints `ALLOW` or `BLOCK`; as a hook it refuses the settle and logs every one. A `BLOCK`ed thread is settled only after a recorded proof line. Helpers bulk-settle children only, and there are no "settle all" cards. An audit of one live fleet found 45 of 165 top-level settles over three days were still open.
+
 **1.2.1** (21 Nov 2026) - every thread and delegate starts with `runtimeMode: "full-access"` unless the owner asks for a supervised one. In a live fleet, threads launched from a linked machine did not inherit the caller's mode and sat waiting on approval prompts.
 
 **1.2.0** (18 Nov 2026) - sweep on the clock. At the start of any turn, when the last `SWEEP` line in `LEDGER.md` is more than 45 minutes old, the conductor sweeps before it handles the message: every thread whose run ended and that is neither settled nor snoozed gets one of four moves (settle, progress, desk or snooze). In a live fleet the 1.1.0 trigger ("sweep whenever no reply needs you") never fired: replies reached the conductor every 1.5 minutes (median over 27 hours), context compaction dropped the duty from its summary within a few hours, and sweeps ran only when the owner asked. Snooze is now a named move, a desk card snoozes its thread until the owner's likely answer, and the cycle starts with the sweep check. Wording only; `desk.py` did not change.
