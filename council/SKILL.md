@@ -54,7 +54,7 @@ Resolve the seats from what is live on this machine. In T3 Code, call `orchestra
 |---|---|
 | OpenAI | the latest top GPT model, on any account the user is signed in to |
 | Anthropic | the latest Claude Opus, on any account the user is signed in to, then the same Opus through another harness such as Cursor |
-| Third lab | the latest Gemini Pro, then the latest Grok, then another lab's top model |
+| Third lab | the latest Gemini Neon (through Antigravity or Cursor), then the latest Gemini Pro, then the latest Grok, then another lab's top model |
 
 - Run every seat at `high` effort. At xhigh or max, reviewers keep finding nits forever.
 - A seat that fails twice moves down its ladder. A seat that hits a usage limit tries the next account or plan before it counts as a failure.
