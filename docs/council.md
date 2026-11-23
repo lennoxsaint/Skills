@@ -95,7 +95,7 @@ Theo Browne's council video (16 Nov 2026) and his [tstack](https://github.com/t3
 
 ## Changelog
 
-**1.1.0** (24 Nov 2026) - the third lab's ladder starts with the latest Gemini Neon, through Antigravity or Cursor, before Gemini Pro and Grok.
+**1.1.0** (24 Nov 2026) - the third lab's ladder starts with the latest Gemini Neon, through a harness such as Antigravity or Cursor, before Gemini Pro and Grok.
 
 **1.0.1** (21 Nov 2026) - seats start with `runtimeMode: "full-access"` unless the user asks for supervised seats. A seat launched on a linked machine did not inherit the caller's mode and stalled on approval prompts.
 

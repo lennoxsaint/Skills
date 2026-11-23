@@ -6,7 +6,7 @@ What changed in this repository, newest first. Each skill also keeps its own not
 
 **Changed**
 
-- **Council 1.1.0: Gemini Neon seat.** Adds Gemini 4 Neon as the Google seat's first Gemini rung. The third lab's ladder is now the latest Gemini Neon (through Antigravity or Cursor), then the latest Gemini Pro, then the latest Grok, then another lab's top model. Wording only: no code changed.
+- **Council 1.1.0: Gemini Neon seat.** The third lab's ladder is now the latest Gemini Neon, through a harness such as Antigravity or Cursor, then the latest Gemini Pro, then the latest Grok, then another lab's top model. Wording only: no code changed.
 
 ## 21 Nov 2026
 
