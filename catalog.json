@@ -145,7 +145,7 @@
       "display_name": "Council",
       "path": "council",
       "status": "stable",
-      "version": "1.0.1",
+      "version": "1.1.0",
       "summary": "Have reviewers from three AI labs score the exact same version, fix what they prove, and loop until every one would ship it, the loop stalls, or it is blocked.",
       "use_when": "The user wants work reviewed by models from several AI labs before it goes out (\"council\", \"council 9.5\", \"model council\", \"get the models to agree\"), or a hard decision put to several labs. Not for one reviewer against a 100-point rubric: use adversarial-review.",
       "try": "Council 9 on this PR: have three labs review it and loop until they would all ship it.",
