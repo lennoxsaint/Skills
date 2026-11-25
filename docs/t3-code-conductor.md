@@ -82,6 +82,8 @@ A synthetic example lives in [`examples/t3-code-conductor/`](../examples/t3-code
 
 ## Changelog
 
+**1.4.0** (26 Nov 2026) - snooze is the last resort. The four moves are now a ladder: settle only when the end objective is proven, advance anything inside your authority (answering the owner's routine choices from their standing decisions), put the rest on the desk and leave the thread unsnoozed, and snooze only for a fixed clock time no work can bring forward, with at most 5 lanes snoozed at once. In one live fleet the earlier wording left 34 threads snoozed at once. Wording only, plus the settle gate's refusal message.
+
 **1.3.0** (21 Nov 2026) - the settle gate. `scripts/settle_check.py` reads a top-level thread's last message, last run and linked pull requests before it is settled and prints `ALLOW` or `BLOCK`; as a hook it refuses the settle and logs every one. A `BLOCK`ed thread is settled only after a recorded proof line. Helpers bulk-settle children only, and there are no "settle all" cards. An audit of one live fleet found 45 of 165 top-level settles over three days were still open.
 
 **1.2.1** (21 Nov 2026) - every thread and delegate starts with `runtimeMode: "full-access"` unless the owner asks for a supervised one. In a live fleet, threads launched from a linked machine did not inherit the caller's mode and sat waiting on approval prompts.

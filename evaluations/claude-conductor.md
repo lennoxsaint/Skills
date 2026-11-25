@@ -1,6 +1,6 @@
 # Claude Conductor evaluation
 
-Version: 1.2.1
+Version: 1.2.2
 
 ## What was tested
 
@@ -50,6 +50,7 @@ Before merge, on 12 Nov 2026:
 
 ## Limits
 
+- **1.2.2's snooze-last order is wording only.** It comes from the same live T3 fleet (34 threads snoozed at once); no run has measured it.
 - **1.2.1's read-before-you-resolve rule is wording only.** It comes from an audit of one live T3 fleet (45 of 165 top-level threads resolved over three days were still open; see the [T3 Code Conductor evaluation](t3-code-conductor.md)). No run has measured whether the paragraph changes what a conductor resolves.
 - **1.1.0's settle-on-the-goal rule has not run in a forward test.** It is one paragraph of instruction; no run measured whether a conductor resolves, progresses or carries a finished thread to the review page at the right moment.
 - **1.2.0's clock-driven sweep has not run in a forward test either.** It replaces the 1.1.0 trigger ("sweep whenever no reply needs you"), which never fired in a live fleet: replies reached the conductor every 1.5 minutes (median over 27 hours), context compaction dropped the duty from its summary within a few hours, and sweeps ran only when the owner asked. Whether the new trigger keeps every ended thread handled within the hour was not measured.
