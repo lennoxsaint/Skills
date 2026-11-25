@@ -18,8 +18,8 @@ Rules:
   - A child or helper thread is ALLOW: its report went to its parent.
   - A root thread is BLOCK when any open signal is found, unless a proof line
     newer than its last message is in the settle log.
-  - BLOCK is not "never settle". It means: read the thread, then snooze,
-    progress or desk it, or record the proof that the goal is met.
+  - BLOCK is not "never settle". It means: read the thread, then advance it
+    or desk it (snooze last), or record the proof that the goal is met.
 
 The database is $T3_STATE_DB, else ~/.t3/userdata/statev2.sqlite. The log is
 $CONDUCTOR_SETTLE_LOG, else settle-log.jsonl in $CONDUCTOR_HOME, else in
@@ -204,8 +204,8 @@ def hook():
         me = os.path.abspath(__file__)
         reason = (
             f"SETTLE GATE: \"{(r['title'] or '')[:60]}\" still looks open ({why}). A run that ended is not a goal that is met. "
-            "Read the thread, then make the right move: snooze it (waiting on a time, a card or a person), progress it "
-            "(send the next whole outcome), or desk it. If you have read the proof that its goal is met, or its work was "
+            "Read the thread, then take the first move that fits: advance it (send the next whole outcome), or put it on the "
+            "desk and leave it unsnoozed. Snooze only as a last resort, for a fixed clock time. If you have read the proof that its goal is met, or its work was "
             f"handed whole to a named live thread, record that first: python3 {me} --proof \"<where the proof is>\" "
             f"'{i['threadId']}' and then settle. Helpers never record proof for a thread they did not read."
         )

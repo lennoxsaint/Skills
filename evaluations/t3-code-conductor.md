@@ -1,6 +1,6 @@
 # T3 Code Conductor evaluation
 
-Version: 1.3.0
+Version: 1.4.0
 
 ## What was tested
 
@@ -83,6 +83,7 @@ Before merge, on 12 Nov 2026:
 
 ## Limits
 
+- **1.4.0's snooze-last ladder is wording only.** It comes from one live fleet where 34 threads were snoozed at once (17 on a desk card, 8 on CI or a review) under the earlier wording. No run has measured whether the ladder lowers that count, and the shipped script does not enforce the cap of 5.
 - **1.3.0's settle gate is measured on the data it was tuned on.** The phrase list was fitted to the same 165 threads the replay used, so its 28 of 34 is a ceiling, not a forecast. No forward run has measured it yet; the settle log it writes is there so the next audit can. The labels are model judgments checked by the author, not by a second person.
 - **The gate matches phrases.** It missed 6 of 34 open threads, which said nothing it has a phrase for, and it stops about a quarter of finished ones until a proof line is recorded. `ALLOW` is not proof.
 - **The gate reads T3's local database, which is not a public contract.** A T3 update can move a table; the check then reports the thread as not found and the hook lets the settle through. It sees only this machine's threads. The hook is wired for Claude Code; a Codex conductor follows the skill text.

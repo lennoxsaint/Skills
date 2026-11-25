@@ -2,6 +2,12 @@
 
 What changed in this repository, newest first. Each skill also keeps its own notes in `docs/<skill-name>.md`.
 
+## 26 Nov 2026
+
+**Changed**
+
+- **T3 Code Conductor 1.4.0 and Claude Conductor 1.2.2: snooze is the last resort.** The conductor's four moves are now a ladder, taken in order: settle only when the end objective is proven; advance anything inside your authority, answering the owner's routine choices from their standing decisions; put what only the owner can decide on the desk and leave the thread unsnoozed; snooze only for a fixed clock time that no work can bring forward, with the reason written down and at most 5 lanes snoozed at once. In one live fleet a conductor told to keep snoozes rare had 34 threads snoozed at once: 17 waiting on a desk card and 8 waiting minutes on CI or a review. The earlier wording asked for both and the sweep counted a snoozed thread as handled. Wording only, plus the settle gate's refusal message; not measured.
+
 ## 24 Nov 2026
 
 **Changed**

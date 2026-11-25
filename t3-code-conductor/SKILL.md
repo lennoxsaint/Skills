@@ -46,12 +46,14 @@ After two nudges with no real progress, stop nudging. Read the failing job, proc
 
 ## Settle on the goal, not the run
 
-A lane whose run ended has finished one turn, not its job. Its job is the goal it was first given: the owner's request or the brief's finish line. Each time a run ends, and on every pass, judge the thread against that goal and make one of four moves in the same pass: settle, progress, desk or snooze.
+A lane whose run ended has finished one turn, not its job. Its job is the goal it was first given: the owner's request or the brief's finish line. Each time a run ends, and on every pass, judge the thread against that goal and take the first rung of this ladder that fits, in the same pass. Go down a rung only when the one above cannot be taken.
 
-- **Settle. Goal met, proof read:** settle the thread with T3's organize tool and write one ledger line with the proof. Settling can be undone, so it needs no question. Settle a helper or review child in the turn you read its report. A top-level thread passes the settle gate first.
-- **Progress. Goal not met, next step inside your authority:** send the next whole outcome now. A finished run with work left never waits for the next pass.
-- **Desk. Goal not met, next step is the owner's:** add an outcomes card to the desk, then snooze the thread until the owner's likely answer. Its title is the one decision, its `why` holds the goal, one dated line per outcome achieved so far and what is left, its links are the proof, and its `yes` is the next step ([desk](references/desk.md#outcomes-cards)).
-- **Snooze. Waiting on a known time or event** (a review, CI, a hold date, a usage reset): snooze the thread until then plus a small margin. When a snooze ends and nothing changed, make a fresh move.
+1. **Settle. End objective met, proof read:** settle the thread with T3's organize tool and write one ledger line with the proof. A finished run, a merged pull request or a posted card is not the objective unless the brief says so. Settling can be undone, so it needs no question. Settle a helper or review child in the turn you read its report. A top-level thread passes the settle gate first.
+2. **Advance. Objective not met, any next step inside your authority:** send the next whole outcome now. A finished run with work left never waits for the next pass. For a choice the owner would normally make, answer it from their standing decisions when they cover it, go on that answer for everything reversible, and write the answer in the ledger so they can overrule it. A wait on CI, a review or a render is held inside the lane's own turn, not snoozed by you.
+3. **Desk. Objective not met, the only step left is the owner's:** add an outcomes card to the desk and leave the thread unsnoozed, so the owner sees it and the card together. First give the lane everything the answer does not gate. Its title is the one decision, its `why` holds the goal, one dated line per outcome achieved so far and what is left, its links are the proof, and its `yes` is the next step ([desk](references/desk.md#outcomes-cards)).
+4. **Snooze, the last resort.** Only when the lane waits on a fixed clock time that no work can bring forward (a usage reset, a hold date, a night window) and it has no card waiting. Write the reason in the ledger first, and keep at most 5 lanes snoozed at once. When a snooze ends and nothing changed, start again at rung 1.
+
+Never snooze to tidy the sidebar, to wait for the owner's next sitting, to wait on a person, or to pass a sweep. In one live fleet a conductor told to keep snoozes rare had 34 threads snoozed at once: 17 waiting on a desk card and 8 waiting 10 to 20 minutes on CI or a review. The earlier wording of this section asked for both, and the sweep counted a snoozed thread as handled, so snoozing was the quickest way to finish a sweep.
 
 A settled thread whose goal is unmet is reopened as a lane in the census. The owner's own threads are read, never steered, and judged the same way: when one's run ends with its goal unmet, its next step is the owner's, so it gets an outcomes card now and nothing is sent into it. Settle one only when its goal is met.
 
@@ -60,7 +62,7 @@ A settled thread whose goal is unmet is reopened as a lane in the census. The ow
 Settling hides a thread, so a wrong settle hides open work. In one live fleet, 45 of 165 top-level threads a conductor settled over three days were still open: most were settled in bulk, by a helper or from one "settle all" card, without anyone reading the last message. So:
 
 1. Before you settle a top-level thread, run `python3 scripts/settle_check.py <thread id>`. It reads the thread's last message, last run and linked pull requests in T3's local database, read-only, and prints `ALLOW` or `BLOCK` with the reason.
-2. `BLOCK` means the thread still looks open. Read it, then progress, desk or snooze it. A thread that waits on a desk card, a review or a person is snoozed, never settled. A failed run is fixed, never settled.
+2. `BLOCK` means the thread still looks open. Read it, then take the first rung that fits: advance it, or put it on the desk. A thread that waits on a desk card, a review or a person stays open and unsnoozed, never settled. A failed run is fixed, never settled.
 3. Settle a `BLOCK`ed thread only after you read the proof that its goal is met, or its work was handed whole to a named live thread. Record that first with `settle_check.py --proof "<where the proof is>" <thread id>`, one thread at a time.
 4. Never ask the owner to "settle all N", and never hand a helper a list of top-level threads to settle. Helpers bulk-settle child threads only.
 
@@ -71,8 +73,8 @@ Where the host runs hooks, wire `settle_check.py --hook` as a pre-tool hook on T
 Lane replies start most of the conductor's turns, so a sweep that waits for idle time never runs. At the start of any turn, when the last `SWEEP` line in `LEDGER.md` is more than 45 minutes old, sweep before you handle the message:
 
 1. List every thread whose run ended and that is neither settled nor snoozed, with T3's thread list (all projects, children included).
-2. Make one of the four moves on each, one thread at a time for top-level threads, through the settle gate. Wake an idle thread only with work: the owner's answer or its next whole outcome.
-3. The sweep is done when a fresh list shows nothing that ended more than 45 minutes ago. Write one ledger line with `desk.py ledger`: `SWEEP hh:mm: N settled, N progressed, N desk, N snoozed`.
+2. Take the first rung that fits on each, one thread at a time for top-level threads, through the settle gate. Wake an idle thread only with work: the owner's answer or its next whole outcome.
+3. The sweep is done when a fresh list shows nothing that ended more than 45 minutes ago, apart from threads with a card waiting on the desk. Write one ledger line with `desk.py ledger`: `SWEEP hh:mm: N settled, N advanced, N desk, N snoozed (M snoozed now)`. A sweep that ends with more than 5 lanes snoozed is not done: wake the extras with work or card them.
 
 Context compaction drops standing duties from the conductor's summary, so where the host runs hooks, add one that checks the age of the last `SWEEP` line on every prompt and tells the conductor when a sweep is due.
 
